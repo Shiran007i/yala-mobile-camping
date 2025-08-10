@@ -1,0 +1,12 @@
+Cleanup plan:
+- Remove src/contexts/AuthContext.jsx
+- Remove src/components/Auth/
+- Remove src/models/LoginModal.jsx
+- Remove src/lib/supabase.js
+- Remove all supabase imports and usage from:
+  - src/hooks/useLocations.js
+  - src/components/BookingForm.jsx
+  - src/components/BookingDetailsPage.jsx
+  - src/components/DatabaseDebug.jsx
+- Remove all AuthProvider, useAuth, LoginModal, UserMenu imports/usages from all files (including App.jsx, Header, etc.)
+- Remove any authentication-related UI or logic from navigation, headers, and booking forms.
