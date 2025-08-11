@@ -1,6 +1,6 @@
 {
   "functions": {
-    "app/api/booking/route.ts": {
+    "src/app/api/booking/route.ts": {
       "runtime": "nodejs20.x"
     }
   }
