@@ -2,21 +2,31 @@
 // src/components/Booking/BookingForm.jsx - FIXED VERSION
 // ===================================================================
 
-import React, { useState } from 'react';
-import { Calendar, Users, Mail, Phone, MessageCircle, User, MapPin, Star, Send } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Calendar,
+  Users,
+  Mail,
+  Phone,
+  MessageCircle,
+  User,
+  MapPin,
+  Star,
+  Send,
+} from "lucide-react";
 
 const BookingForm = ({ selectedLocation, onBookingComplete }) => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    checkIn: '',
-    checkOut: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    checkIn: "",
+    checkOut: "",
     groupSize: 1,
-    accommodationType: 'Safari Tent',
-    mealPlan: 'Full Board',
-    specialRequests: ''
+    accommodationType: "Safari Tent",
+    mealPlan: "Full Board",
+    specialRequests: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,14 +37,28 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
           <div className="text-red-600 mb-4">
-            <svg className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-2.186-.833-2.956 0L3.857 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            <svg
+              className="h-12 w-12 mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-2.186-.833-2.956 0L3.857 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">No Location Selected</h2>
-          <p className="text-gray-600 mb-4">Please select a camping location first.</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <h2 className="text-xl font-bold text-gray-900 mb-2">
+            No Location Selected
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Please select a camping location first.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
             className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
           >
             Go Back to Locations
@@ -46,9 +70,9 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -78,12 +102,12 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
   const handleSubmitBooking = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const nights = calculateNights();
       const total = calculateTotal();
       const bookingId = generateBookingId();
-      
+
       // Prepare booking data
       const bookingData = {
         bookingId,
@@ -100,37 +124,46 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
         total,
         location: selectedLocation,
         specialRequests: formData.specialRequests,
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
-      console.log('🚀 Attempting to submit booking:', bookingData);
+      console.log("🚀 Attempting to submit booking:", bookingData);
 
       // *** MAIN FIX: Better API call with detailed error handling ***
       try {
-        console.log('📡 Calling API endpoint: /api/booking');
+        console.log("📡 Calling API endpoint: /api/booking");
 
         ///Users/shiran/builds/web/mobile-camping/src/app/api/booking/route.ts
-        
-        const response = await fetch('/api/booking', {
-          method: 'POST',
+
+        const response = await fetch("/api/booking", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(bookingData),
         });
-        
-        console.log('📨 API Response status:', response.status);
-        console.log('📨 API Response headers:', [...response.headers.entries()]);
-        
+
+        console.log("📨 API Response status:", response.status);
+        console.log("📨 API Response headers:", [
+          ...response.headers.entries(),
+        ]);
+
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('❌ API Error Response:', errorText);
-          throw new Error(`API call failed with status ${response.status}: ${errorText}`);
+          console.error("❌ API Error Response:", errorText);
+          // If it's a 404, the API route isn't working
+          if (response.status === 404) {
+            throw new Error("API endpoint not found - deployment issue");
+          }
+
+          throw new Error(
+            `API call failed with status ${response.status}: ${errorText}`
+          );
         }
-        
+
         const result = await response.json();
-        console.log('✅ API Success Response:', result);
-        
+        console.log("✅ API Success Response:", result);
+
         if (result.success) {
           // SUCCESS - Show success message
           alert(`🎉 SUCCESS! Your booking has been submitted!
@@ -140,26 +173,27 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
 ⏰ We'll respond within 1-2 hours
 
 ✅ Check your email for confirmation details!`);
-          
+
           // Optional: Ask about WhatsApp
           const wantWhatsApp = window.confirm(
             `📱 Would you also like to message us on WhatsApp for faster service?`
           );
-          
+
           if (wantWhatsApp && result.whatsappLink) {
-            window.open(result.whatsappLink, '_blank');
+            window.open(result.whatsappLink, "_blank");
           }
-          
+
           // Pass to confirmation page
           onBookingComplete && onBookingComplete(bookingData);
           return;
         } else {
-          throw new Error(result.message || 'API returned unsuccessful response');
+          throw new Error(
+            result.message || "API returned unsuccessful response"
+          );
         }
-        
       } catch (apiError) {
-        console.error('❌ API call failed:', apiError);
-        
+        console.error("❌ API call failed:", apiError);
+
         // Show user-friendly error with fallback options
         const userChoice = window.confirm(
           `⚠️ Automatic booking submission failed, but don't worry!
@@ -172,7 +206,7 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
 
 Would you like to try the email option now?`
         );
-        
+
         if (userChoice) {
           handleEmailBooking(bookingData);
         } else {
@@ -186,10 +220,11 @@ Would you like to try the email option now?`
         }
         return;
       }
-      
     } catch (error) {
-      console.error('💥 Unexpected error:', error);
-      alert(`❌ Unexpected error: ${error.message}\n\nPlease try the email or WhatsApp options below.`);
+      console.error("💥 Unexpected error:", error);
+      alert(
+        `❌ Unexpected error: ${error.message}\n\nPlease try the email or WhatsApp options below.`
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -200,7 +235,7 @@ Would you like to try the email option now?`
     const nights = calculateNights();
     const total = calculateTotal();
     const bookingId = bookingData?.bookingId || generateBookingId();
-    
+
     // Use provided booking data or create new
     const finalBookingData = bookingData || {
       bookingId,
@@ -216,11 +251,11 @@ Would you like to try the email option now?`
       mealPlan: formData.mealPlan,
       total,
       location: selectedLocation,
-      specialRequests: formData.specialRequests
+      specialRequests: formData.specialRequests,
     };
-    
+
     const subject = `🏕️ New Booking Request - ${selectedLocation.name} - ID: ${finalBookingData.bookingId}`;
-    
+
     const emailBody = `
 New Booking Request Details:
 
@@ -247,7 +282,7 @@ Rate: $${selectedLocation.price_per_night}/night
 Total: $${finalBookingData.total} (${finalBookingData.nights} nights)
 
 📝 SPECIAL REQUESTS:
-${finalBookingData.specialRequests || 'None'}
+${finalBookingData.specialRequests || "None"}
 
 ⏰ STATUS: Pending Confirmation
 
@@ -257,9 +292,11 @@ Best regards,
 ${finalBookingData.firstName} ${finalBookingData.lastName}
     `.trim();
 
-    const mailtoLink = `mailto:bookings@yalamobilecamping.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-    window.open(mailtoLink, '_blank');
-    
+    const mailtoLink = `mailto:bookings@yalamobilecamping.com?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(emailBody)}`;
+    window.open(mailtoLink, "_blank");
+
     // Show success message
     alert(`📧 Opening email client...
 
@@ -270,7 +307,7 @@ Next steps:
 1. Send the email that just opened
 2. Check your email for our response (usually within 1-2 hours)
 3. We'll send payment instructions once confirmed`);
-    
+
     // Pass to confirmation page
     onBookingComplete && onBookingComplete(finalBookingData);
   };
@@ -301,7 +338,11 @@ Next steps:
 • Rate: $${bookingData.location.price_per_night}/night
 • *Total: $${bookingData.total}*
 
-${bookingData.specialRequests ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n` : ''}Please confirm availability and send payment details. Thank you! 🙏`;
+${
+  bookingData.specialRequests
+    ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n`
+    : ""
+}Please confirm availability and send payment details. Thank you! 🙏`;
   };
 
   // WhatsApp booking
@@ -309,19 +350,21 @@ ${bookingData.specialRequests ? `📝 *Special Requests:*\n${bookingData.special
     const nights = calculateNights();
     const total = calculateTotal();
     const bookingId = bookingData?.bookingId || generateBookingId();
-    
+
     const finalBookingData = bookingData || {
       ...formData,
       bookingId,
       nights,
       total,
-      location: selectedLocation
+      location: selectedLocation,
     };
-    
+
     const message = createWhatsAppMessage(finalBookingData);
-    const whatsappUrl = `https://wa.me/94713991051?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-    
+    const whatsappUrl = `https://wa.me/94713991051?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
+
     // Show success message
     alert(`📱 Opening WhatsApp...
 
@@ -329,14 +372,21 @@ ${bookingData.specialRequests ? `📝 *Special Requests:*\n${bookingData.special
 💬 WhatsApp message prepared and ready to send!
 
 We'll respond quickly via WhatsApp with confirmation and payment details.`);
-    
+
     // Pass to confirmation page
     onBookingComplete && onBookingComplete(finalBookingData);
   };
 
   const isFormValid = () => {
-    return formData.firstName && formData.lastName && formData.email && formData.phone && 
-           formData.checkIn && formData.checkOut && formData.groupSize > 0;
+    return (
+      formData.firstName &&
+      formData.lastName &&
+      formData.email &&
+      formData.phone &&
+      formData.checkIn &&
+      formData.checkOut &&
+      formData.groupSize > 0
+    );
   };
 
   return (
@@ -345,30 +395,37 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="md:w-1/3">
-            <img 
-              src={selectedLocation.image_url} 
+            <img
+              src={selectedLocation.image_url}
               alt={selectedLocation.name}
               className="w-full h-48 object-cover rounded-lg"
             />
           </div>
           <div className="md:w-2/3">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">{selectedLocation.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              {selectedLocation.name}
+            </h2>
             <div className="flex items-center mb-3">
               <MapPin className="h-4 w-4 text-gray-500 mr-1" />
               <span className="text-gray-600">{selectedLocation.location}</span>
               <div className="flex items-center ml-4">
                 <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
-                <span className="font-medium">{selectedLocation.rating || '4.9'}</span>
+                <span className="font-medium">
+                  {selectedLocation.rating || "4.9"}
+                </span>
               </div>
             </div>
             <p className="text-gray-700 mb-4">{selectedLocation.description}</p>
             <div className="flex items-center justify-between">
               <div className="text-2xl font-bold text-emerald-600">
                 ${selectedLocation.price_per_night}
-                <span className="text-sm font-normal text-gray-600">/night</span>
+                <span className="text-sm font-normal text-gray-600">
+                  /night
+                </span>
               </div>
               <div className="text-sm text-gray-600">
-                Max {selectedLocation.max_guests || 8} guests • {selectedLocation.difficulty || 'Easy'}
+                Max {selectedLocation.max_guests || 8} guests •{" "}
+                {selectedLocation.difficulty || "Easy"}
               </div>
             </div>
           </div>
@@ -377,7 +434,9 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
       {/* Booking Form */}
       <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Book Your Adventure</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          Book Your Adventure
+        </h2>
 
         <form onSubmit={handleSubmitBooking}>
           <div className="space-y-6">
@@ -460,7 +519,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                   name="checkIn"
                   value={formData.checkIn}
                   onChange={handleInputChange}
-                  min={new Date().toISOString().split('T')[0]}
+                  min={new Date().toISOString().split("T")[0]}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   required
                 />
@@ -476,7 +535,9 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                   name="checkOut"
                   value={formData.checkOut}
                   onChange={handleInputChange}
-                  min={formData.checkIn || new Date().toISOString().split('T')[0]}
+                  min={
+                    formData.checkIn || new Date().toISOString().split("T")[0]
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   required
                 />
@@ -496,11 +557,14 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   required
                 >
-                  {Array.from({ length: selectedLocation?.max_guests || 8 }, (_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1} {i + 1 === 1 ? 'Guest' : 'Guests'}
-                    </option>
-                  ))}
+                  {Array.from(
+                    { length: selectedLocation?.max_guests || 8 },
+                    (_, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {i + 1} {i + 1 === 1 ? "Guest" : "Guests"}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
 
@@ -554,16 +618,25 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
             {/* Price Summary */}
             {formData.checkIn && formData.checkOut && (
               <div className="bg-emerald-50 p-6 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-4">Price Summary</h4>
+                <h4 className="font-semibold text-gray-900 mb-4">
+                  Price Summary
+                </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>${selectedLocation.price_per_night} × {calculateNights()} nights</span>
-                    <span>${selectedLocation.price_per_night * calculateNights()}</span>
+                    <span>
+                      ${selectedLocation.price_per_night} × {calculateNights()}{" "}
+                      nights
+                    </span>
+                    <span>
+                      ${selectedLocation.price_per_night * calculateNights()}
+                    </span>
                   </div>
                   <div className="border-t border-emerald-200 pt-2 mt-2">
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
-                      <span className="text-emerald-600">${calculateTotal()}</span>
+                      <span className="text-emerald-600">
+                        ${calculateTotal()}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -572,7 +645,9 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
             {/* *** FIX 3: Updated Booking Options with Clear Labels *** */}
             <div className="bg-blue-50 p-6 rounded-lg">
-              <h4 className="font-semibold text-gray-900 mb-4">Choose Your Booking Method:</h4>
+              <h4 className="font-semibold text-gray-900 mb-4">
+                Choose Your Booking Method:
+              </h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="submit"
@@ -586,8 +661,8 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                     </>
                   ) : (
                     <>
-                      <Send className="h-5 w-5 mr-2" />
-                      ✨ Auto Submit (Recommended)
+                      <Send className="h-5 w-5 mr-2" />✨ Auto Submit
+                      (Recommended)
                     </>
                   )}
                 </button>
@@ -612,10 +687,16 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                   💬 WhatsApp Backup
                 </button>
               </div>
-              
+
               <div className="mt-4 text-sm text-gray-600">
-                <p><strong>Auto Submit:</strong> Sends emails automatically to both you and our team</p>
-                <p><strong>Email/WhatsApp Backup:</strong> Use if auto-submit doesn't work</p>
+                <p>
+                  <strong>Auto Submit:</strong> Sends emails automatically to
+                  both you and our team
+                </p>
+                <p>
+                  <strong>Email/WhatsApp Backup:</strong> Use if auto-submit
+                  doesn't work
+                </p>
               </div>
             </div>
           </div>
@@ -637,7 +718,9 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
         <div className="bg-green-50 p-6 rounded-lg">
           <MessageCircle className="h-8 w-8 text-green-600 mb-4" />
-          <h4 className="font-semibold text-green-900 mb-2">WhatsApp Booking</h4>
+          <h4 className="font-semibold text-green-900 mb-2">
+            WhatsApp Booking
+          </h4>
           <p className="text-sm text-green-800 mb-2">
             Instant communication and quick responses
           </p>
@@ -646,14 +729,16 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
           </p>
         </div>
       </div>
-      
+
       {/* Debug Info (remove in production) */}
-      {process.env.NODE_ENV === 'development' && (
+      {process.env.NODE_ENV === "development" && (
         <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-          <h4 className="font-semibold text-yellow-800 mb-2">Debug Info (Development Only)</h4>
+          <h4 className="font-semibold text-yellow-800 mb-2">
+            Debug Info (Development Only)
+          </h4>
           <div className="text-sm text-yellow-700">
-            <p>Selected Location: {selectedLocation?.name || 'None'}</p>
-            <p>Form Valid: {isFormValid() ? 'Yes' : 'No'}</p>
+            <p>Selected Location: {selectedLocation?.name || "None"}</p>
+            <p>Form Valid: {isFormValid() ? "Yes" : "No"}</p>
             <p>API Endpoint: /api/booking</p>
             <p>Environment: {process.env.NODE_ENV}</p>
           </div>
