@@ -6,11 +6,5 @@
     "src/app/api/booking/route.ts": {
       "runtime": "nodejs18.x"
     }
-  },
-  "env": {
-    "EMAIL_USER": "@EMAIL_USER",
-    "EMAIL_PASSWORD": "@EMAIL_PASSWORD", 
-    "ADMIN_EMAIL": "@ADMIN_EMAIL",
-    "EMAIL_FROM_NAME": "@EMAIL_FROM_NAME"
   }
 }
