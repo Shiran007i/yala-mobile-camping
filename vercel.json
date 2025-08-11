@@ -8,9 +8,9 @@
     }
   },
   "env": {
-    "EMAIL_USER": "@email_user",
-    "EMAIL_PASSWORD": "@email_password", 
-    "ADMIN_EMAIL": "@admin_email",
-    "EMAIL_FROM_NAME": "@email_from_name"
+    "EMAIL_USER": "@EMAIL_USER",
+    "EMAIL_PASSWORD": "@EMAIL_PASSWORD", 
+    "ADMIN_EMAIL": "@ADMIN_EMAIL",
+    "EMAIL_FROM_NAME": "@EMAIL_FROM_NAME"
   }
 }
