@@ -170,7 +170,7 @@ const App = () => {
   }, [activeTab]);
 
   // Memoized locations data to prevent unnecessary re-renders
-  const locations = useMemo(
+  const locations01 = useMemo(
     () => [
       {
         id: 2,
@@ -229,6 +229,68 @@ const App = () => {
     ],
     []
   );
+
+  const locations = useMemo(
+  () => [
+    {
+      id: 2,
+      name: "Yala Mobile Camp",
+      location: "Yala National Park",
+      coordinates: [6.3725, 81.5185],
+      price_per_night: 950 ,
+      rating: 4.9,
+      max_guests: 10,
+      difficulty: "Easy",
+      elevation: "30m",
+      best_season: "February - July",
+      image_url: camp3,
+      gallery: [camp3],
+      description:
+        "An exclusive camping experience inside the heart of Yala jungle. For $950 (per 2 persons), enjoy full-board meals, a full-day guided safari, and one night in our comfortable safari tents — surrounded by the raw sights and sounds of the wild.",
+      detailed_description:
+        "Yala Wilderness Camp offers a truly unique opportunity to stay inside the untouched wilderness of Sri Lanka's most iconic national park. Nestled deep within Yala’s jungle, our camp blends comfort with raw adventure — where leopards roam, elephants wander nearby, and the calls of nocturnal creatures become your night’s soundtrack. This $950 package for two includes full-board meals, a full-day guided safari, park entrance fees, and one night’s stay in a fully equipped safari tent, ensuring an unforgettable immersion in nature.",
+      amenities: [
+        "Safari Tours",
+        "Wildlife Viewing",
+        "Guided Tours",
+        "Photography",
+      ],
+      activities: [
+        {
+          name: "Morning Safari Drive",
+          duration: "4 hours",
+          difficulty: "Easy",
+        },
+        {
+          name: "Evening Safari Drive",
+          duration: "4 hours",
+          difficulty: "Easy",
+        },
+        { name: "Bird Watching", duration: "2 hours", difficulty: "Easy" },
+        {
+          name: "Night Wildlife Sounds Experience",
+          duration: "1 hour",
+          difficulty: "Easy",
+        },
+      ],
+      included: [
+        "Safari tent",
+        "All meals",
+        "Safari vehicle",
+        "Park entrance fees",
+        "Professional guide",
+      ],
+      weather: {
+        temp: "25-35°C",
+        humidity: "60-75%",
+        rainfall: "Very Low (Feb-Jul)",
+      },
+    },
+  ],
+  []
+);
+
+
 
   // Use custom hook for booking handlers
   const {

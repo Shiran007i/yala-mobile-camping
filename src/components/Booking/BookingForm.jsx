@@ -392,42 +392,122 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
   return (
     <div className="max-w-4xl mx-auto">
       {/* Location Summary */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="md:w-1/3">
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+        <div className="flex flex-col lg:flex-row">
+          {/* Image Section */}
+          <div className="lg:w-1/2 relative">
             <img
               src={selectedLocation.image_url}
               alt={selectedLocation.name}
-              className="w-full h-48 object-cover rounded-lg"
+              className="w-full h-64 lg:h-full object-cover"
             />
           </div>
-          <div className="md:w-2/3">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+
+          {/* Content Section */}
+          <div className="lg:w-1/2 p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
               {selectedLocation.name}
             </h2>
-            <div className="flex items-center mb-3">
-              <MapPin className="h-4 w-4 text-gray-500 mr-1" />
-              <span className="text-gray-600">{selectedLocation.location}</span>
-              <div className="flex items-center ml-4">
-                <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
-                <span className="font-medium">
-                  {selectedLocation.rating || "4.9"}
+            {/* Best Season Badge */}
+            <div className="flex items-center justify-between mb-4">
+              {/* Location (left) */}
+              <div className="flex items-center">
+                <MapPin className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" />
+                <span className="text-gray-700 font-medium leading-none">
+                  {selectedLocation.location}
+                </span>
+              </div>
+
+              {/* Best Season (right) */}
+              <div className="inline-flex items-center h-6">
+                <span className="text-xs bg-green-100 text-gray-600 px-2 py-0.5 rounded-full font-medium leading-none">
+                  {selectedLocation.best_season || "Year Round"}
                 </span>
               </div>
             </div>
-            <p className="text-gray-700 mb-4">{selectedLocation.description}</p>
-            <div className="flex items-center justify-between">
-              <div className="text-2xl font-bold text-emerald-600">
-                ${selectedLocation.price_per_night}
-                <span className="text-sm font-normal text-gray-600">
-                  /night
-                </span>
-              </div>
-              <div className="text-sm text-gray-600">
-                Max {selectedLocation.max_guests || 8} guests •{" "}
-                {selectedLocation.difficulty || "Easy"}
+
+            {/* Price Highlight */}
+            {/* Price Highlight */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-3xl font-bold text-emerald-600">
+                    ${selectedLocation.price_per_night}
+                  </div>
+                  <div className="text-sm text-emerald-700 font-medium">
+                    Complete package for 2 persons
+                  </div>
+                  <div className="text-xs text-gray-600 mt-1">
+                    Includes accommodation, meals & safari
+                  </div>
+
+                  {/* Rating moved here */}
+                  <div className="flex items-center text-sm mt-3">
+                    <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
+                    <span className="font-semibold">
+                      {selectedLocation.rating || "4.9"}
+                    </span>
+                    <span className="text-gray-600 ml-1">
+                      ({selectedLocation.max_guests || 8} max)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <Users className="h-8 w-8 text-emerald-600 mx-auto mb-1" />
+                  <span className="text-xs text-gray-600">For 2 People</span>
+                </div>
               </div>
             </div>
+
+            {/* Description */}
+            <p className="text-gray-700 mb-6 leading-relaxed">
+              {selectedLocation.description ||
+                selectedLocation.detailed_description}
+            </p>
+
+            {/* Key Features Grid */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="flex items-center text-sm">
+                <Calendar className="h-4 w-4 text-gray-500 mr-2" />
+                <span className="text-gray-700">
+                  {selectedLocation.difficulty || "Easy"} Access
+                </span>
+              </div>
+              <div className="flex items-center text-sm">
+                <MapPin className="h-4 w-4 text-gray-500 mr-2" />
+                <span className="text-gray-700">
+                  {selectedLocation.elevation || "30m"} Elevation
+                </span>
+              </div>
+              <div className="flex items-center text-sm">
+                <Users className="h-4 w-4 text-gray-500 mr-2" />
+                <span className="text-gray-700">
+                  Up to {selectedLocation.max_guests || 8} Guests
+                </span>
+              </div>
+              <div className="flex items-center text-sm">
+                <Star className="h-4 w-4 text-gray-500 mr-2" />
+                <span className="text-gray-700">Premium Experience</span>
+              </div>
+            </div>
+
+            {/* Included Features */}
+            {selectedLocation.included && (
+              <div className="border-t border-gray-200 pt-4">
+                <h4 className="font-semibold text-gray-900 mb-3">
+                  Package Includes:
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {selectedLocation.included.slice(0, 6).map((item, index) => (
+                    <div key={index} className="flex items-center text-sm">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></div>
+                      <span className="text-gray-700 capitalize">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
