@@ -3,5 +3,14 @@
     "src/app/api/booking/route.ts": {
       "runtime": "nodejs20.x"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/booking",
+      "destination": "/src/app/api/booking/route"
+    }
+  ],
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install"
 }
