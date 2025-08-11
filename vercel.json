@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "functions": {
     "src/app/api/booking/route.ts": {
-      "runtime": "nodejs18.x"
+      "runtime": "@vercel/node@18.x"
     }
   }
 }
