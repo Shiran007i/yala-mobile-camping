@@ -24,6 +24,7 @@ import {
 
 import BookingManager from "./components/Booking";
 
+
 // Custom hooks
 import { useBookingHandlers } from "./hooks";
 
