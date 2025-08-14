@@ -47,6 +47,7 @@ const SEO_CONFIG = {
 };
 
 // FIXED: Proper Schema.org structured data with correct itemReviewed
+// Fixed generateStructuredData function with proper Product schema
 const generateStructuredData = (activeTab, selectedLocation) => {
   // Base business/organization schema
   const baseOrganization = {
@@ -183,7 +184,7 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     }
   };
 
-  // Service schema for camping services
+  // FIXED: Service schema with proper Product structure including required aggregateRating
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -206,8 +207,35 @@ const generateStructuredData = (activeTab, selectedLocation) => {
           "@type": "Offer",
           itemOffered: {
             "@type": "Product",
+            "@id": `${SEO_CONFIG.siteUrl}#camping-package`,
             name: "1 Night Mobile Camping Package",
-            description: "Includes accommodation, meals, safari tours, and guide services"
+            description: "Includes accommodation, meals, safari tours, and guide services",
+            brand: {
+              "@type": "Brand",
+              name: "Yala Mobile Camping"
+            },
+            category: "Travel Package",
+            // FIXED: Added required aggregateRating for Product
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: 4.9,
+              reviewCount: 89,
+              bestRating: 5,
+              worstRating: 1
+            },
+            // FIXED: Added offers to satisfy Schema requirements
+            offers: {
+              "@type": "Offer",
+              price: "950",
+              priceCurrency: "USD",
+              priceValidUntil: "2025-12-31",
+              availability: "https://schema.org/InStock",
+              validFrom: "2025-01-01",
+              seller: {
+                "@type": "TravelAgency",
+                "@id": `${SEO_CONFIG.siteUrl}#organization`
+              }
+            }
           },
           price: "950",
           priceCurrency: "USD",
