@@ -210,6 +210,14 @@ const generateStructuredData = (activeTab, selectedLocation) => {
             "@id": `${SEO_CONFIG.siteUrl}#camping-package`,
             name: "1 Night Mobile Camping Package",
             description: "Includes accommodation, meals, safari tours, and guide services",
+            // FIXED: Added required image field for Product
+            image: {
+              "@type": "ImageObject",
+              url: `${SEO_CONFIG.siteUrl}/images/yala-camping-hero.webp`,
+              width: 1200,
+              height: 630,
+              caption: "Yala Mobile Camping safari experience"
+            },
             brand: {
               "@type": "Brand",
               name: "Yala Mobile Camping"
@@ -231,6 +239,31 @@ const generateStructuredData = (activeTab, selectedLocation) => {
               priceValidUntil: "2025-12-31",
               availability: "https://schema.org/InStock",
               validFrom: "2025-01-01",
+              // FIXED: Added optional shipping and return policy fields
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: "0",
+                  currency: "USD"
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  handlingTime: {
+                    "@type": "QuantitativeValue",
+                    minValue: 0,
+                    maxValue: 1,
+                    unitText: "days"
+                  }
+                }
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+                merchantReturnDays: 7,
+                returnMethod: "https://schema.org/ReturnByMail",
+                returnFees: "https://schema.org/FreeReturn"
+              },
               seller: {
                 "@type": "TravelAgency",
                 "@id": `${SEO_CONFIG.siteUrl}#organization`
@@ -309,7 +342,6 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     ]
   };
 };
-
 // Main App component
 const App = () => {
   const [activeTab, setActiveTab] = useState("safaris");
