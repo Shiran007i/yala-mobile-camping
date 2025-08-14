@@ -1,5 +1,5 @@
 // ===================================================================
-// src/components/Booking/BookingForm.jsx - FIXED VERSION
+// src/components/Booking/BookingForm.jsx - UPDATED WITH CORRECT PRICING
 // ===================================================================
 
 import React, { useState } from "react";
@@ -23,13 +23,38 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
     phone: "",
     checkIn: "",
     checkOut: "",
-    groupSize: 1,
+    groupSize: 2, // Start with 2 as minimum
     accommodationType: "Safari Tent",
     mealPlan: "Full Board",
     specialRequests: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // *** UPDATED PRICING CALCULATION ***
+  const calculatePricing = (persons, nights) => {
+    const BASE_PRICE_2_PERSONS = 950;
+    const ADDITIONAL_PERSON_PRICE = (950 / 2) - 25; // $450 per additional person
+    
+    let total = BASE_PRICE_2_PERSONS * nights; // Base price for 2 persons
+    
+    if (persons > 2) {
+      const additionalPersons = persons - 2;
+      const additionalCost = additionalPersons * ADDITIONAL_PERSON_PRICE * nights;
+      total += additionalCost;
+    }
+    
+    return {
+      basePrice: BASE_PRICE_2_PERSONS,
+      additionalPersonPrice: ADDITIONAL_PERSON_PRICE,
+      additionalPersons: Math.max(0, persons - 2),
+      additionalCost: persons > 2 ? (persons - 2) * ADDITIONAL_PERSON_PRICE * nights : 0,
+      total: total,
+      perPerson: total / persons,
+      perNight: total / nights,
+      savings: persons > 2 ? (persons - 2) * 25 * nights : 0, // $25 savings per additional person per night
+    };
+  };
 
   // *** FIX 1: Better handling of missing selectedLocation ***
   if (!selectedLocation) {
@@ -87,9 +112,12 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
     return 0;
   };
 
-  const calculateTotal = () => {
+  const getCurrentPricing = () => {
     const nights = calculateNights();
-    return nights * selectedLocation.price_per_night;
+    if (nights > 0) {
+      return calculatePricing(formData.groupSize, nights);
+    }
+    return { total: 0 };
   };
 
   const generateBookingId = () => {
@@ -98,17 +126,17 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
     return `YMC-${timestamp}-${randomStr}`.toUpperCase();
   };
 
-  // *** FIX 2: Updated API submission with better error handling ***
+  // *** FIX 2: Updated API submission with correct pricing ***
   const handleSubmitBooking = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
       const nights = calculateNights();
-      const total = calculateTotal();
+      const pricing = calculatePricing(formData.groupSize, nights);
       const bookingId = generateBookingId();
 
-      // Prepare booking data
+      // Prepare booking data with updated pricing
       const bookingData = {
         bookingId,
         firstName: formData.firstName,
@@ -121,19 +149,21 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
         groupSize: formData.groupSize,
         accommodationType: formData.accommodationType,
         mealPlan: formData.mealPlan,
-        total,
-        location: selectedLocation,
+        total: pricing.total,
+        location: {
+          ...selectedLocation,
+          price_per_night: 950, // Base price for 2 persons per night
+        },
+        pricing: pricing, // Include detailed pricing breakdown
         specialRequests: formData.specialRequests,
         submittedAt: new Date().toISOString(),
       };
 
       console.log("🚀 Attempting to submit booking:", bookingData);
 
-      // *** MAIN FIX: Better API call with detailed error handling ***
+      // API call with detailed error handling
       try {
         console.log("📡 Calling API endpoint: /api/booking");
-
-        ///Users/shiran/builds/web/mobile-camping/src/app/api/booking/route.ts
 
         const response = await fetch("/api/booking", {
           method: "POST",
@@ -144,18 +174,13 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
         });
 
         console.log("📨 API Response status:", response.status);
-        console.log("📨 API Response headers:", [
-          ...response.headers.entries(),
-        ]);
 
         if (!response.ok) {
           const errorText = await response.text();
           console.error("❌ API Error Response:", errorText);
-          // If it's a 404, the API route isn't working
           if (response.status === 404) {
             throw new Error("API endpoint not found - deployment issue");
           }
-
           throw new Error(
             `API call failed with status ${response.status}: ${errorText}`
           );
@@ -165,7 +190,6 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
         console.log("✅ API Success Response:", result);
 
         if (result.success) {
-          // SUCCESS - Show success message
           alert(`🎉 SUCCESS! Your booking has been submitted!
 
 📧 Confirmation emails sent automatically
@@ -174,7 +198,6 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
 
 ✅ Check your email for confirmation details!`);
 
-          // Optional: Ask about WhatsApp
           const wantWhatsApp = window.confirm(
             `📱 Would you also like to message us on WhatsApp for faster service?`
           );
@@ -183,7 +206,6 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
             window.open(result.whatsappLink, "_blank");
           }
 
-          // Pass to confirmation page
           onBookingComplete && onBookingComplete(bookingData);
           return;
         } else {
@@ -194,7 +216,6 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
       } catch (apiError) {
         console.error("❌ API call failed:", apiError);
 
-        // Show user-friendly error with fallback options
         const userChoice = window.confirm(
           `⚠️ Automatic booking submission failed, but don't worry!
 
@@ -210,7 +231,6 @@ Would you like to try the email option now?`
         if (userChoice) {
           handleEmailBooking(bookingData);
         } else {
-          // Show WhatsApp option
           const whatsappChoice = window.confirm(
             `📱 Would you like to send your booking via WhatsApp instead?`
           );
@@ -230,13 +250,12 @@ Would you like to try the email option now?`
     }
   };
 
-  // Email booking using mailto - with booking data passed
+  // Email booking with updated pricing
   const handleEmailBooking = (bookingData = null) => {
     const nights = calculateNights();
-    const total = calculateTotal();
+    const pricing = calculatePricing(formData.groupSize, nights);
     const bookingId = bookingData?.bookingId || generateBookingId();
 
-    // Use provided booking data or create new
     const finalBookingData = bookingData || {
       bookingId,
       firstName: formData.firstName,
@@ -249,12 +268,13 @@ Would you like to try the email option now?`
       groupSize: formData.groupSize,
       accommodationType: formData.accommodationType,
       mealPlan: formData.mealPlan,
-      total,
+      total: pricing.total,
+      pricing: pricing,
       location: selectedLocation,
       specialRequests: formData.specialRequests,
     };
 
-    const subject = `🏕️ New Booking Request - ${selectedLocation.name} - ID: ${finalBookingData.bookingId}`;
+    const subject = `🕏️ New Booking Request - ${selectedLocation.name} - ID: ${finalBookingData.bookingId}`;
 
     const emailBody = `
 New Booking Request Details:
@@ -267,7 +287,7 @@ Name: ${finalBookingData.firstName} ${finalBookingData.lastName}
 Email: ${finalBookingData.email}
 Phone: ${finalBookingData.phone}
 
-🏕️ ACCOMMODATION DETAILS:
+🕏️ ACCOMMODATION DETAILS:
 Location: ${selectedLocation.name}
 Address: ${selectedLocation.location}
 Check-in: ${finalBookingData.checkIn}
@@ -277,9 +297,11 @@ Guests: ${finalBookingData.groupSize}
 Accommodation: ${finalBookingData.accommodationType}
 Meal Plan: ${finalBookingData.mealPlan}
 
-💰 PRICING:
-Rate: $${selectedLocation.price_per_night}/night
-Total: $${finalBookingData.total} (${finalBookingData.nights} nights)
+💰 PRICING BREAKDOWN:
+Base Package (2 persons): $950 × ${finalBookingData.nights} nights = $${950 * finalBookingData.nights}
+${finalBookingData.groupSize > 2 ? `Additional Persons (${finalBookingData.groupSize - 2}): $450 × ${finalBookingData.groupSize - 2} × ${finalBookingData.nights} nights = $${(finalBookingData.groupSize - 2) * 450 * finalBookingData.nights}` : ''}
+${finalBookingData.groupSize > 2 ? `Savings: $${(finalBookingData.groupSize - 2) * 25 * finalBookingData.nights} ($25 discount per additional person per night)` : ''}
+TOTAL: $${finalBookingData.total}
 
 📝 SPECIAL REQUESTS:
 ${finalBookingData.specialRequests || "None"}
@@ -297,7 +319,6 @@ ${finalBookingData.firstName} ${finalBookingData.lastName}
     )}&body=${encodeURIComponent(emailBody)}`;
     window.open(mailtoLink, "_blank");
 
-    // Show success message
     alert(`📧 Opening email client...
 
 📋 Booking ID: ${finalBookingData.bookingId}
@@ -308,13 +329,12 @@ Next steps:
 2. Check your email for our response (usually within 1-2 hours)
 3. We'll send payment instructions once confirmed`);
 
-    // Pass to confirmation page
     onBookingComplete && onBookingComplete(finalBookingData);
   };
 
-  // WhatsApp message creation
+  // WhatsApp message with updated pricing
   const createWhatsAppMessage = (bookingData) => {
-    return `🏕️ *NEW BOOKING REQUEST*
+    return `🕏️ *NEW BOOKING REQUEST*
 
 📋 *Booking ID:* ${bookingData.bookingId}
 📅 *Date:* ${new Date().toLocaleString()}
@@ -324,7 +344,7 @@ Next steps:
 • Email: ${bookingData.email}
 • Phone: ${bookingData.phone}
 
-🏕️ *Accommodation:*
+🕏️ *Accommodation:*
 • Location: ${bookingData.location.name}
 • Address: ${bookingData.location.location}
 • Check-in: ${bookingData.checkIn}
@@ -335,8 +355,10 @@ Next steps:
 • Meal Plan: ${bookingData.mealPlan}
 
 💰 *Pricing:*
-• Rate: $${bookingData.location.price_per_night}/night
-• *Total: $${bookingData.total}*
+• Base Package (2 persons): $950 × ${bookingData.nights} = $${950 * bookingData.nights}
+${bookingData.groupSize > 2 ? `• Additional Persons (${bookingData.groupSize - 2}): $450 × ${bookingData.groupSize - 2} × ${bookingData.nights} = $${(bookingData.groupSize - 2) * 450 * bookingData.nights}` : ''}
+${bookingData.groupSize > 2 ? `• *Your Savings:* $${(bookingData.groupSize - 2) * 25 * bookingData.nights} ($25 off per additional person!)` : ''}
+• *TOTAL: $${bookingData.total}*
 
 ${
   bookingData.specialRequests
@@ -345,17 +367,17 @@ ${
 }Please confirm availability and send payment details. Thank you! 🙏`;
   };
 
-  // WhatsApp booking
   const handleWhatsAppBooking = (bookingData = null) => {
     const nights = calculateNights();
-    const total = calculateTotal();
+    const pricing = calculatePricing(formData.groupSize, nights);
     const bookingId = bookingData?.bookingId || generateBookingId();
 
     const finalBookingData = bookingData || {
       ...formData,
       bookingId,
       nights,
-      total,
+      total: pricing.total,
+      pricing: pricing,
       location: selectedLocation,
     };
 
@@ -365,7 +387,6 @@ ${
     )}`;
     window.open(whatsappUrl, "_blank");
 
-    // Show success message
     alert(`📱 Opening WhatsApp...
 
 📋 Booking ID: ${finalBookingData.bookingId}
@@ -373,7 +394,6 @@ ${
 
 We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
-    // Pass to confirmation page
     onBookingComplete && onBookingComplete(finalBookingData);
   };
 
@@ -385,7 +405,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
       formData.phone &&
       formData.checkIn &&
       formData.checkOut &&
-      formData.groupSize > 0
+      formData.groupSize >= 2
     );
   };
 
@@ -408,17 +428,13 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
             <h2 className="text-3xl font-bold text-gray-900 mb-3">
               {selectedLocation.name}
             </h2>
-            {/* Best Season Badge */}
             <div className="flex items-center justify-between mb-4">
-              {/* Location (left) */}
               <div className="flex items-center">
                 <MapPin className="h-5 w-5 text-gray-500 mr-2 flex-shrink-0" />
                 <span className="text-gray-700 font-medium leading-none">
                   {selectedLocation.location}
                 </span>
               </div>
-
-              {/* Best Season (right) */}
               <div className="inline-flex items-center h-6">
                 <span className="text-xs bg-green-100 text-gray-600 px-2 py-0.5 rounded-full font-medium leading-none">
                   {selectedLocation.best_season || "Year Round"}
@@ -426,22 +442,20 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
               </div>
             </div>
 
-            {/* Price Highlight */}
-            {/* Price Highlight */}
+            {/* Updated Price Highlight */}
             <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-emerald-600">
-                    ${selectedLocation.price_per_night}
+                    $950
                   </div>
                   <div className="text-sm text-emerald-700 font-medium">
                     Complete package for 2 persons
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Includes accommodation, meals & safari
+                    Additional person: $450/night (save $25!)
                   </div>
 
-                  {/* Rating moved here */}
                   <div className="flex items-center text-sm mt-3">
                     <Star className="h-4 w-4 text-yellow-400 fill-current mr-1" />
                     <span className="font-semibold">
@@ -455,12 +469,11 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
                 <div className="text-right">
                   <Users className="h-8 w-8 text-emerald-600 mx-auto mb-1" />
-                  <span className="text-xs text-gray-600">For 2 People</span>
+                  <span className="text-xs text-gray-600">For 2+ People</span>
                 </div>
               </div>
             </div>
 
-            {/* Description */}
             <p className="text-gray-700 mb-6 leading-relaxed">
               {selectedLocation.description ||
                 selectedLocation.detailed_description}
@@ -632,16 +645,19 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                 </label>
                 <select
                   name="groupSize"
-                  value={formData.groupSize}
+                  value={formData.groupSize || 2}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   required
+                     
                 >
+              
                   {Array.from(
-                    { length: selectedLocation?.max_guests || 8 },
+                    { length: (selectedLocation?.max_guests || 8) - 1 },
                     (_, i) => (
-                      <option key={i + 1} value={i + 1}>
-                        {i + 1} {i + 1 === 1 ? "Guest" : "Guests"}
+                      <option key={i + 2} value={i + 2}>
+                        {i + 2} {i + 2 === 1 ? "Guest" : "Guests"}
+                        {i >= 1 ? ` (Save $${(i) * 25}!)` : ""}
                       </option>
                     )
                   )}
@@ -695,28 +711,41 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
               />
             </div>
 
-            {/* Price Summary */}
+            {/* Updated Price Summary */}
             {formData.checkIn && formData.checkOut && (
+            
               <div className="bg-emerald-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-4">
                   Price Summary
                 </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>
-                      ${selectedLocation.price_per_night} × {calculateNights()}{" "}
-                      nights
-                    </span>
-                    <span>
-                      ${selectedLocation.price_per_night * calculateNights()}
-                    </span>
+                    <span>Base Package (2 persons) × {calculateNights()} {calculateNights() === 1 ? 'night' : 'nights'}</span>
+                    <span>${950 * calculateNights()}</span>
                   </div>
+                  {formData.groupSize > 2 && (
+                       
+                    <>
+                      <div className="flex justify-between">
+                        <span>Additional Persons ({formData.groupSize - 2}) × ${450} × {calculateNights()}</span>
+                        <span>${(formData.groupSize - 2) * 450 * calculateNights()}</span>
+                      </div>
+                      <div className="flex justify-between text-green-600">
+                        <span>💰 Your Savings ($25 off per additional person)</span>
+                        <span>-${(formData.groupSize - 2) * 25 * calculateNights()}</span>
+                      </div>
+                    </>
+                  )}
                   <div className="border-t border-emerald-200 pt-2 mt-2">
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
                       <span className="text-emerald-600">
-                        ${calculateTotal()}
+                        ${getCurrentPricing().total}
                       </span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600 mt-1">
+                      <span>Per Person</span>
+                      <span>${Math.round(getCurrentPricing().total / formData.groupSize)}</span>
                     </div>
                   </div>
                 </div>
@@ -810,6 +839,37 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
         </div>
       </div>
 
+      {/* Pricing Info Card */}
+      <div className="mt-8 bg-amber-50 border border-amber-200 rounded-lg p-6">
+        <h4 className="font-semibold text-amber-900 mb-3 flex items-center">
+          💡 Smart Pricing Structure
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div>
+            <p className="text-amber-800 mb-2">
+              <strong>Base Package:</strong> $950 for 2 persons per night
+            </p>
+            <p className="text-amber-800">
+              <strong>Additional Persons:</strong> $450 per person per night
+            </p>
+          </div>
+          <div>
+            <p className="text-green-700 mb-2">
+              <strong>💰 You Save:</strong> $25 per additional person per night
+            </p>
+            <p className="text-amber-800">
+              <strong>Formula:</strong> ($950 ÷ 2) - $25 = $450
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 p-3 bg-amber-100 rounded border-l-4 border-amber-400">
+          <p className="text-xs text-amber-800">
+            <strong>Example:</strong> 4 people, 2 nights = $950×2 + $450×2×2 = $3,700 
+            (You save $100 compared to individual rates!)
+          </p>
+        </div>
+      </div>
+
       {/* Debug Info (remove in production) */}
       {process.env.NODE_ENV === "development" && (
         <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
@@ -819,6 +879,21 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
           <div className="text-sm text-yellow-700">
             <p>Selected Location: {selectedLocation?.name || "None"}</p>
             <p>Form Valid: {isFormValid() ? "Yes" : "No"}</p>
+            <p>Group Size: {formData.groupSize}</p>
+            <p>Nights: {calculateNights()}</p>
+            {calculateNights() > 0 && (
+              <>
+                <p>Base Cost: ${950 * calculateNights()}</p>
+                {formData.groupSize > 2 && (
+                  <>
+                    <p>Additional Persons: {formData.groupSize - 2}</p>
+                    <p>Additional Cost: ${(formData.groupSize - 2) * 450 * calculateNights()}</p>
+                    <p>Savings: ${(formData.groupSize - 2) * 25 * calculateNights()}</p>
+                  </>
+                )}
+                <p>Total: ${getCurrentPricing().total}</p>
+              </>
+            )}
             <p>API Endpoint: /api/booking</p>
             <p>Environment: {process.env.NODE_ENV}</p>
           </div>

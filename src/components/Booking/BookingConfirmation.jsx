@@ -184,28 +184,51 @@ Thank you for choosing Yala Mobile Camping!
         )}
 
         {/* Pricing */}
+       {/* Pricing - CORRECTED VERSION */}
         <div className="mt-8 pt-6 border-t border-gray-200">
           <div className="bg-emerald-50 p-6 rounded-lg">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Pricing Details</h3>
             <div className="space-y-3">
+              {/* Base Package */}
               <div className="flex justify-between">
-                <span className="text-gray-700">${location.price_per_night} × {nights} nights</span>
-                <span className="font-medium">${location.price_per_night * nights}</span>
+                <span className="text-gray-700">Base Package (2 persons) × {nights} nights</span>
+                <span className="font-medium">${950 * nights}</span>
               </div>
+              
+              {/* Additional Persons (only show if group > 2) */}
+              {groupSize > 2 && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-gray-700">Additional Persons ({groupSize - 2}) × $450 × {nights} nights</span>
+                    <span className="font-medium">${(groupSize - 2) * 450 * nights}</span>
+                  </div>
+                  <div className="flex justify-between text-green-600">
+                    <span className="text-gray-700">💰 Your Savings ($25 off per additional person per night)</span>
+                    <span className="font-medium">-${(groupSize - 2) * 25 * nights}</span>
+                  </div>
+                </>
+              )}
+              
+              {/* Service Fee */}
               <div className="flex justify-between">
                 <span className="text-gray-700">Service fee</span>
                 <span className="font-medium">$0</span>
               </div>
+              
+              {/* Total */}
               <div className="border-t border-emerald-200 pt-3 mt-3">
                 <div className="flex justify-between text-xl font-bold">
                   <span>Total Amount</span>
                   <span className="text-emerald-600">${total}</span>
                 </div>
+                <div className="flex justify-between text-sm text-gray-600 mt-1">
+                  <span>Per Person</span>
+                  <span>${Math.round(total / groupSize)}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
       {/* What Happens Next */}
       <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
@@ -366,6 +389,7 @@ Thank you for choosing Yala Mobile Camping!
             WhatsApp Support
           </a>
         </div>
+      </div>
       </div>
     </div>
   );
