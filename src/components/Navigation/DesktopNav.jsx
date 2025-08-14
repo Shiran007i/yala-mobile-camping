@@ -31,11 +31,11 @@ const DesktopNav = ({ scrollToSection, textClassName = "" }) => {
           <span className="truncate">+94 77 123 4567</span>
         </a>
         <a
-          href="mailto:info@camplanka.com"
+          href="mailto:info@yalamobilecamping.com"
           className={textClassName + " flex items-center"}
         >
           <Mail className="h-4 w-4 mr-1" />
-          <span className="truncate">info@camplanka.com</span>
+          <span className="truncate">info@yalamobilecamping.com</span>
         </a>
       </div>
     </nav>

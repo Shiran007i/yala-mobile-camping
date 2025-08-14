@@ -128,7 +128,7 @@ const AboutUsSection = () => {
                 : "translate-y-8 opacity-0"
             }`}
           >
-            About CampLanka
+            About Yala Mobile Camping
           </h2>
           <p
             className={`text-lg sm:text-xl md:text-2xl text-emerald-700 max-w-3xl mx-auto font-light transform transition-all duration-1000 delay-300 ${
@@ -159,7 +159,7 @@ const AboutUsSection = () => {
               </h3>
               <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">
                 Born from a passion for Sri Lanka's incredible biodiversity,
-                CampLanka was founded to offer authentic wilderness experiences
+                Yala Mobile Camping was founded to offer authentic wilderness experiences
                 while supporting conservation efforts and local communities.
               </p>
               <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4 sm:mb-6">

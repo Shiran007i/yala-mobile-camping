@@ -441,7 +441,7 @@ Please assist me. Thank you!`;
                 Contact via WhatsApp
               </button>
               <a
-                href="mailto:info@camplanka.com"
+                href="mailto:info@yalamobilecamping.com"
                 className="bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors flex items-center justify-center"
               >
                 <Mail className="h-5 w-5 mr-2" />
@@ -450,7 +450,7 @@ Please assist me. Thank you!`;
             </div>
             <div className="mt-4 text-center text-sm text-gray-600">
               <p>📱 WhatsApp: +94 071 399 1051</p>
-              <p>📧 Email: info@camplanka.com</p>
+              <p>📧 Email: info@yalamobilecamping.com</p>
               <p>🕒 Available 24/7 for assistance</p>
             </div>
           </div>

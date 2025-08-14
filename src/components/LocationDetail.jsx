@@ -41,11 +41,11 @@ const LocationDetail = ({ location, onBackToLocations, onBookNow }) => {
 
   // SEO Meta tags (would be handled by a proper router in production)
   React.useEffect(() => {
-    document.title = `${location.name} - Premium Camping Experience in ${location.location} | CampLanka`;
+    document.title = `${location.name} - Premium Camping Experience in ${location.location} | Yala Mobilecamping`;
 
     const metaDescription = document.createElement("meta");
     metaDescription.name = "description";
-    metaDescription.content = `Experience ${location.name} camping in ${location.location}. ${location.description} Book your adventure with CampLanka today! Starting from $${location.price_per_night}/night.`;
+    metaDescription.content = `Experience ${location.name} camping in ${location.location}. ${location.description} Book your adventure with Yala Mobile Camping today! Starting from $${location.price_per_night}/night.`;
     document.head.appendChild(metaDescription);
 
     const metaKeywords = document.createElement("meta");

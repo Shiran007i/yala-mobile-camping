@@ -89,11 +89,11 @@ const TabSections = ({ activeTab }) => {
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-8 lg:px-12">
           <h2 className={`${headingClasses} text-blue-900 ${fadeInClass}`}>
-            About CampLanka
+            About Yala Mobile Camping
           </h2>
           <p className={`${paragraphClasses} text-blue-700 ${fadeInClass}`}>
             Pioneering sustainable wildlife tourism in Sri Lanka since 2018,
-            CampLanka connects travelers with authentic wilderness experiences
+            Yala Mobile Camping connects travelers with authentic wilderness experiences
             rooted in eco-conscious practices and local expertise.
           </p>
         </div>

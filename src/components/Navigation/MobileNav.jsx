@@ -62,12 +62,12 @@ const MobileNav = ({ scrollToSection, textClassName = "" }) => {
                 <span className="truncate">+94 77 123 4567</span>
               </a>
               <a
-                href="mailto:info@camplanka.com"
+                href="mailto:info@yalamobilecamping.com"
                 className={textClassName + " flex items-center break-all"}
                 aria-label="Email Yala Mobile Camping"
               >
                 <Mail className="h-4 w-4 mr-2" />
-                <span className="truncate">info@camplanka.com</span>
+                <span className="truncate">info@yalamobilecamping.com</span>
               </a>
             </div>
           </div>

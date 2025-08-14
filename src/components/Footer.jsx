@@ -191,7 +191,7 @@ const Footer = () => {
                 <div className="flex items-start space-x-3">
                   <Mail className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-gray-400">info@camplanka.com</p>
+                    <p className="text-gray-400">info@yalamobilecamping.com</p>
                     <p className="text-gray-400 text-sm">
                       We reply within 24hrs
                     </p>
@@ -232,7 +232,7 @@ const Footer = () => {
             <div className="flex flex-col md:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
               <div className="flex flex-col md:flex-row items-center space-y-1 sm:space-y-2 md:space-y-0 md:space-x-4 sm:space-x-6">
                 <p className="text-gray-400 text-center md:text-left text-xs sm:text-base">
-                  &copy; {currentYear} CampLanka. All rights reserved.
+                  &copy; {currentYear} Yala Mobile Camping. All rights reserved.
                 </p>
                 <div className="flex items-center space-x-1 text-gray-400 text-xs sm:text-base">
                   <span>Made with</span>
