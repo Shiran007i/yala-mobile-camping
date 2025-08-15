@@ -7,7 +7,7 @@ import {
   generateAdminEmailTemplate,
   generateCustomerEmailTemplate,
 } from "./src/templates/emailTemplates.js";
-import { SitemapGenerator } from "./src/utils/sitemapGenerator.js";
+import SitemapGenerator from "./src/utils/sitemapGenerator.js";
 
 // Load environment variables
 dotenv.config({ path: ".env.local" });

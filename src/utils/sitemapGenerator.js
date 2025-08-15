@@ -1,6 +1,6 @@
 // sitemapGenerator.js - Place this in your project root or src/utils/
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 class SitemapGenerator {
   constructor(baseUrl = 'https://www.yalamobilecamping.com') {
@@ -118,10 +118,10 @@ class SitemapGenerator {
   }
 }
 
-// Usage example
-if (require.main === module) {
+// Usage example for ES modules
+if (import.meta.url === `file://${process.argv[1]}`) {
   const generator = new SitemapGenerator();
   generator.saveSitemap();
 }
 
-module.exports = SitemapGenerator;
+export default SitemapGenerator;
