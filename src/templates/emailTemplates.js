@@ -13,14 +13,15 @@ const calculateEmailPricing = (data) => {
   const additionalPersonPrice = 450;
   const groupSize = parseInt(data.groupSize) || 2;
   const nights = parseInt(data.nights) || 1;
-  
+
   // Calculate components
   const basePriceTotal = basePrice * nights;
   const additionalPersons = Math.max(0, groupSize - 2);
-  const additionalPersonsTotal = additionalPersons * additionalPersonPrice * nights;
+  const additionalPersonsTotal =
+    additionalPersons * additionalPersonPrice * nights;
   const subtotal = basePriceTotal + additionalPersonsTotal;
   const savings = additionalPersons * 25 * nights; // $25 savings per additional person per night
-  
+
   return {
     basePrice,
     additionalPersonPrice,
@@ -32,7 +33,7 @@ const calculateEmailPricing = (data) => {
     subtotal,
     total: parseInt(data.total) || subtotal,
     savings,
-    perPerson: Math.round((subtotal / groupSize) * 100) / 100
+    perPerson: Math.round((subtotal / groupSize) * 100) / 100,
   };
 };
 
@@ -42,7 +43,7 @@ const calculateEmailPricing = (data) => {
 export const generateAdminEmailTemplate = (data, env) => {
   const whatsappPhone = data.phone.replace(/[^\d]/g, "").replace(/^0/, "94");
   const pricing = calculateEmailPricing(data);
-  
+
   return `
 <!DOCTYPE html>
 <html>
@@ -62,7 +63,7 @@ export const generateAdminEmailTemplate = (data, env) => {
       ${generateUrgentBanner(data, pricing)}
       ${generateCustomerInfoSection(data)}
       ${generateBookingDetailsSection(data)}
-      ${data.specialRequests ? generateSpecialRequestsSection(data) : ''}
+      ${data.specialRequests ? generateSpecialRequestsSection(data) : ""}
       ${generateFixedPricingSection(pricing)}
       ${generateActionButtons(data, env, whatsappPhone)}
       ${generateFooterInfo(data, env)}
@@ -77,7 +78,7 @@ export const generateAdminEmailTemplate = (data, env) => {
  */
 export const generateCustomerEmailTemplate = (data, env) => {
   const pricing = calculateEmailPricing(data);
-  
+
   return `
 <!DOCTYPE html>
 <html>
@@ -96,7 +97,7 @@ export const generateCustomerEmailTemplate = (data, env) => {
     <div class="content">
       ${generateCustomerWelcome(data)}
       ${generateBookingSummary(data)}
-      ${data.specialRequests ? generateCustomerSpecialRequests(data) : ''}
+      ${data.specialRequests ? generateCustomerSpecialRequests(data) : ""}
       ${generateFixedCustomerPricingSummary(pricing)}
       ${generateNextSteps()}
       ${generateContactInfo(env)}
@@ -144,17 +145,27 @@ const generateFixedPricingSection = (pricing) => `
       <div class="pricing-row">
         <div class="pricing-item">
           <span class="pricing-label">💵 Base Package (2 persons):</span>
-          <span class="pricing-calculation">$${pricing.basePrice} × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}</span>
+          <span class="pricing-calculation">$${pricing.basePrice} × ${
+  pricing.nights
+} ${pricing.nights === 1 ? "night" : "nights"}</span>
         </div>
         <span class="pricing-value">$${pricing.basePriceTotal.toLocaleString()}</span>
       </div>
       
-      ${pricing.additionalPersons > 0 ? `
+      ${
+        pricing.additionalPersons > 0
+          ? `
       <!-- Additional Persons -->
       <div class="pricing-row additional-persons">
         <div class="pricing-item">
-          <span class="pricing-label">👥 Additional Persons (${pricing.additionalPersons}):</span>
-          <span class="pricing-calculation">$${pricing.additionalPersonPrice} × ${pricing.additionalPersons} × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}</span>
+          <span class="pricing-label">👥 Additional Persons (${
+            pricing.additionalPersons
+          }):</span>
+          <span class="pricing-calculation">$${
+            pricing.additionalPersonPrice
+          } × ${pricing.additionalPersons} × ${pricing.nights} ${
+              pricing.nights === 1 ? "night" : "nights"
+            }</span>
           <span class="savings-note">💸 Save $${pricing.savings} total!</span>
         </div>
         <span class="pricing-value">$${pricing.additionalPersonsTotal.toLocaleString()}</span>
@@ -168,29 +179,47 @@ const generateFixedPricingSection = (pricing) => `
         </div>
         <span class="pricing-value">$${pricing.subtotal.toLocaleString()}</span>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
       
       <!-- Final Total -->
       <div class="pricing-row total">
         <div class="pricing-item">
           <span class="pricing-label">💲 TOTAL BOOKING VALUE:</span>
-          <span class="pricing-details">${pricing.groupSize} persons × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}</span>
+          <span class="pricing-details">${pricing.groupSize} persons × ${
+  pricing.nights
+} ${pricing.nights === 1 ? "night" : "nights"}</span>
         </div>
         <span class="pricing-value total-amount">$${pricing.total.toLocaleString()}</span>
       </div>
     </div>
     
-    ${pricing.savings > 0 ? `
+    ${
+      pricing.savings > 0
+        ? `
     <div class="savings-summary">
       💰 Customer Savings: $${pricing.savings} 
-      <br><small>(${pricing.additionalPersons} additional ${pricing.additionalPersons === 1 ? 'person' : 'persons'} × $25 × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'})</small>
+      <br><small>(${pricing.additionalPersons} additional ${
+            pricing.additionalPersons === 1 ? "person" : "persons"
+          } × $25 × ${pricing.nights} ${
+            pricing.nights === 1 ? "night" : "nights"
+          })</small>
     </div>
-    ` : ''}
+    `
+        : ""
+    }
     
     <div class="pricing-verification">
       <strong>📊 Calculation Verification:</strong><br>
-      Base Package: $${pricing.basePrice} × ${pricing.nights} = $${pricing.basePriceTotal}<br>
-      ${pricing.additionalPersons > 0 ? `Additional: $${pricing.additionalPersonPrice} × ${pricing.additionalPersons} × ${pricing.nights} = $${pricing.additionalPersonsTotal}<br>` : ''}
+      Base Package: $${pricing.basePrice} × ${pricing.nights} = $${
+  pricing.basePriceTotal
+}<br>
+      ${
+        pricing.additionalPersons > 0
+          ? `Additional: $${pricing.additionalPersonPrice} × ${pricing.additionalPersons} × ${pricing.nights} = $${pricing.additionalPersonsTotal}<br>`
+          : ""
+      }
       <strong>Final Total: $${pricing.total}</strong>
     </div>
   </div>
@@ -208,22 +237,32 @@ const generateFixedCustomerPricingSummary = (pricing) => `
         <span><strong>$${pricing.basePriceTotal.toLocaleString()}</strong></span>
       </div>
       <div class="pricing-sub-line">
-        $${pricing.basePrice} per night × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}
+        $${pricing.basePrice} per night × ${pricing.nights} ${
+  pricing.nights === 1 ? "night" : "nights"
+}
       </div>
       
-      ${pricing.additionalPersons > 0 ? `
+      ${
+        pricing.additionalPersons > 0
+          ? `
       <!-- Additional Persons -->
       <div class="pricing-line additional">
-        <span><strong>Additional Persons (${pricing.additionalPersons})</strong></span>
+        <span><strong>Additional Persons (${
+          pricing.additionalPersons
+        })</strong></span>
         <span><strong>$${pricing.additionalPersonsTotal.toLocaleString()}</strong></span>
       </div>
       <div class="pricing-sub-line">
-        $${pricing.additionalPersonPrice} per person × ${pricing.additionalPersons} × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}
+        $${pricing.additionalPersonPrice} per person × ${
+              pricing.additionalPersons
+            } × ${pricing.nights} ${pricing.nights === 1 ? "night" : "nights"}
       </div>
       
       <!-- Savings Note -->
       <div class="pricing-note">
-        <small>💸 You save $${pricing.savings} ($25 per additional person per night)!</small>
+        <small>💸 You save $${
+          pricing.savings
+        } ($25 per additional person per night)!</small>
       </div>
       
       <!-- Subtotal -->
@@ -231,7 +270,9 @@ const generateFixedCustomerPricingSummary = (pricing) => `
         <span><strong>Subtotal</strong></span>
         <span><strong>$${pricing.subtotal.toLocaleString()}</strong></span>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
     </div>
     
     <!-- Final Total -->
@@ -240,9 +281,17 @@ const generateFixedCustomerPricingSummary = (pricing) => `
         Total: $${pricing.total.toLocaleString()}
       </div>
       <div style="text-align: center; color: #6b7280; margin-top: 10px; font-size: 16px;">
-        <strong>${pricing.groupSize} ${pricing.groupSize === 1 ? 'person' : 'persons'} × ${pricing.nights} ${pricing.nights === 1 ? 'night' : 'nights'}</strong>
-        ${pricing.savings > 0 ? `<br><span style="color: #059669; font-weight: bold;">🎉 You save $${pricing.savings}!</span>` : ''}
-        <br><small style="color: #9ca3af;">($${pricing.perPerson} per person)</small>
+        <strong>${pricing.groupSize} ${
+  pricing.groupSize === 1 ? "person" : "persons"
+} × ${pricing.nights} ${pricing.nights === 1 ? "night" : "nights"}</strong>
+        ${
+          pricing.savings > 0
+            ? `<br><span style="color: #059669; font-weight: bold;">🎉 You save $${pricing.savings}!</span>`
+            : ""
+        }
+        <br><small style="color: #9ca3af;">($${
+          pricing.perPerson
+        } per person)</small>
       </div>
     </div>
   </div>
@@ -262,7 +311,9 @@ const generateCustomerInfoSection = (data) => `
       </div>
       <div class="info-row">
         <span class="info-label">📧 Email Address:</span>
-        <span class="info-value"><a href="mailto:${data.email}">${data.email}</a></span>
+        <span class="info-value"><a href="mailto:${data.email}">${
+  data.email
+}</a></span>
       </div>
       <div class="info-row">
         <span class="info-label">📱 Phone Number:</span>
@@ -270,7 +321,11 @@ const generateCustomerInfoSection = (data) => `
       </div>
       <div class="info-row">
         <span class="info-label">💬 WhatsApp:</span>
-        <span class="info-value"><a href="https://wa.me/${data.phone.replace(/[^\d]/g, "").replace(/^0/, "94")}" target="_blank">+${data.phone.replace(/[^\d]/g, "").replace(/^0/, "94")}</a></span>
+        <span class="info-value"><a href="https://wa.me/${data.phone
+          .replace(/[^\d]/g, "")
+          .replace(/^0/, "94")}" target="_blank">+${data.phone
+  .replace(/[^\d]/g, "")
+  .replace(/^0/, "94")}</a></span>
       </div>
     </div>
   </div>
@@ -290,21 +345,27 @@ const generateBookingDetailsSection = (data) => `
       </div>
       <div class="info-row">
         <span class="info-label">📅 Check-in Date:</span>
-        <span class="info-value">${new Date(data.checkIn).toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}</span>
+        <span class="info-value">${new Date(data.checkIn).toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }
+        )}</span>
       </div>
       <div class="info-row">
         <span class="info-label">📅 Check-out Date:</span>
-        <span class="info-value">${new Date(data.checkOut).toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}</span>
+        <span class="info-value">${new Date(data.checkOut).toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }
+        )}</span>
       </div>
       <div class="info-row">
         <span class="info-label">🌙 Number of Nights:</span>
@@ -340,11 +401,17 @@ const generateSpecialRequestsSection = (data) => `
 `;
 
 const generateActionButtons = (data, env, whatsappPhone) => {
-  const emailSubject = encodeURIComponent(`✅ Booking Confirmed - ${data.bookingId} - Yala Mobile Camping`);
+  const emailSubject = encodeURIComponent(
+    `✅ Booking Confirmed - ${data.bookingId} - Yala Mobile Camping`
+  );
   const pricing = calculateEmailPricing(data);
-  const emailBody = encodeURIComponent(generateConfirmationEmailBody(data, env, pricing));
-  const whatsappMessage = encodeURIComponent(generateWhatsAppMessage(data, pricing));
-  
+  const emailBody = encodeURIComponent(
+    generateConfirmationEmailBody(data, env, pricing)
+  );
+  const whatsappMessage = encodeURIComponent(
+    generateWhatsAppMessage(data, pricing)
+  );
+
   return `
     <div class="action-buttons">
       <h3>🚀 Quick Response Actions</h3>
@@ -365,10 +432,24 @@ const generateFooterInfo = (data, env) => `
   <div class="footer-info">
     <strong>📊 Booking Management Summary</strong><br><br>
     <strong>⏰ Response Target:</strong> Within 1-2 hours during business hours (8 AM - 8 PM LKT)<br>
-    <strong>📧 Customer Status:</strong> Automatic confirmation email sent to ${data.email}<br>  
+    <strong>📧 Customer Status:</strong> Automatic confirmation email sent to ${
+      data.email
+    }<br>  
     <strong>📄 Next Required Action:</strong> Send availability confirmation and payment instructions<br>
-    <strong>💼 Booking Priority:</strong> ${data.total >= 200 ? "HIGH VALUE" : data.total >= 100 ? "MEDIUM VALUE" : "STANDARD"}<br>
-    <strong>👥 Group Type:</strong> ${data.groupSize >= 6 ? "Large Group" : data.groupSize >= 4 ? "Medium Group" : "Small Group"}
+    <strong>💼 Booking Priority:</strong> ${
+      data.total >= 200
+        ? "HIGH VALUE"
+        : data.total >= 100
+        ? "MEDIUM VALUE"
+        : "STANDARD"
+    }<br>
+    <strong>👥 Group Type:</strong> ${
+      data.groupSize >= 6
+        ? "Large Group"
+        : data.groupSize >= 4
+        ? "Medium Group"
+        : "Small Group"
+    }
     
     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #d1d5db; font-size: 12px;">
       <strong>🤖 System Information:</strong><br>
@@ -407,24 +488,40 @@ const generateCustomerWelcome = (data) => `
 const generateBookingSummary = (data) => `
   <div class="section">
     <h3>📋 Your Booking Summary</h3>
-    <div class="info-row"><span><strong>Booking ID:</strong></span><span>${data.bookingId}</span></div>
-    <div class="info-row"><span><strong>Location:</strong></span><span>${data.location.name}</span></div>
-    <div class="info-row"><span><strong>Check-in:</strong></span><span>${new Date(data.checkIn).toLocaleDateString("en-US", {
+    <div class="info-row"><span><strong>Booking ID:</strong></span><span>${
+      data.bookingId
+    }</span></div>
+    <div class="info-row"><span><strong>Location:</strong></span><span>${
+      data.location.name
+    }</span></div>
+    <div class="info-row"><span><strong>Check-in:</strong></span><span>${new Date(
+      data.checkIn
+    ).toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
       year: "numeric",
     })}</span></div>
-    <div class="info-row"><span><strong>Check-out:</strong></span><span>${new Date(data.checkOut).toLocaleDateString("en-US", {
+    <div class="info-row"><span><strong>Check-out:</strong></span><span>${new Date(
+      data.checkOut
+    ).toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
       year: "numeric",
     })}</span></div>
-    <div class="info-row"><span><strong>Duration:</strong></span><span>${data.nights} nights</span></div>
-    <div class="info-row"><span><strong>Guests:</strong></span><span>${data.groupSize} people</span></div>
-    <div class="info-row"><span><strong>Accommodation:</strong></span><span>${data.accommodationType}</span></div>
-    <div class="info-row"><span><strong>Meal Plan:</strong></span><span>${data.mealPlan}</span></div>
+    <div class="info-row"><span><strong>Duration:</strong></span><span>${
+      data.nights
+    } nights</span></div>
+    <div class="info-row"><span><strong>Guests:</strong></span><span>${
+      data.groupSize
+    } people</span></div>
+    <div class="info-row"><span><strong>Accommodation:</strong></span><span>${
+      data.accommodationType
+    }</span></div>
+    <div class="info-row"><span><strong>Meal Plan:</strong></span><span>${
+      data.mealPlan
+    }</span></div>
   </div>
 `;
 
@@ -452,7 +549,7 @@ const generateNextSteps = () => `
 const generateContactInfo = (env) => `
   <div class="contact">
     <h3>📞 Need Help? Contact Us Anytime!</h3>
-    <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/94713991051" style="color: #10b981;">+94 71 399 1051</a></p>
+    <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/94713585926" style="color: #10b981;">+94 71 399 1051</a></p>
     <p><strong>📧 Email:</strong> <a href="mailto:${env.EMAIL_USER}" style="color: #3b82f6;">${env.EMAIL_USER}</a></p>
     <p><strong>🕐 Available:</strong> 8:00 AM - 8:00 PM (Sri Lanka Time)</p>
   </div>
@@ -473,9 +570,14 @@ const generateCustomerHighlights = () => `
 
 const generateImportantInfo = (data) => `
   <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; color: #6b7280; font-size: 14px;">
-    <p><strong>Important:</strong> Please save your Booking ID: <strong style="color: #059669;">${data.bookingId}</strong></p>
+    <p><strong>Important:</strong> Please save your Booking ID: <strong style="color: #059669;">${
+      data.bookingId
+    }</strong></p>
     <p>This is an automated confirmation. We'll contact you personally within 1-2 hours.</p>
-    <p style="margin-top: 15px; font-size: 12px;">Generated: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Colombo" })} Sri Lanka Time</p>
+    <p style="margin-top: 15px; font-size: 12px;">Generated: ${new Date().toLocaleString(
+      "en-US",
+      { timeZone: "Asia/Colombo" }
+    )} Sri Lanka Time</p>
   </div>
 `;
 
@@ -483,7 +585,9 @@ const generateImportantInfo = (data) => `
 // HELPER FUNCTIONS WITH FIXED PRICING
 // ========================================
 
-const generateConfirmationEmailBody = (data, env, pricing) => `Dear ${data.firstName},
+const generateConfirmationEmailBody = (data, env, pricing) => `Dear ${
+  data.firstName
+},
 
 Great news! Your booking request has been confirmed! 🎉
 
@@ -497,9 +601,15 @@ Great news! Your booking request has been confirmed! 🎉
 - Meals: ${data.mealPlan}
 
 💰 Pricing Breakdown:
-- Base Package (2 persons): $${pricing.basePriceTotal.toLocaleString()}${pricing.additionalPersons > 0 ? `
-- Additional Persons (${pricing.additionalPersons}): $${pricing.additionalPersonsTotal.toLocaleString()}
-- Your Savings: $${pricing.savings} ($25 per additional person per night!)` : ''}
+- Base Package (2 persons): $${pricing.basePriceTotal.toLocaleString()}${
+  pricing.additionalPersons > 0
+    ? `
+- Additional Persons (${
+        pricing.additionalPersons
+      }): $${pricing.additionalPersonsTotal.toLocaleString()}
+- Your Savings: $${pricing.savings} ($25 per additional person per night!)`
+    : ""
+}
 - TOTAL AMOUNT: $${pricing.total.toLocaleString()}
 
 🏕️ Your safari adventure at Yala National Park is confirmed!
@@ -511,11 +621,15 @@ Great news! Your booking request has been confirmed! 🎉
 - WhatsApp: +94 71 399 1051
 - Email: ${env.EMAIL_USER}
 
-${data.specialRequests ? `
+${
+  data.specialRequests
+    ? `
 📝 Regarding your special requests:
 "${data.specialRequests}"
 We've noted these requirements and will ensure they are addressed during your stay.
-` : ''}
+`
+    : ""
+}
 
 Thank you for choosing Yala Mobile Camping!
 
@@ -531,13 +645,21 @@ Thank you for your booking request with Yala Mobile Camping! 🏕️
 - Location: ${data.location.name}  
 - Dates: ${data.checkIn} to ${data.checkOut}
 - Guests: ${pricing.groupSize} people
-- Total: $${pricing.total.toLocaleString()}${pricing.savings > 0 ? `
-- You save: $${pricing.savings}!` : ''}
+- Total: $${pricing.total.toLocaleString()}${
+  pricing.savings > 0
+    ? `
+- You save: $${pricing.savings}!`
+    : ""
+}
 
 GREAT NEWS: Your dates are available! ✅
 
-${data.specialRequests ? `
-📝 I've noted your special requests: "${data.specialRequests}"` : ''}
+${
+  data.specialRequests
+    ? `
+📝 I've noted your special requests: "${data.specialRequests}"`
+    : ""
+}
 
 Welcome to Yala Mobile Camping! 🌟`;
 
@@ -1063,5 +1185,5 @@ const getCustomerEmailStyles = () => `
 export default {
   generateAdminEmailTemplate,
   generateCustomerEmailTemplate,
-  calculateEmailPricing
+  calculateEmailPricing,
 };

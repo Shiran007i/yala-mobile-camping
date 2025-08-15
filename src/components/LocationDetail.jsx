@@ -33,7 +33,7 @@ const LocationDetail = ({ location, onBackToLocations, onBookNow }) => {
 
   const handleWhatsAppContact = () => {
     const message = `Hi! I'm interested in booking ${location.name} camping experience. Can you provide more details?`;
-    const whatsappUrl = `https://wa.me/94713991051?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");

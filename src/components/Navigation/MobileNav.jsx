@@ -53,14 +53,14 @@ const MobileNav = ({ scrollToSection, textClassName = "" }) => {
             </button>
 
             <div className="px-3 py-2 border-t border-white/20 flex flex-col gap-1 text-sm">
-              <a
+              {/* <a
                 href="tel:+94771234567"
                 className={textClassName + " flex items-center mb-1 break-all"}
                 aria-label="Call Yala Mobile Camping"
               >
                 <Phone className="h-4 w-4 mr-2" />
-                <span className="truncate">+94 77 123 4567</span>
-              </a>
+                <span className="truncate">94716335000</span>
+              </a> */}
               <a
                 href="mailto:info@yalamobilecamping.com"
                 className={textClassName + " flex items-center break-all"}

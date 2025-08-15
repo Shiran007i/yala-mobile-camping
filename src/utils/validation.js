@@ -24,7 +24,7 @@ export const validateBookingData = (data) => {
     { field: "nights", type: "number" },
     { field: "groupSize", type: "number" },
     { field: "total", type: "number" },
-    { field: "location", type: "object" }
+    { field: "location", type: "object" },
   ];
 
   // Check required fields
@@ -32,7 +32,9 @@ export const validateBookingData = (data) => {
     if (!data[field]) {
       errors.push(`Missing required field: ${field}`);
     } else if (typeof data[field] !== type) {
-      errors.push(`Invalid type for ${field}: expected ${type}, got ${typeof data[field]}`);
+      errors.push(
+        `Invalid type for ${field}: expected ${type}, got ${typeof data[field]}`
+      );
     }
   });
 
@@ -50,7 +52,7 @@ export const validateBookingData = (data) => {
   if (data.checkIn && data.checkOut) {
     const checkIn = new Date(data.checkIn);
     const checkOut = new Date(data.checkOut);
-    
+
     if (checkIn >= checkOut) {
       errors.push("Check-out date must be after check-in date");
     }
@@ -92,7 +94,7 @@ export const validateBookingData = (data) => {
     isValid: errors.length === 0,
     errors,
     warnings,
-    hasWarnings: warnings.length > 0
+    hasWarnings: warnings.length > 0,
   };
 };
 
@@ -113,7 +115,7 @@ const isValidEmail = (email) => {
  */
 const isValidPhone = (phone) => {
   // Remove all non-digits
-  const cleanPhone = phone.replace(/\D/g, '');
+  const cleanPhone = phone.replace(/\D/g, "");
   // Should have at least 7 digits and max 15 (international standard)
   return cleanPhone.length >= 7 && cleanPhone.length <= 15;
 };
@@ -136,7 +138,7 @@ export const sanitizeBookingData = (data) => {
     groupSize: parseInt(data.groupSize) || 1,
     total: parseFloat(data.total) || 0,
     // Add timestamp if not present
-    submittedAt: data.submittedAt || new Date().toISOString()
+    submittedAt: data.submittedAt || new Date().toISOString(),
   };
 };
 
@@ -146,9 +148,9 @@ export const sanitizeBookingData = (data) => {
  * @returns {string} WhatsApp URL
  */
 export const generateWhatsAppLink = (bookingData) => {
-  const phone = "94713991051"; // Your business WhatsApp number
+  const phone = "94713585926"; // Your business WhatsApp number
   const message = `Hi! I just submitted booking ${bookingData.bookingId} for ${bookingData.nights} nights at ${bookingData.location.name}. Looking forward to hearing from you!`;
-  
+
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 };
 
@@ -169,11 +171,11 @@ export const logBookingActivity = (action, bookingData, result = {}) => {
     nights: bookingData.nights,
     location: bookingData.location.name,
     success: result.success !== false,
-    ...result
+    ...result,
   };
 
   console.log(`📝 BOOKING LOG [${action}]:`, JSON.stringify(logEntry, null, 2));
-  
+
   // In production, you might want to send this to a logging service
   // or save to a database
 };
@@ -184,5 +186,5 @@ export default {
   validateBookingData,
   sanitizeBookingData,
   generateWhatsAppLink,
-  logBookingActivity
+  logBookingActivity,
 };

@@ -34,21 +34,23 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
   // *** UPDATED PRICING CALCULATION ***
   const calculatePricing = (persons, nights) => {
     const BASE_PRICE_2_PERSONS = 950;
-    const ADDITIONAL_PERSON_PRICE = (950 / 2) - 25; // $450 per additional person
-    
+    const ADDITIONAL_PERSON_PRICE = 950 / 2 - 25; // $450 per additional person
+
     let total = BASE_PRICE_2_PERSONS * nights; // Base price for 2 persons
-    
+
     if (persons > 2) {
       const additionalPersons = persons - 2;
-      const additionalCost = additionalPersons * ADDITIONAL_PERSON_PRICE * nights;
+      const additionalCost =
+        additionalPersons * ADDITIONAL_PERSON_PRICE * nights;
       total += additionalCost;
     }
-    
+
     return {
       basePrice: BASE_PRICE_2_PERSONS,
       additionalPersonPrice: ADDITIONAL_PERSON_PRICE,
       additionalPersons: Math.max(0, persons - 2),
-      additionalCost: persons > 2 ? (persons - 2) * ADDITIONAL_PERSON_PRICE * nights : 0,
+      additionalCost:
+        persons > 2 ? (persons - 2) * ADDITIONAL_PERSON_PRICE * nights : 0,
       total: total,
       perPerson: total / persons,
       perNight: total / nights,
@@ -298,9 +300,25 @@ Accommodation: ${finalBookingData.accommodationType}
 Meal Plan: ${finalBookingData.mealPlan}
 
 💰 PRICING BREAKDOWN:
-Base Package (2 persons): $950 × ${finalBookingData.nights} nights = $${950 * finalBookingData.nights}
-${finalBookingData.groupSize > 2 ? `Additional Persons (${finalBookingData.groupSize - 2}): $450 × ${finalBookingData.groupSize - 2} × ${finalBookingData.nights} nights = $${(finalBookingData.groupSize - 2) * 450 * finalBookingData.nights}` : ''}
-${finalBookingData.groupSize > 2 ? `Savings: $${(finalBookingData.groupSize - 2) * 25 * finalBookingData.nights} ($25 discount per additional person per night)` : ''}
+Base Package (2 persons): $950 × ${finalBookingData.nights} nights = $${
+      950 * finalBookingData.nights
+    }
+${
+  finalBookingData.groupSize > 2
+    ? `Additional Persons (${finalBookingData.groupSize - 2}): $450 × ${
+        finalBookingData.groupSize - 2
+      } × ${finalBookingData.nights} nights = $${
+        (finalBookingData.groupSize - 2) * 450 * finalBookingData.nights
+      }`
+    : ""
+}
+${
+  finalBookingData.groupSize > 2
+    ? `Savings: $${
+        (finalBookingData.groupSize - 2) * 25 * finalBookingData.nights
+      } ($25 discount per additional person per night)`
+    : ""
+}
 TOTAL: $${finalBookingData.total}
 
 📝 SPECIAL REQUESTS:
@@ -355,9 +373,25 @@ Next steps:
 • Meal Plan: ${bookingData.mealPlan}
 
 💰 *Pricing:*
-• Base Package (2 persons): $950 × ${bookingData.nights} = $${950 * bookingData.nights}
-${bookingData.groupSize > 2 ? `• Additional Persons (${bookingData.groupSize - 2}): $450 × ${bookingData.groupSize - 2} × ${bookingData.nights} = $${(bookingData.groupSize - 2) * 450 * bookingData.nights}` : ''}
-${bookingData.groupSize > 2 ? `• *Your Savings:* $${(bookingData.groupSize - 2) * 25 * bookingData.nights} ($25 off per additional person!)` : ''}
+• Base Package (2 persons): $950 × ${bookingData.nights} = $${
+      950 * bookingData.nights
+    }
+${
+  bookingData.groupSize > 2
+    ? `• Additional Persons (${bookingData.groupSize - 2}): $450 × ${
+        bookingData.groupSize - 2
+      } × ${bookingData.nights} = $${
+        (bookingData.groupSize - 2) * 450 * bookingData.nights
+      }`
+    : ""
+}
+${
+  bookingData.groupSize > 2
+    ? `• *Your Savings:* $${
+        (bookingData.groupSize - 2) * 25 * bookingData.nights
+      } ($25 off per additional person!)`
+    : ""
+}
 • *TOTAL: $${bookingData.total}*
 
 ${
@@ -382,7 +416,7 @@ ${
     };
 
     const message = createWhatsAppMessage(finalBookingData);
-    const whatsappUrl = `https://wa.me/94713991051?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");
@@ -649,15 +683,13 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   required
-                     
                 >
-              
                   {Array.from(
                     { length: (selectedLocation?.max_guests || 8) - 1 },
                     (_, i) => (
                       <option key={i + 2} value={i + 2}>
                         {i + 2} {i + 2 === 1 ? "Guest" : "Guests"}
-                        {i >= 1 ? ` (Save $${(i) * 25}!)` : ""}
+                        {i >= 1 ? ` (Save $${i * 25}!)` : ""}
                       </option>
                     )
                   )}
@@ -713,26 +745,36 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
 
             {/* Updated Price Summary */}
             {formData.checkIn && formData.checkOut && (
-            
               <div className="bg-emerald-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-4">
                   Price Summary
                 </h4>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Base Package (2 persons) × {calculateNights()} {calculateNights() === 1 ? 'night' : 'nights'}</span>
+                    <span>
+                      Base Package (2 persons) × {calculateNights()}{" "}
+                      {calculateNights() === 1 ? "night" : "nights"}
+                    </span>
                     <span>${950 * calculateNights()}</span>
                   </div>
                   {formData.groupSize > 2 && (
-                       
                     <>
                       <div className="flex justify-between">
-                        <span>Additional Persons ({formData.groupSize - 2}) × ${450} × {calculateNights()}</span>
-                        <span>${(formData.groupSize - 2) * 450 * calculateNights()}</span>
+                        <span>
+                          Additional Persons ({formData.groupSize - 2}) × ${450}{" "}
+                          × {calculateNights()}
+                        </span>
+                        <span>
+                          ${(formData.groupSize - 2) * 450 * calculateNights()}
+                        </span>
                       </div>
                       <div className="flex justify-between text-green-600">
-                        <span>💰 Your Savings ($25 off per additional person)</span>
-                        <span>-${(formData.groupSize - 2) * 25 * calculateNights()}</span>
+                        <span>
+                          💰 Your Savings ($25 off per additional person)
+                        </span>
+                        <span>
+                          -${(formData.groupSize - 2) * 25 * calculateNights()}
+                        </span>
                       </div>
                     </>
                   )}
@@ -745,7 +787,12 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                     </div>
                     <div className="flex justify-between text-sm text-gray-600 mt-1">
                       <span>Per Person</span>
-                      <span>${Math.round(getCurrentPricing().total / formData.groupSize)}</span>
+                      <span>
+                        $
+                        {Math.round(
+                          getCurrentPricing().total / formData.groupSize
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -864,8 +911,8 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
         </div>
         <div className="mt-4 p-3 bg-amber-100 rounded border-l-4 border-amber-400">
           <p className="text-xs text-amber-800">
-            <strong>Example:</strong> 4 people, 2 nights = $950×2 + $450×2×2 = $3,700 
-            (You save $100 compared to individual rates!)
+            <strong>Example:</strong> 4 people, 2 nights = $950×2 + $450×2×2 =
+            $3,700 (You save $100 compared to individual rates!)
           </p>
         </div>
       </div>
@@ -887,8 +934,14 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                 {formData.groupSize > 2 && (
                   <>
                     <p>Additional Persons: {formData.groupSize - 2}</p>
-                    <p>Additional Cost: ${(formData.groupSize - 2) * 450 * calculateNights()}</p>
-                    <p>Savings: ${(formData.groupSize - 2) * 25 * calculateNights()}</p>
+                    <p>
+                      Additional Cost: $
+                      {(formData.groupSize - 2) * 450 * calculateNights()}
+                    </p>
+                    <p>
+                      Savings: $
+                      {(formData.groupSize - 2) * 25 * calculateNights()}
+                    </p>
                   </>
                 )}
                 <p>Total: ${getCurrentPricing().total}</p>

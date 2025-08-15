@@ -58,48 +58,48 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     alternateName: "Yala Mobile Camp",
     description: SEO_CONFIG.defaultDescription,
     url: SEO_CONFIG.siteUrl,
-    telephone: "+94713991051",
+    telephone: "+94713585926",
     email: "info@yalamobilecamping.com",
     logo: {
       "@type": "ImageObject",
       url: `${SEO_CONFIG.siteUrl}/images/logo.webp`,
       width: 300,
-      height: 100
+      height: 100,
     },
     image: {
       "@type": "ImageObject",
       url: `${SEO_CONFIG.siteUrl}/images/yala-camping-hero.webp`,
       width: 1200,
-      height: 630
+      height: 630,
     },
     address: {
       "@type": "PostalAddress",
       addressCountry: "LK",
       addressRegion: "Southern Province",
       addressLocality: "Tissamaharama",
-      streetAddress: "Near Yala National Park Entrance"
+      streetAddress: "Near Yala National Park Entrance",
     },
     geo: {
       "@type": "GeoCoordinates",
       latitude: 6.3725,
-      longitude: 81.5185
+      longitude: 81.5185,
     },
     priceRange: "$$$",
     paymentAccepted: "Cash, Bank Transfer",
     currenciesAccepted: "USD, LKR",
     areaServed: {
       "@type": "Country",
-      name: "Sri Lanka"
+      name: "Sri Lanka",
     },
     serviceArea: {
       "@type": "GeoCircle",
       geoMidpoint: {
         "@type": "GeoCoordinates",
         latitude: 6.3725,
-        longitude: 81.5185
+        longitude: 81.5185,
       },
-      geoRadius: "50000"
-    }
+      geoRadius: "50000",
+    },
   };
 
   // Tourism attraction schema
@@ -108,24 +108,25 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     "@type": "TouristAttraction",
     "@id": `${SEO_CONFIG.siteUrl}#attraction`,
     name: "Yala National Park Mobile Camping Experience",
-    description: "Premium mobile camping experience in Sri Lanka's most famous national park with wildlife viewing and safari tours",
+    description:
+      "Premium mobile camping experience in Sri Lanka's most famous national park with wildlife viewing and safari tours",
     url: SEO_CONFIG.siteUrl,
     image: {
       "@type": "ImageObject",
       url: `${SEO_CONFIG.siteUrl}/images/yala-camping-hero.webp`,
       width: 1200,
-      height: 630
+      height: 630,
     },
     address: {
       "@type": "PostalAddress",
       addressCountry: "LK",
       addressRegion: "Southern Province",
-      addressLocality: "Yala National Park"
+      addressLocality: "Yala National Park",
     },
     geo: {
       "@type": "GeoCoordinates",
       latitude: 6.3725,
-      longitude: 81.5185
+      longitude: 81.5185,
     },
     touristType: ["EcoTourist", "WildlifeEnthusiast", "AdventureTourist"],
     availableLanguage: ["English", "Sinhala"],
@@ -133,24 +134,24 @@ const generateStructuredData = (activeTab, selectedLocation) => {
       {
         "@type": "LocationFeatureSpecification",
         name: "Safari Tours",
-        value: "Professional guided wildlife tours"
+        value: "Professional guided wildlife tours",
       },
       {
-        "@type": "LocationFeatureSpecification", 
+        "@type": "LocationFeatureSpecification",
         name: "Mobile Camping",
-        value: "Luxury tents with full amenities"
+        value: "Luxury tents with full amenities",
       },
       {
         "@type": "LocationFeatureSpecification",
         name: "Wildlife Photography",
-        value: "Professional photography opportunities"
+        value: "Professional photography opportunities",
       },
       {
         "@type": "LocationFeatureSpecification",
         name: "Meal Service",
-        value: "Full board authentic Sri Lankan cuisine"
-      }
-    ]
+        value: "Full board authentic Sri Lankan cuisine",
+      },
+    ],
   };
 
   // FIXED: Proper Review/Rating structure with correct itemReviewed
@@ -162,13 +163,14 @@ const generateStructuredData = (activeTab, selectedLocation) => {
       "@type": "Rating",
       ratingValue: 4.9,
       bestRating: 5,
-      worstRating: 1
+      worstRating: 1,
     },
     author: {
       "@type": "Organization",
-      name: "TripAdvisor and Google Reviews"
+      name: "TripAdvisor and Google Reviews",
     },
-    reviewBody: "Exceptional mobile camping experience in Yala National Park with excellent wildlife viewing opportunities and professional service.",
+    reviewBody:
+      "Exceptional mobile camping experience in Yala National Park with excellent wildlife viewing opportunities and professional service.",
     itemReviewed: {
       "@type": "TravelAgency",
       "@id": `${SEO_CONFIG.siteUrl}#organization`,
@@ -179,9 +181,10 @@ const generateStructuredData = (activeTab, selectedLocation) => {
         reviewCount: 156,
         bestRating: 5,
         worstRating: 1,
-        ratingExplanation: "Based on customer reviews from multiple platforms including TripAdvisor and Google"
-      }
-    }
+        ratingExplanation:
+          "Based on customer reviews from multiple platforms including TripAdvisor and Google",
+      },
+    },
   };
 
   // FIXED: Service schema with proper Product structure including required aggregateRating
@@ -190,14 +193,15 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     "@type": "Service",
     "@id": `${SEO_CONFIG.siteUrl}#service`,
     name: "Mobile Safari Camping Experience",
-    description: "Premium mobile camping with guided safari tours in Yala National Park",
+    description:
+      "Premium mobile camping with guided safari tours in Yala National Park",
     provider: {
       "@type": "TravelAgency",
-      "@id": `${SEO_CONFIG.siteUrl}#organization`
+      "@id": `${SEO_CONFIG.siteUrl}#organization`,
     },
     areaServed: {
       "@type": "Place",
-      name: "Yala National Park, Sri Lanka"
+      name: "Yala National Park, Sri Lanka",
     },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
@@ -209,18 +213,19 @@ const generateStructuredData = (activeTab, selectedLocation) => {
             "@type": "Product",
             "@id": `${SEO_CONFIG.siteUrl}#camping-package`,
             name: "1 Night Mobile Camping Package",
-            description: "Includes accommodation, meals, safari tours, and guide services",
+            description:
+              "Includes accommodation, meals, safari tours, and guide services",
             // FIXED: Added required image field for Product
             image: {
               "@type": "ImageObject",
               url: `${SEO_CONFIG.siteUrl}/images/yala-camping-hero.webp`,
               width: 1200,
               height: 630,
-              caption: "Yala Mobile Camping safari experience"
+              caption: "Yala Mobile Camping safari experience",
             },
             brand: {
               "@type": "Brand",
-              name: "Yala Mobile Camping"
+              name: "Yala Mobile Camping",
             },
             category: "Travel Package",
             // FIXED: Added required aggregateRating for Product
@@ -229,7 +234,7 @@ const generateStructuredData = (activeTab, selectedLocation) => {
               ratingValue: 4.9,
               reviewCount: 89,
               bestRating: 5,
-              worstRating: 1
+              worstRating: 1,
             },
             // FIXED: Added offers to satisfy Schema requirements
             offers: {
@@ -245,7 +250,7 @@ const generateStructuredData = (activeTab, selectedLocation) => {
                 shippingRate: {
                   "@type": "MonetaryAmount",
                   value: "0",
-                  currency: "USD"
+                  currency: "USD",
                 },
                 deliveryTime: {
                   "@type": "ShippingDeliveryTime",
@@ -253,31 +258,32 @@ const generateStructuredData = (activeTab, selectedLocation) => {
                     "@type": "QuantitativeValue",
                     minValue: 0,
                     maxValue: 1,
-                    unitText: "days"
-                  }
-                }
+                    unitText: "days",
+                  },
+                },
               },
               hasMerchantReturnPolicy: {
                 "@type": "MerchantReturnPolicy",
-                returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+                returnPolicyCategory:
+                  "https://schema.org/MerchantReturnFiniteReturnWindow",
                 merchantReturnDays: 7,
                 returnMethod: "https://schema.org/ReturnByMail",
-                returnFees: "https://schema.org/FreeReturn"
+                returnFees: "https://schema.org/FreeReturn",
               },
               seller: {
                 "@type": "TravelAgency",
-                "@id": `${SEO_CONFIG.siteUrl}#organization`
-              }
-            }
+                "@id": `${SEO_CONFIG.siteUrl}#organization`,
+              },
+            },
           },
           price: "950",
           priceCurrency: "USD",
           priceValidUntil: "2025-12-31",
           availability: "https://schema.org/InStock",
-          validFrom: "2025-01-01"
-        }
-      ]
-    }
+          validFrom: "2025-01-01",
+        },
+      ],
+    },
   };
 
   // Location-specific structured data
@@ -296,38 +302,38 @@ const generateStructuredData = (activeTab, selectedLocation) => {
             "@type": "ImageObject",
             url: selectedLocation.image_url,
             width: 800,
-            height: 600
+            height: 600,
           },
           address: {
             "@type": "PostalAddress",
             addressCountry: "LK",
-            addressRegion: "Southern Province", 
-            addressLocality: selectedLocation.location
+            addressRegion: "Southern Province",
+            addressLocality: selectedLocation.location,
           },
           geo: {
             "@type": "GeoCoordinates",
             latitude: selectedLocation.coordinates[0],
-            longitude: selectedLocation.coordinates[1]
+            longitude: selectedLocation.coordinates[1],
           },
           priceRange: `$${selectedLocation.price_per_night}`,
           maximumAttendeeCapacity: selectedLocation.max_guests,
           starRating: {
             "@type": "Rating",
-            ratingValue: selectedLocation.rating
+            ratingValue: selectedLocation.rating,
           },
-          amenityFeature: selectedLocation.amenities.map(amenity => ({
+          amenityFeature: selectedLocation.amenities.map((amenity) => ({
             "@type": "LocationFeatureSpecification",
-            name: amenity
+            name: amenity,
           })),
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: selectedLocation.rating,
             reviewCount: 45,
             bestRating: 5,
-            worstRating: 1
-          }
-        }
-      ]
+            worstRating: 1,
+          },
+        },
+      ],
     };
   }
 
@@ -338,8 +344,8 @@ const generateStructuredData = (activeTab, selectedLocation) => {
       baseOrganization,
       touristAttraction,
       reviewSchema,
-      serviceSchema
-    ]
+      serviceSchema,
+    ],
   };
 };
 // Main App component
@@ -541,7 +547,10 @@ const App = () => {
       <meta property="og:url" content={canonical || SEO_CONFIG.siteUrl} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={`${SEO_CONFIG.siteUrl}${SEO_CONFIG.ogImage}`} />
+      <meta
+        property="og:image"
+        content={`${SEO_CONFIG.siteUrl}${SEO_CONFIG.ogImage}`}
+      />
       <meta property="og:site_name" content={SEO_CONFIG.siteName} />
       <meta property="og:locale" content="en_US" />
 
@@ -550,7 +559,10 @@ const App = () => {
       <meta property="twitter:url" content={canonical || SEO_CONFIG.siteUrl} />
       <meta property="twitter:title" content={title} />
       <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={`${SEO_CONFIG.siteUrl}${SEO_CONFIG.ogImage}`} />
+      <meta
+        property="twitter:image"
+        content={`${SEO_CONFIG.siteUrl}${SEO_CONFIG.ogImage}`}
+      />
       {SEO_CONFIG.twitterHandle && (
         <meta property="twitter:creator" content={SEO_CONFIG.twitterHandle} />
       )}

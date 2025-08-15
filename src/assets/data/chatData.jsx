@@ -2,20 +2,20 @@
 export const CHAT_CONFIG = {
   // Company Information
   companyName: "Yala Mobile Camping",
-  whatsappNumber: "+94713991051",
+  whatsappNumber: "+94713585926",
   email: "info@yalamobilecamping.com",
-  phone: "+94713991051",
+  phone: "+94713585926",
   website: "https://yalamobilecamping.com",
-  
+
   // Location Details
   location: {
     address: "Yala National Park entrance, Tissamaharama",
     coordinates: "6.3725°N, 81.5185°E",
     pickupAreas: [
       "Tissamaharama hotels",
-      "Kataragama area", 
-      "Kirinda beach hotels"
-    ]
+      "Kataragama area",
+      "Kirinda beach hotels",
+    ],
   },
 
   // Package Information
@@ -28,52 +28,52 @@ export const CHAT_CONFIG = {
       description: "Complete safari camping experience",
       includes: [
         "Full-board meals (breakfast, lunch, dinner)",
-        "One night in luxury safari tent", 
+        "One night in luxury safari tent",
         "Full-day guided safari",
         "Park entrance fees included",
         "Professional wildlife guide",
-        "All camping equipment provided"
-      ]
+        "All camping equipment provided",
+      ],
     },
     safariOptions: [
       {
         name: "Morning Safari",
         time: "6 AM - 12 PM",
         price: 75,
-        currency: "USD"
+        currency: "USD",
       },
       {
-        name: "Full Day Safari", 
+        name: "Full Day Safari",
         time: "6 AM - 6 PM",
         price: 120,
-        currency: "USD"
+        currency: "USD",
       },
       {
         name: "Evening Safari",
-        time: "2 PM - 6 PM", 
+        time: "2 PM - 6 PM",
         price: 65,
-        currency: "USD"
-      }
-    ]
+        currency: "USD",
+      },
+    ],
   },
 
   // Wildlife Information
   wildlife: [
     "Sri Lankan Leopards (highest density globally!)",
     "Asian Elephants",
-    "Sloth Bears", 
+    "Sloth Bears",
     "Water Buffalo",
     "200+ Bird Species",
-    "Crocodiles and more!"
+    "Crocodiles and more!",
   ],
 
   // Quick Reply Buttons
   quickReplies: [
     "Safari packages",
     "Camping prices",
-    "Available dates", 
+    "Available dates",
     "Wildlife viewing",
-    "Contact info"
+    "Contact info",
   ],
 
   // Q&A Database - Add/Edit questions and answers here
@@ -82,14 +82,14 @@ export const CHAT_CONFIG = {
     {
       keywords: ["contact", "phone", "call", "tel", "telephone", "number"],
       response: `📞 **Contact Information**:
-• WhatsApp: ${"+94713991051"} (Instant response)
-• Phone: ${"+94713991051"}
+• WhatsApp: ${"+94713585926"} (Instant response)
+• Phone: ${"+94713585926"}
 • Email: info@yalamobilecamping.com
 • Available: 24/7 for bookings and support
 
-💬 **Fastest Response**: Use WhatsApp for instant replies!`
+💬 **Fastest Response**: Use WhatsApp for instant replies!`,
     },
-    
+
     // Location Information
     {
       keywords: ["location", "where", "address", "directions", "pickup"],
@@ -102,7 +102,7 @@ export const CHAT_CONFIG = {
 
 🗺️ **Coordinates**: 6.3725°N, 81.5185°E
 
-We provide detailed directions and pickup coordination upon booking!`
+We provide detailed directions and pickup coordination upon booking!`,
     },
 
     // Safari Packages
@@ -116,7 +116,7 @@ We provide detailed directions and pickup coordination upon booking!`
 • **Complete Package with Camping** - $950 for 2 persons
 
 All include park fees, professional guide, and refreshments. 
-The complete package includes camping, all meals, and full-day safari!`
+The complete package includes camping, all meals, and full-day safari!`,
     },
 
     // Pricing Information
@@ -132,12 +132,20 @@ The complete package includes camping, all meals, and full-day safari!`
 • Professional wildlife guide
 • All camping equipment provided
 
-This is an all-inclusive experience inside Yala National Park!`
+This is an all-inclusive experience inside Yala National Park!`,
     },
 
     // Availability & Booking
     {
-      keywords: ["date", "dates", "available", "availability", "booking", "book", "reserve"],
+      keywords: [
+        "date",
+        "dates",
+        "available",
+        "availability",
+        "booking",
+        "book",
+        "reserve",
+      ],
       response: `📅 **Availability & Booking**:
 
 🌟 **Current Status**: Taking bookings year-round
@@ -147,10 +155,10 @@ This is an all-inclusive experience inside Yala National Park!`
 ⚡ **Quick Booking**: Use the 'Book Now' button
 📱 **Instant Response**: Contact via WhatsApp
 
-Would you like to check specific dates?`
+Would you like to check specific dates?`,
     },
 
-    // Wildlife Information  
+    // Wildlife Information
     {
       keywords: ["wildlife", "animals", "leopard", "elephant", "birds", "bear"],
       response: `🐆 **Wildlife in Yala National Park**:
@@ -166,7 +174,7 @@ Would you like to check specific dates?`
 🎯 **Leopard Success Rate**: 85% sightings
 🦅 **Bird Watching**: Year-round excellent opportunities
 
-Ready for the adventure of a lifetime?`
+Ready for the adventure of a lifetime?`,
     },
 
     // Weather Information
@@ -180,7 +188,7 @@ Ready for the adventure of a lifetime?`
 ☔ **Wet Season**: October-January (occasional rain)
 
 🦁 **Best Wildlife Viewing**: February-April
-🌿 **Green Season**: May-September (lush landscapes)`
+🌿 **Green Season**: May-September (lush landscapes)`,
     },
 
     // What to Bring
@@ -200,7 +208,7 @@ Ready for the adventure of a lifetime?`
 • Sunscreen and insect repellent
 • Personal medications
 
-✅ **We Provide**: All camping equipment, meals, safari vehicle, and professional guide!`
+✅ **We Provide**: All camping equipment, meals, safari vehicle, and professional guide!`,
     },
 
     // Best Time to Visit
@@ -220,7 +228,7 @@ Ready for the adventure of a lifetime?`
 
 🌧️ **Transition (Oct-Nov)**:
 • Park sometimes closed for maintenance
-• Check availability before booking`
+• Check availability before booking`,
     },
 
     // Food & Meals
@@ -239,34 +247,36 @@ Ready for the adventure of a lifetime?`
 • Vegan options (on request)
 • Spice levels adjusted to preference
 
-Please inform us of any dietary restrictions when booking!`
-    }
+Please inform us of any dietary restrictions when booking!`,
+    },
   ],
 
   // Default responses for unmatched queries
   defaultResponses: [
     "Thanks for your question! 😊 Our team will provide you with detailed information.",
     "Great question! Let me connect you with our expert team for the best answer.",
-    "I'd love to help you with that specific question! Our team can provide detailed information."
-  ]
+    "I'd love to help you with that specific question! Our team can provide detailed information.",
+  ],
 };
 
 // Function to search for matching responses
 export const findResponse = (userMessage) => {
   const message = userMessage.toLowerCase().trim();
-  
+
   // Search through Q&A database
   for (const qa of CHAT_CONFIG.qaDatabase) {
-    const hasMatch = qa.keywords.some(keyword => 
+    const hasMatch = qa.keywords.some((keyword) =>
       message.includes(keyword.toLowerCase())
     );
-    
+
     if (hasMatch) {
       return qa.response;
     }
   }
-  
+
   // Return random default response if no match found
-  const randomIndex = Math.floor(Math.random() * CHAT_CONFIG.defaultResponses.length);
+  const randomIndex = Math.floor(
+    Math.random() * CHAT_CONFIG.defaultResponses.length
+  );
   return CHAT_CONFIG.defaultResponses[randomIndex];
 };

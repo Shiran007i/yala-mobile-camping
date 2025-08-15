@@ -23,13 +23,13 @@ const DesktopNav = ({ scrollToSection, textClassName = "" }) => {
 
       {/* Contact Info */}
       <div className="hidden md:flex items-center space-x-4 text-sm whitespace-nowrap overflow-hidden">
-        <a
+        {/* <a
           href="tel:+94771234567"
           className={textClassName + " flex items-center"}
         >
           <Phone className="h-4 w-4 mr-1" />
-          <span className="truncate">+94 77 123 4567</span>
-        </a>
+          <span className="truncate">94716335000</span>
+        </a> */}
         <a
           href="mailto:info@yalamobilecamping.com"
           className={textClassName + " flex items-center"}

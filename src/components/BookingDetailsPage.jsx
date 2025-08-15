@@ -75,7 +75,7 @@ const BookingDetailsPage = () => {
 
 Please assist me. Thank you!`;
 
-    const whatsappUrl = `https://wa.me/940713991051?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/940713585926?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");
