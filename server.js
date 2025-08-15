@@ -115,23 +115,35 @@ app.get("/api/health", (req, res) => {
 // Sitemap generation endpoint
 // Then add these routes in the API ROUTES section
 
-// Serve sitemap.xml
-app.get("/sitemap.xml", (req, res) => {
+// Serve sitemap.xml with proper headers for Google Search Console
+app.get('/sitemap.xml', (req, res) => {
   try {
-    const generator = new SitemapGenerator("https://www.yalamobilecamping.com");
+    const generator = new SitemapGenerator('https://www.yalamobilecamping.com');
     const sitemapXML = generator.generateSitemap();
-
-    res.setHeader("Content-Type", "application/xml");
-    res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 24 hours
+    
+    // Set proper headers for Google Search Console
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour cache
+    res.setHeader('X-Robots-Tag', 'noindex'); // Don't index the sitemap itself
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'User-Agent, Content-Type');
+    
+    // Set status explicitly
+    res.status(200);
+    
+    console.log('📄 Sitemap requested by:', req.get('User-Agent') || 'Unknown');
+    console.log('📄 Sitemap generated successfully, length:', sitemapXML.length);
+    
     res.send(sitemapXML);
   } catch (error) {
-    console.error("Error generating sitemap:", error);
-    res.status(500).send("Error generating sitemap");
+    console.error('❌ Error generating sitemap:', error);
+    res.status(500).setHeader('Content-Type', 'text/plain').send('Error generating sitemap');
   }
 });
 
-// Serve robots.txt
-app.get("/robots.txt", (req, res) => {
+// Enhanced robots.txt with proper headers
+app.get('/robots.txt', (req, res) => {
   const robotsTxt = `User-agent: *
 Allow: /
 
@@ -158,11 +170,45 @@ Allow: /*.webp
 # Sitemap location
 Sitemap: https://www.yalamobilecamping.com/sitemap.xml`;
 
-  res.setHeader("Content-Type", "text/plain");
-  res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 24 hours
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.status(200);
+  
+  console.log('🤖 Robots.txt requested by:', req.get('User-Agent') || 'Unknown');
+  
   res.send(robotsTxt);
 });
 
+// Add a sitemap test endpoint for debugging
+app.get('/api/test-sitemap', (req, res) => {
+  try {
+    const generator = new SitemapGenerator('https://www.yalamobilecamping.com');
+    const sitemapXML = generator.generateSitemap();
+    
+    // Return JSON with debugging info
+    res.json({
+      success: true,
+      sitemapLength: sitemapXML.length,
+      urlCount: (sitemapXML.match(/<url>/g) || []).length,
+      imageCount: (sitemapXML.match(/<image:image>/g) || []).length,
+      userAgent: req.get('User-Agent'),
+      timestamp: new Date().toISOString(),
+      preview: sitemapXML.substring(0, 500) + '...',
+      headers: {
+        'content-type': 'application/xml; charset=utf-8',
+        'cache-control': 'public, max-age=3600',
+        'x-robots-tag': 'noindex'
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
 // Optional: Generate static sitemap file on server start
 const generateStaticSitemap = () => {
   try {
