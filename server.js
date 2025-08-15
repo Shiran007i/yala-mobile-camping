@@ -3,10 +3,11 @@ import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
 import dotenv from "dotenv";
-import { 
-  generateAdminEmailTemplate, 
-  generateCustomerEmailTemplate 
+import {
+  generateAdminEmailTemplate,
+  generateCustomerEmailTemplate,
 } from "./src/templates/emailTemplates.js";
+import { SitemapGenerator } from "./src/utils/sitemapGenerator.js";
 
 // Load environment variables
 dotenv.config({ path: ".env.local" });
@@ -21,7 +22,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:3000", 
+      "http://localhost:3000",
       "https://4d769c8f09e8.ngrok-free.app",
     ],
     credentials: true,
@@ -45,19 +46,22 @@ const transporter = nodemailer.createTransport({
 // ===================================================================
 const sendAdminEmails = async (emailHtml, subject, envVars) => {
   const adminEmails = [];
-  
+
   // Add Gmail admin email if configured
   if (process.env.ADMIN_EMAIL) {
     adminEmails.push(process.env.ADMIN_EMAIL);
   }
-  
+
   // Add custom domain email if configured
-  if (process.env.ZOHO_USER && process.env.ZOHO_USER !== process.env.ADMIN_EMAIL) {
+  if (
+    process.env.ZOHO_USER &&
+    process.env.ZOHO_USER !== process.env.ADMIN_EMAIL
+  ) {
     adminEmails.push(process.env.ZOHO_USER);
   }
-  
+
   console.log("📧 Admin emails to notify:", adminEmails);
-  
+
   // Send to all admin emails
   const emailPromises = adminEmails.map(async (adminEmail) => {
     try {
@@ -76,11 +80,14 @@ const sendAdminEmails = async (emailHtml, subject, envVars) => {
       console.log(`✅ Admin notification sent to: ${adminEmail}`);
       return { email: adminEmail, status: "✅ Sent" };
     } catch (error) {
-      console.error(`❌ Failed to send admin notification to ${adminEmail}:`, error.message);
+      console.error(
+        `❌ Failed to send admin notification to ${adminEmail}:`,
+        error.message
+      );
       return { email: adminEmail, status: `❌ Failed: ${error.message}` };
     }
   });
-  
+
   return await Promise.allSettled(emailPromises);
 };
 
@@ -99,12 +106,75 @@ app.get("/api/health", (req, res) => {
       gmailAdmin: process.env.ADMIN_EMAIL ? "✅ Configured" : "❌ Missing",
       customDomainAdmin: process.env.ZOHO_USER ? "✅ Configured" : "❌ Missing",
       adminEmailCount: [process.env.ADMIN_EMAIL, process.env.ZOHO_USER]
-        .filter(email => email && email.trim())
-        .filter((email, index, arr) => arr.indexOf(email) === index) // Remove duplicates
-        .length
+        .filter((email) => email && email.trim())
+        .filter((email, index, arr) => arr.indexOf(email) === index).length, // Remove duplicates
     },
   });
 });
+
+// Sitemap generation endpoint
+// Then add these routes in the API ROUTES section
+
+// Serve sitemap.xml
+app.get("/sitemap.xml", (req, res) => {
+  try {
+    const generator = new SitemapGenerator("https://www.yalamobilecamping.com");
+    const sitemapXML = generator.generateSitemap();
+
+    res.setHeader("Content-Type", "application/xml");
+    res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 24 hours
+    res.send(sitemapXML);
+  } catch (error) {
+    console.error("Error generating sitemap:", error);
+    res.status(500).send("Error generating sitemap");
+  }
+});
+
+// Serve robots.txt
+app.get("/robots.txt", (req, res) => {
+  const robotsTxt = `User-agent: *
+Allow: /
+
+# Prevent indexing of API routes and sensitive directories
+Disallow: /api/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /.env*
+Disallow: /server.js
+Disallow: /unused/
+
+# Allow all images and assets
+Allow: /assets/
+Allow: /public/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Sitemap location
+Sitemap: https://www.yalamobilecamping.com/sitemap.xml`;
+
+  res.setHeader("Content-Type", "text/plain");
+  res.setHeader("Cache-Control", "public, max-age=86400"); // Cache for 24 hours
+  res.send(robotsTxt);
+});
+
+// Optional: Generate static sitemap file on server start
+const generateStaticSitemap = () => {
+  try {
+    const generator = new SitemapGenerator("https://www.yalamobilecamping.com");
+    generator.saveSitemap("./public/sitemap.xml");
+  } catch (error) {
+    console.error("Error generating static sitemap:", error);
+  }
+};
+
+// Generate sitemap on server start
+generateStaticSitemap();
 
 // Booking submission endpoint
 app.post("/api/booking", async (req, res) => {
@@ -117,11 +187,20 @@ app.post("/api/booking", async (req, res) => {
     // VALIDATION
     // ===================================================================
     const requiredFields = [
-      "bookingId", "firstName", "lastName", "email", "phone", 
-      "checkIn", "checkOut", "nights", "groupSize", "total", "location"
+      "bookingId",
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "checkIn",
+      "checkOut",
+      "nights",
+      "groupSize",
+      "total",
+      "location",
     ];
-    
-    const missingFields = requiredFields.filter(field => !data[field]);
+
+    const missingFields = requiredFields.filter((field) => !data[field]);
     if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
@@ -162,7 +241,11 @@ app.post("/api/booking", async (req, res) => {
     const adminSubject = `🚨 URGENT: New Camping Booking - ${data.bookingId} - ${data.firstName} ${data.lastName} ($${data.total})`;
 
     console.log("📧 Sending admin notifications to multiple addresses...");
-    const adminEmailResults = await sendAdminEmails(adminEmailHtml, adminSubject, envVars);
+    const adminEmailResults = await sendAdminEmails(
+      adminEmailHtml,
+      adminSubject,
+      envVars
+    );
 
     // ===================================================================
     // 2. SEND CUSTOMER CONFIRMATION EMAIL (using Gmail)
@@ -189,11 +272,11 @@ app.post("/api/booking", async (req, res) => {
     // SUCCESS RESPONSE
     // ===================================================================
     console.log("✅ Email processing completed for booking:", data.bookingId);
-    
+
     // Process admin email results
     const adminEmailSummary = {};
     adminEmailResults.forEach((result, index) => {
-      if (result.status === 'fulfilled' && result.value) {
+      if (result.status === "fulfilled" && result.value) {
         const { email, status } = result.value;
         adminEmailSummary[email] = status;
       } else {
@@ -203,30 +286,36 @@ app.post("/api/booking", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Booking request submitted successfully! Check your email for confirmation.",
+      message:
+        "Booking request submitted successfully! Check your email for confirmation.",
       bookingId: data.bookingId,
       emailStatus: {
         adminEmails: adminEmailSummary,
         customerEmail: customerEmailStatus,
-        totalAdminEmails: Object.keys(adminEmailSummary).length
+        totalAdminEmails: Object.keys(adminEmailSummary).length,
       },
       whatsappLink: `https://wa.me/94713991051?text=${encodeURIComponent(
         `Hi! I just submitted a booking request (ID: ${data.bookingId}) for ${data.nights} nights at ${data.location.name}. Looking forward to hearing from you!`
       )}`,
     });
-
   } catch (error) {
     console.error("❌ Error processing booking request:", error);
-    
+
     res.status(500).json({
       success: false,
-      message: "Failed to process booking request. Please try again or contact us directly.",
-      error: process.env.NODE_ENV === "development" ? error.message : "Internal server error",
+      message:
+        "Failed to process booking request. Please try again or contact us directly.",
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
       timestamp: new Date().toISOString(),
       fallback: {
         whatsapp: "https://wa.me/94713991051",
         email: `mailto:${process.env.EMAIL_USER}`,
-        customEmail: process.env.ZOHO_USER ? `mailto:${process.env.ZOHO_USER}` : undefined,
+        customEmail: process.env.ZOHO_USER
+          ? `mailto:${process.env.ZOHO_USER}`
+          : undefined,
       },
     });
   }
@@ -241,7 +330,7 @@ if (process.env.NODE_ENV === "development") {
     const testData = {
       bookingId: "YMC-TEST-001",
       firstName: "John",
-      lastName: "Doe", 
+      lastName: "Doe",
       email: "john.doe@example.com",
       phone: "0712345678",
       checkIn: "2024-03-15",
@@ -254,15 +343,16 @@ if (process.env.NODE_ENV === "development") {
       location: {
         name: "Yala Mobile Camp",
         location: "Yala National Park",
-        price_per_night: 950
+        price_per_night: 950,
       },
-      specialRequests: "Please arrange vegetarian meals and early morning safari.",
-      submittedAt: new Date().toISOString()
+      specialRequests:
+        "Please arrange vegetarian meals and early morning safari.",
+      submittedAt: new Date().toISOString(),
     };
 
     const envVars = {
       EMAIL_USER: process.env.EMAIL_USER || "test@example.com",
-      ADMIN_EMAIL: process.env.ADMIN_EMAIL || "admin@example.com", 
+      ADMIN_EMAIL: process.env.ADMIN_EMAIL || "admin@example.com",
       EMAIL_FROM_NAME: "Yala Mobile Camping",
     };
 
@@ -279,14 +369,14 @@ if (process.env.NODE_ENV === "development") {
             preview: adminTemplate.substring(0, 200) + "...",
           },
           customer: {
-            length: customerTemplate.length, 
+            length: customerTemplate.length,
             preview: customerTemplate.substring(0, 200) + "...",
           },
         },
         emailConfig: {
           gmailAdmin: process.env.ADMIN_EMAIL,
           customDomainAdmin: process.env.ZOHO_USER,
-          sender: process.env.EMAIL_USER
+          sender: process.env.EMAIL_USER,
         },
         testData,
       });
@@ -303,7 +393,7 @@ if (process.env.NODE_ENV === "development") {
   app.post("/api/test-emails", async (req, res) => {
     try {
       const { testType = "both" } = req.body;
-      
+
       const testData = {
         bookingId: "YMC-TEST-" + Date.now(),
         firstName: "Test",
@@ -320,9 +410,9 @@ if (process.env.NODE_ENV === "development") {
         location: {
           name: "Yala Mobile Camp",
           location: "Yala National Park",
-          price_per_night: 950
+          price_per_night: 950,
         },
-        submittedAt: new Date().toISOString()
+        submittedAt: new Date().toISOString(),
       };
 
       const envVars = {
@@ -337,20 +427,30 @@ if (process.env.NODE_ENV === "development") {
         console.log("🧪 Testing admin email notifications...");
         const adminEmailHtml = generateAdminEmailTemplate(testData, envVars);
         const adminSubject = `🧪 TEST: Admin Email - ${testData.bookingId}`;
-        
-        const adminResults = await sendAdminEmails(adminEmailHtml, adminSubject, envVars);
-        results.adminEmails = adminResults.map(result => 
-          result.status === 'fulfilled' ? result.value : { error: result.reason }
+
+        const adminResults = await sendAdminEmails(
+          adminEmailHtml,
+          adminSubject,
+          envVars
+        );
+        results.adminEmails = adminResults.map((result) =>
+          result.status === "fulfilled"
+            ? result.value
+            : { error: result.reason }
         );
       }
 
       if (testType === "customer" || testType === "both") {
         console.log("🧪 Testing customer email...");
         // For testing, we'll send to the configured admin emails instead of a test email
-        const testCustomerEmail = process.env.ADMIN_EMAIL || process.env.ZOHO_USER;
-        
-        const customerEmailHtml = generateCustomerEmailTemplate(testData, envVars);
-        
+        const testCustomerEmail =
+          process.env.ADMIN_EMAIL || process.env.ZOHO_USER;
+
+        const customerEmailHtml = generateCustomerEmailTemplate(
+          testData,
+          envVars
+        );
+
         try {
           await transporter.sendMail({
             from: `"${envVars.EMAIL_FROM_NAME}" <${process.env.EMAIL_USER}>`,
@@ -358,9 +458,15 @@ if (process.env.NODE_ENV === "development") {
             subject: `🧪 TEST: Customer Email - ${testData.bookingId}`,
             html: customerEmailHtml,
           });
-          results.customerEmail = { status: "✅ Sent", email: testCustomerEmail };
+          results.customerEmail = {
+            status: "✅ Sent",
+            email: testCustomerEmail,
+          };
         } catch (error) {
-          results.customerEmail = { status: `❌ Failed: ${error.message}`, email: testCustomerEmail };
+          results.customerEmail = {
+            status: `❌ Failed: ${error.message}`,
+            email: testCustomerEmail,
+          };
         }
       }
 
@@ -368,9 +474,8 @@ if (process.env.NODE_ENV === "development") {
         success: true,
         message: "Test emails processed",
         results,
-        testData: { bookingId: testData.bookingId }
+        testData: { bookingId: testData.bookingId },
       });
-
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -385,29 +490,39 @@ if (process.env.NODE_ENV === "development") {
 // SERVER STARTUP
 // ===================================================================
 app.listen(PORT, () => {
-  console.log(`🚀 Yala Mobile Camping API Server running on http://localhost:${PORT}`);
-  console.log(`📧 Email sender configured: ${process.env.EMAIL_USER || "NOT CONFIGURED"}`);
+  console.log(
+    `🚀 Yala Mobile Camping API Server running on http://localhost:${PORT}`
+  );
+  console.log(
+    `📧 Email sender configured: ${process.env.EMAIL_USER || "NOT CONFIGURED"}`
+  );
   console.log(`📧 Gmail admin: ${process.env.ADMIN_EMAIL || "NOT CONFIGURED"}`);
-  console.log(`📧 Custom domain admin: ${process.env.ZOHO_USER || "NOT CONFIGURED"}`);
-  
+  console.log(
+    `📧 Custom domain admin: ${process.env.ZOHO_USER || "NOT CONFIGURED"}`
+  );
+
   // Count unique admin emails
   const adminEmails = [process.env.ADMIN_EMAIL, process.env.ZOHO_USER]
-    .filter(email => email && email.trim())
+    .filter((email) => email && email.trim())
     .filter((email, index, arr) => arr.indexOf(email) === index);
-  
+
   console.log(`📊 Total admin notification emails: ${adminEmails.length}`);
   if (adminEmails.length > 0) {
     adminEmails.forEach((email, index) => {
       console.log(`   ${index + 1}. ${email}`);
     });
   }
-  
+
   console.log(`🌐 CORS enabled for: http://localhost:5173, ngrok tunnel`);
   console.log(`⏰ Server started at: ${new Date().toLocaleString()}`);
-  
+
   if (process.env.NODE_ENV === "development") {
-    console.log(`🧪 Template testing: http://localhost:${PORT}/api/test-templates`);
-    console.log(`📧 Email testing: POST http://localhost:${PORT}/api/test-emails`);
+    console.log(
+      `🧪 Template testing: http://localhost:${PORT}/api/test-templates`
+    );
+    console.log(
+      `📧 Email testing: POST http://localhost:${PORT}/api/test-emails`
+    );
   }
 });
 

@@ -1,3 +1,25 @@
 User-agent: *
 Allow: /
-Sitemap: https://campingyala.com/sitemap.xml
+
+# Prevent indexing of API routes and sensitive directories
+Disallow: /api/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /.env*
+Disallow: /server.js
+Disallow: /unused/
+
+# Allow all images and assets
+Allow: /assets/
+Allow: /public/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.gif
+Allow: /*.svg
+Allow: /*.webp
+
+# Sitemap location
+Sitemap: https://www.yalamobilecamping.com/sitemap.xml
