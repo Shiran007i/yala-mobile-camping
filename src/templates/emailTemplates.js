@@ -1,7 +1,7 @@
 // src/templates/emailTemplates.js
 /**
  * FIXED Email Templates for Yala Mobile Camping
- * Correct pricing calculations and breakdown display
+ * Correct pricing calculations and DUPLICATE-FREE admin notifications
  */
 
 /**
@@ -35,6 +35,42 @@ const calculateEmailPricing = (data) => {
     savings,
     perPerson: Math.round((subtotal / groupSize) * 100) / 100,
   };
+};
+
+/**
+ * FIXED: Get unique admin email addresses to prevent duplicates
+ * @param {Object} env - Environment variables
+ * @returns {Array} Array of unique admin email addresses
+ */
+const getUniqueAdminEmails = (env) => {
+  const adminEmails = [];
+  
+  // Add ADMIN_EMAIL if configured
+  if (process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL.trim()) {
+    adminEmails.push(process.env.ADMIN_EMAIL.trim().toLowerCase());
+  }
+  
+  // Add ZOHO_USER if configured and NOT already in list
+  if (process.env.ZOHO_USER && process.env.ZOHO_USER.trim()) {
+    const zohoEmail = process.env.ZOHO_USER.trim().toLowerCase();
+    if (!adminEmails.includes(zohoEmail)) {
+      adminEmails.push(zohoEmail);
+    }
+  }
+  
+  // Remove any empty or invalid emails
+  const validEmails = adminEmails.filter(email => 
+    email && 
+    email.includes('@') && 
+    email.includes('.')
+  );
+  
+  console.log(`📧 ADMIN EMAILS (deduplicated): ${validEmails.length} unique addresses`);
+  validEmails.forEach((email, index) => {
+    console.log(`   ${index + 1}. ${email}`);
+  });
+  
+  return validEmails;
 };
 
 /**
@@ -110,7 +146,82 @@ export const generateCustomerEmailTemplate = (data, env) => {
 };
 
 // ========================================
-// FIXED ADMIN EMAIL SECTIONS
+// FIXED ADMIN EMAIL HELPER FUNCTIONS
+// ========================================
+
+/**
+ * FIXED: Send admin notification emails with duplicate prevention
+ * @param {Object} data - Booking data
+ * @param {Object} env - Environment variables
+ * @param {Function} transporter - Email transporter (Gmail)
+ * @param {string} subject - Email subject
+ * @param {string} htmlContent - Email HTML content
+ * @returns {Promise<Array>} Results array
+ */
+export const sendDeduplicatedAdminEmails = async (data, env, transporter, subject, htmlContent) => {
+  const uniqueAdminEmails = getUniqueAdminEmails(env);
+  
+  if (uniqueAdminEmails.length === 0) {
+    console.warn("⚠️ No valid admin emails configured!");
+    return [{
+      email: "NO_ADMIN_EMAILS_CONFIGURED",
+      status: "❌ No admin emails found in environment variables"
+    }];
+  }
+
+  console.log(`📧 Sending admin notifications to ${uniqueAdminEmails.length} unique email(s)...`);
+
+  const emailPromises = uniqueAdminEmails.map(async (adminEmail, index) => {
+    try {
+      const result = await transporter.sendMail({
+        from: `"${env.EMAIL_FROM_NAME || 'Yala Mobile Camping'}" <${env.EMAIL_USER}>`,
+        to: adminEmail,
+        subject: subject,
+        html: htmlContent,
+        priority: "high",
+        headers: {
+          "X-Priority": "1",
+          "X-MSMail-Priority": "High",
+          Importance: "high",
+          "X-Booking-ID": data.bookingId,
+          "X-Admin-Notification": `${index + 1}/${uniqueAdminEmails.length}`
+        },
+      });
+      
+      console.log(`✅ Admin notification ${index + 1}/${uniqueAdminEmails.length} sent to: ${adminEmail}`);
+      return { 
+        email: adminEmail, 
+        status: "✅ Sent via Gmail",
+        messageId: result.messageId,
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+      };
+    } catch (error) {
+      console.error(`❌ Failed to send admin notification to ${adminEmail}:`, error.message);
+      return { 
+        email: adminEmail, 
+        status: `❌ Failed: ${error.message}`,
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+      };
+    }
+  });
+
+  const results = await Promise.allSettled(emailPromises);
+  
+  return results.map((result, index) => {
+    if (result.status === "fulfilled") {
+      return result.value;
+    } else {
+      return {
+        email: uniqueAdminEmails[index],
+        status: `❌ Promise rejected: ${result.reason}`,
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+      };
+    }
+  });
+};
+
+// ========================================
+// EXISTING EMAIL SECTIONS (unchanged)
 // ========================================
 
 const generateUrgentBanner = (data, pricing) => `
@@ -463,13 +574,14 @@ const generateFooterInfo = (data, env) => `
         second: "2-digit",
       })} Sri Lanka Time<br>
       Notification ID: ${data.bookingId}-ADMIN<br>
-      Email Route: System → ${env.ADMIN_EMAIL || env.EMAIL_USER}
+      Email Route: System → ${env.ADMIN_EMAIL || env.EMAIL_USER}<br>
+      Admin Emails: ${getUniqueAdminEmails(env).length} unique recipient(s)
     </div>
   </div>
 `;
 
 // ========================================
-// CUSTOMER EMAIL SECTIONS
+// CUSTOMER EMAIL SECTIONS (unchanged)
 // ========================================
 
 const generateCustomerWelcome = (data) => `
@@ -601,16 +713,16 @@ Great news! Your booking request has been confirmed! 🎉
 - Meals: ${data.mealPlan}
 
 💰 Pricing Breakdown:
-- Base Package (2 persons): $${pricing.basePriceTotal.toLocaleString()}${
+- Base Package (2 persons): ${pricing.basePriceTotal.toLocaleString()}${
   pricing.additionalPersons > 0
     ? `
 - Additional Persons (${
         pricing.additionalPersons
-      }): $${pricing.additionalPersonsTotal.toLocaleString()}
-- Your Savings: $${pricing.savings} ($25 per additional person per night!)`
+      }): ${pricing.additionalPersonsTotal.toLocaleString()}
+- Your Savings: ${pricing.savings} ($25 per additional person per night!)`
     : ""
 }
-- TOTAL AMOUNT: $${pricing.total.toLocaleString()}
+- TOTAL AMOUNT: ${pricing.total.toLocaleString()}
 
 🏕️ Your safari adventure at Yala National Park is confirmed!
 
@@ -645,10 +757,10 @@ Thank you for your booking request with Yala Mobile Camping! 🏕️
 - Location: ${data.location.name}  
 - Dates: ${data.checkIn} to ${data.checkOut}
 - Guests: ${pricing.groupSize} people
-- Total: $${pricing.total.toLocaleString()}${
+- Total: ${pricing.total.toLocaleString()}${
   pricing.savings > 0
     ? `
-- You save: $${pricing.savings}!`
+- You save: ${pricing.savings}!`
     : ""
 }
 
@@ -1182,8 +1294,11 @@ const getCustomerEmailStyles = () => `
   }
 `;
 
+// Export functions including the new deduplicated admin email function
 export default {
   generateAdminEmailTemplate,
   generateCustomerEmailTemplate,
   calculateEmailPricing,
+  sendDeduplicatedAdminEmails,
+  getUniqueAdminEmails,
 };

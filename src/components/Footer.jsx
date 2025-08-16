@@ -201,8 +201,9 @@ const Footer = () => {
                 <div className="flex items-start space-x-3">
                   <MapPin className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-gray-400">123 Galle Road,</p>
-                    <p className="text-gray-400">Colombo 03, Sri Lanka</p>
+                    <p className="text-gray-400">No-795/6,Wilhelm Garden</p>
+                    <p className="text-gray-400">Welipillewa , Dadigamuwa</p>
+                  <p className="text-gray-400">Sri Lanka</p>
                   </div>
                 </div>
 
@@ -221,7 +222,7 @@ const Footer = () => {
                   Emergency Hotline
                 </h4>
                 <p className="text-red-300 font-bold text-base sm:text-lg">
-                  +94 11 911 9119
+                   +9471 358 5926
                 </p>
               </div>
             </div>
