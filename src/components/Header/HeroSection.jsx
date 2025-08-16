@@ -31,7 +31,7 @@ const HeroSection = ({ onInquireNow }) => {
   }, []);
 
   return (
-    <section id="home" className="relative h-[70vh] overflow-hidden">
+    <section id="home" className="relative h-[90vh] overflow-hidden">
       <Helmet>
         <title>
           Yala Mobile Camping | Sri Lanka Safari & Wildlife Adventure
@@ -67,10 +67,10 @@ const HeroSection = ({ onInquireNow }) => {
       {/* Content */}
       <div className="relative z-10 h-full flex items-center px-4 lg:px-16 pt-20">
         <div className="max-w-2xl">
-          <h1 className="font-serif italic text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight text-white tracking-wide">
+          <h1 className="font-light text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight text-white tracking-wide uppercase">
             {slides[currentSlide].title}
           </h1>
-          <p className="font-sans text-lg md:text-xl lg:text-2xl mb-8 text-gray-100 leading-loose tracking-wide">
+          <p className="font-light text-base md:text-lg lg:text-xl mb-12 text-gray-100 leading-relaxed tracking-wide max-w-xl">
             {slides[currentSlide].subtitle}
           </p>
           <button
@@ -81,7 +81,7 @@ const HeroSection = ({ onInquireNow }) => {
                 console.error("onInquireNow function not provided!");
               }
             }}
-            className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-2.5 text-base font-medium rounded-full hover:from-amber-600 hover:to-orange-600 transition-all duration-300 shadow-lg transform hover:scale-105"
+            className="bg-transparent border border-white text-white px-8 py-3 text-sm font-light uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300"
           >
             Inquire Now
           </button>
@@ -91,8 +91,8 @@ const HeroSection = ({ onInquireNow }) => {
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
         <div className="flex flex-col items-center">
-          <span className="text-sm mb-2 font-medium">Scroll Down</span>
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
+          <span className="text-xs mb-2 font-light uppercase tracking-wide">Scroll Down</span>
+          <div className="w-6 h-10 border border-white rounded-full flex justify-center">
             <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
