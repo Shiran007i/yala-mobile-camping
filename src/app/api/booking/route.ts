@@ -5,7 +5,7 @@ import {
   generateAdminEmailTemplate,
   generateCustomerEmailTemplate,
 } from "../../../templates/emailTemplates.js";
-
+// checkiing if the environment variables are set
 interface BookingSubmission {
   bookingId: string;
   firstName: string;
