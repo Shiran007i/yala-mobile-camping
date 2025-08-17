@@ -918,7 +918,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
       </div>
 
       {/* Debug Info (remove in production) */}
-      {process.env.NODE_ENV === "development" && (
+      {/* {process.env.NODE_ENV === "development" && (
         <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
           <h4 className="font-semibold text-yellow-800 mb-2">
             Debug Info (Development Only)
@@ -951,7 +951,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
             <p>Environment: {process.env.NODE_ENV}</p>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

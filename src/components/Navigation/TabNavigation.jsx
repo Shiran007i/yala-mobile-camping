@@ -23,10 +23,10 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
   return (
     <div id="tab-navigation" className="bg-white shadow-md">
       <div className="max-w-6xl mx-auto px-4">
-        <nav className="flex justify-center space-x-8 py-4">
+        <nav className="flex justify-center space-x-8 py-4 overflow-x-auto">
           <button
             onClick={() => handleTabClick("safaris")}
-            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 ${
+            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
               activeTab === "safaris"
                 ? "text-amber-600 border-amber-600"
                 : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
@@ -36,7 +36,7 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
           </button>
           <button
             onClick={() => handleTabClick("camping")}
-            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 ${
+            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
               activeTab === "camping"
                 ? "text-amber-600 border-amber-600"
                 : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
@@ -44,9 +44,19 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
           >
             Camping
           </button>
+          {/* <button
+            onClick={() => handleTabClick("transportation")}
+            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
+              activeTab === "transportation"
+                ? "text-amber-600 border-amber-600"
+                : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
+            }`}
+          >
+            Transportation
+          </button> */}
           <button
             onClick={() => handleTabClick("about")}
-            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 ${
+            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
               activeTab === "about"
                 ? "text-amber-600 border-amber-600"
                 : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"

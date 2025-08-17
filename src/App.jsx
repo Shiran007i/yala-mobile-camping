@@ -1,4 +1,4 @@
-// src/App.jsx - SEO Optimized & Production Ready with Fixed Structured Data
+// src/App.jsx - SEO Optimized & Production Ready with Transportation as Separate Page
 import React, { useState, useMemo, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
@@ -14,15 +14,18 @@ import {
   SafariActivitiesSection,
   AboutUsSection,
   LocationDetail,
-  BookingForm,
   TripAdvisorSection,
   FloatingActionButtons,
   ServicesSection,
   WhyChooseUsSection,
   CallToActionSection,
+  Unsubscribe,
 } from "./components";
 
+import BookingForm from "./components/Booking";
 import BookingManager from "./components/Booking";
+
+import { TransportationSection } from "./components/Transportation";
 
 // Custom hooks
 import { useBookingHandlers } from "./hooks";
@@ -31,7 +34,7 @@ import { useBookingHandlers } from "./hooks";
 import { SERVICES_DATA } from "./constants";
 import camp3 from "/src/assets/images/camp3.webp";
 
-// SEO Constants - Fixed process.env issue
+// SEO Constants
 const SEO_CONFIG = {
   siteName: "Yala Mobile Camping",
   siteUrl: "https://yalamobilecamping.com",
@@ -46,8 +49,22 @@ const SEO_CONFIG = {
   ogImage: "/images/yala-camping-hero.webp",
 };
 
+// Check current page type
+const getCurrentPage = () => {
+  const path = window.location.pathname;
+  const hash = window.location.hash;
+  const search = window.location.search;
+  
+  if (path === '/unsubscribe' || hash === '#unsubscribe' || search.includes('page=unsubscribe')) {
+    return 'unsubscribe';
+  }
+  if (path === '/transportation' || hash === '#transportation' || search.includes('page=transportation')) {
+    return 'transportation';
+  }
+  return 'main';
+};
+
 // FIXED: Proper Schema.org structured data with correct itemReviewed
-// Fixed generateStructuredData function with proper Product schema
 const generateStructuredData = (activeTab, selectedLocation) => {
   // Base business/organization schema
   const baseOrganization = {
@@ -91,15 +108,6 @@ const generateStructuredData = (activeTab, selectedLocation) => {
       "@type": "Country",
       name: "Sri Lanka",
     },
-    serviceArea: {
-      "@type": "GeoCircle",
-      geoMidpoint: {
-        "@type": "GeoCoordinates",
-        latitude: 6.3725,
-        longitude: 81.5185,
-      },
-      geoRadius: "50000",
-    },
   };
 
   // Tourism attraction schema
@@ -130,28 +138,6 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     },
     touristType: ["EcoTourist", "WildlifeEnthusiast", "AdventureTourist"],
     availableLanguage: ["English", "Sinhala"],
-    amenityFeature: [
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Safari Tours",
-        value: "Professional guided wildlife tours",
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Mobile Camping",
-        value: "Luxury tents with full amenities",
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Wildlife Photography",
-        value: "Professional photography opportunities",
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        name: "Meal Service",
-        value: "Full board authentic Sri Lankan cuisine",
-      },
-    ],
   };
 
   // FIXED: Proper Review/Rating structure with correct itemReviewed
@@ -181,13 +167,11 @@ const generateStructuredData = (activeTab, selectedLocation) => {
         reviewCount: 156,
         bestRating: 5,
         worstRating: 1,
-        ratingExplanation:
-          "Based on customer reviews from multiple platforms including TripAdvisor and Google",
       },
     },
   };
 
-  // FIXED: Service schema with proper Product structure including required aggregateRating
+  // Service schema with proper Product structure
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -202,87 +186,6 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     areaServed: {
       "@type": "Place",
       name: "Yala National Park, Sri Lanka",
-    },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Safari Camping Packages",
-      itemListElement: [
-        {
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Product",
-            "@id": `${SEO_CONFIG.siteUrl}#camping-package`,
-            name: "1 Night Mobile Camping Package",
-            description:
-              "Includes accommodation, meals, safari tours, and guide services",
-            // FIXED: Added required image field for Product
-            image: {
-              "@type": "ImageObject",
-              url: `${SEO_CONFIG.siteUrl}/images/yala-camping-hero.webp`,
-              width: 1200,
-              height: 630,
-              caption: "Yala Mobile Camping safari experience",
-            },
-            brand: {
-              "@type": "Brand",
-              name: "Yala Mobile Camping",
-            },
-            category: "Travel Package",
-            // FIXED: Added required aggregateRating for Product
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: 4.9,
-              reviewCount: 89,
-              bestRating: 5,
-              worstRating: 1,
-            },
-            // FIXED: Added offers to satisfy Schema requirements
-            offers: {
-              "@type": "Offer",
-              price: "950",
-              priceCurrency: "USD",
-              priceValidUntil: "2025-12-31",
-              availability: "https://schema.org/InStock",
-              validFrom: "2025-01-01",
-              // FIXED: Added optional shipping and return policy fields
-              shippingDetails: {
-                "@type": "OfferShippingDetails",
-                shippingRate: {
-                  "@type": "MonetaryAmount",
-                  value: "0",
-                  currency: "USD",
-                },
-                deliveryTime: {
-                  "@type": "ShippingDeliveryTime",
-                  handlingTime: {
-                    "@type": "QuantitativeValue",
-                    minValue: 0,
-                    maxValue: 1,
-                    unitText: "days",
-                  },
-                },
-              },
-              hasMerchantReturnPolicy: {
-                "@type": "MerchantReturnPolicy",
-                returnPolicyCategory:
-                  "https://schema.org/MerchantReturnFiniteReturnWindow",
-                merchantReturnDays: 7,
-                returnMethod: "https://schema.org/ReturnByMail",
-                returnFees: "https://schema.org/FreeReturn",
-              },
-              seller: {
-                "@type": "TravelAgency",
-                "@id": `${SEO_CONFIG.siteUrl}#organization`,
-              },
-            },
-          },
-          price: "950",
-          priceCurrency: "USD",
-          priceValidUntil: "2025-12-31",
-          availability: "https://schema.org/InStock",
-          validFrom: "2025-01-01",
-        },
-      ],
     },
   };
 
@@ -321,10 +224,6 @@ const generateStructuredData = (activeTab, selectedLocation) => {
             "@type": "Rating",
             ratingValue: selectedLocation.rating,
           },
-          amenityFeature: selectedLocation.amenities.map((amenity) => ({
-            "@type": "LocationFeatureSpecification",
-            name: amenity,
-          })),
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: selectedLocation.rating,
@@ -348,12 +247,34 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     ],
   };
 };
+
 // Main App component
 const App = () => {
   const [activeTab, setActiveTab] = useState("safaris");
   const [pageLoading, setPageLoading] = useState(true);
+  const [currentView, setCurrentView] = useState("main"); // main, unsubscribe, transportation
 
-  // SEO metadata based on active tab
+  // Enhanced check for current page on mount and URL changes
+  useEffect(() => {
+    const checkCurrentPage = () => {
+      const currentPage = getCurrentPage();
+      console.log('🔍 Current page detected:', currentPage);
+      setCurrentView(currentPage);
+    };
+
+    checkCurrentPage();
+    
+    // Listen for URL changes
+    window.addEventListener('popstate', checkCurrentPage);
+    window.addEventListener('hashchange', checkCurrentPage);
+    
+    return () => {
+      window.removeEventListener('popstate', checkCurrentPage);
+      window.removeEventListener('hashchange', checkCurrentPage);
+    };
+  }, []);
+
+  // SEO metadata based on current view and active tab
   const tabMetadata = useMemo(() => {
     const metadata = {
       safaris: {
@@ -379,9 +300,22 @@ const App = () => {
         keywords:
           "sustainable tourism, wildlife conservation, eco-tourism Sri Lanka, responsible travel",
       },
+      transportation: {
+        title: "Transportation Services | Yala Mobile Camping - Airport & Safari Transfers",
+        description:
+          "Reliable transportation services for Yala National Park including airport transfers, city transfers, and safari vehicle rentals with professional drivers.",
+        keywords:
+          "yala transportation, airport transfer, safari transport, sri lanka transport, yala transfer service",
+      },
+      unsubscribe: {
+        title: "Unsubscribe | Yala Mobile Camping Newsletter",
+        description:
+          "Unsubscribe from Yala Mobile Camping newsletter. We're sorry to see you go!",
+        keywords: "unsubscribe newsletter, Yala Mobile Camping email",
+      },
     };
-    return metadata[activeTab] || metadata.safaris;
-  }, [activeTab]);
+    return metadata[currentView] || metadata[activeTab] || metadata.safaris;
+  }, [activeTab, currentView]);
 
   // Memoized locations data to prevent unnecessary re-renders
   const locations = useMemo(
@@ -535,7 +469,7 @@ const App = () => {
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content={SEO_CONFIG.author} />
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content={currentView === "unsubscribe" ? "noindex, nofollow" : "index, follow"} />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
 
@@ -571,12 +505,76 @@ const App = () => {
       <meta name="theme-color" content="#059669" />
       <meta name="msapplication-TileColor" content="#059669" />
 
-      {/* FIXED: Properly structured JSON-LD */}
-      <script type="application/ld+json">
-        {JSON.stringify(generateStructuredData(activeTab, selectedLocation))}
-      </script>
+      {/* JSON-LD structured data - exclude from unsubscribe page */}
+      {currentView !== "unsubscribe" && (
+        <script type="application/ld+json">
+          {JSON.stringify(generateStructuredData(activeTab, selectedLocation))}
+        </script>
+      )}
     </Helmet>
   );
+
+  // Transportation Page
+  if (currentView === "transportation") {
+    console.log('🚗 Rendering transportation page');
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title={tabMetadata.title}
+          description={tabMetadata.description}
+          keywords={tabMetadata.keywords}
+          canonical={`${SEO_CONFIG.siteUrl}/transportation`}
+        />
+        <div className="min-h-screen bg-white">
+          {/* Simple header for transportation page */}
+          <header className="bg-white shadow-sm sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-between items-center py-4">
+                <button
+                  onClick={() => {
+                    window.location.hash = '';
+                    setCurrentView('main');
+                  }}
+                  className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                >
+                  <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
+                  Back to Main Site
+                </button>
+                {/* <h1 className="text-xl font-bold text-gray-900">Transportation Services</h1> */}
+                <div></div> {/* Spacer for flex layout */}
+              </div>
+            </div>
+          </header>
+          
+          <TransportationSection />
+          <Footer />
+          
+          <FloatingActionButtons
+            onBookNow={() => handleBookNow()}
+            onWhatsAppContact={handleWhatsAppContact}
+          />
+        </div>
+      </HelmetProvider>
+    );
+  }
+
+  // Unsubscribe Page
+  if (currentView === "unsubscribe") {
+    console.log('📧 Rendering unsubscribe page');
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title={tabMetadata.title}
+          description={tabMetadata.description}
+          keywords={tabMetadata.keywords}
+          canonical={`${SEO_CONFIG.siteUrl}/unsubscribe`}
+        />
+        <div className="min-h-screen">
+          <Unsubscribe />
+        </div>
+      </HelmetProvider>
+    );
+  }
 
   // Location Detail Page
   if (showLocationDetail && selectedLocation) {
@@ -584,7 +582,7 @@ const App = () => {
       <HelmetProvider>
         <SEOHead
           title={`${selectedLocation.name} | Premium Safari Camping in ${selectedLocation.location}`}
-          description={`Book ${selectedLocation.name} for $${selectedLocation.price_per_night}/night. ${selectedLocation.description} Rating: ${selectedLocation.rating}/5`}
+          description={`Book ${selectedLocation.name} for ${selectedLocation.price_per_night}/night. ${selectedLocation.description} Rating: ${selectedLocation.rating}/5`}
           keywords={`${selectedLocation.name}, ${selectedLocation.location}, safari camping, wildlife tours`}
           canonical={`${SEO_CONFIG.siteUrl}/location/${selectedLocation.id}`}
           ogType="article"
@@ -643,6 +641,7 @@ const App = () => {
   }
 
   // Main page layout
+  console.log('🏠 Rendering main page layout');
   return (
     <HelmetProvider>
       <SEOHead
@@ -699,6 +698,8 @@ const App = () => {
           {/* Services Section */}
           <ServicesSection services={SERVICES_DATA} />
 
+          {/* Transportation Section - REMOVED from main page */}
+
           {/* Why Choose Us Section */}
           <WhyChooseUsSection />
 
@@ -716,3 +717,4 @@ const App = () => {
 };
 
 export default App;
+            

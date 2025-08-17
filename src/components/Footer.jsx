@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Tent,
   Facebook,
@@ -10,15 +10,98 @@ import {
   Clock,
   Globe,
   Heart,
+  CheckCircle,
+  AlertCircle,
+  Loader2,
+  UserX, // Added for unsubscribe icon
 } from "lucide-react";
 import logo from "../assets/images/logo.png";
 import { Helmet } from "react-helmet";
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [subscriptionState, setSubscriptionState] = useState("idle"); // idle, loading, success, error
+  const [message, setMessage] = useState("");
+
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubscription = async (e) => {
+    e.preventDefault();
+
+    // Reset previous state
+    setMessage("");
+
+    // Validation
+    if (!email.trim()) {
+      setSubscriptionState("error");
+      setMessage("Please enter your email address");
+      setTimeout(() => setSubscriptionState("idle"), 3000);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setSubscriptionState("error");
+      setMessage("Please enter a valid email address");
+      setTimeout(() => setSubscriptionState("idle"), 3000);
+      return;
+    }
+
+    // Start loading
+    setSubscriptionState("loading");
+
+    try {
+      // API call to subscribe
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          source: "footer_signup",
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubscriptionState("success");
+        setMessage("🎉 Successfully subscribed! Welcome to our community!");
+        setEmail(""); // Clear the input
+        
+        // Reset to idle after 5 seconds
+        setTimeout(() => {
+          setSubscriptionState("idle");
+          setMessage("");
+        }, 5000);
+      } else {
+        throw new Error(data.message || "Subscription failed");
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      setSubscriptionState("error");
+      setMessage(
+        error.message.includes("already subscribed")
+          ? "You're already subscribed to our newsletter!"
+          : "Oops! Something went wrong. Please try again."
+      );
+      
+      // Reset to idle after 5 seconds
+      setTimeout(() => {
+        setSubscriptionState("idle");
+        setMessage("");
+      }, 5000);
     }
   };
 
@@ -49,7 +132,6 @@ const Footer = () => {
           property="og:image"
           content="https://campingyala.com/og-contact.webp"
         />
-        {/* No canonical tag here to avoid conflicts. Only set canonical in main route components. */}
       </Helmet>
       <footer
         id="contact"
@@ -91,21 +173,94 @@ const Footer = () => {
                 </button>
               </div>
 
-              {/* Newsletter Signup */}
+              {/* Enhanced Newsletter Signup */}
               <div className="max-w-md">
-                <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3">
-                  Stay Updated
+                <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center space-x-2">
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500" />
+                  <span>Stay Updated</span>
                 </h4>
-                <div className="flex">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-3 sm:px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:border-emerald-500 text-white placeholder-gray-400 text-xs sm:text-base"
-                  />
-                  <button className="bg-emerald-600 hover:bg-emerald-700 px-4 sm:px-6 py-2 rounded-r-lg transition-colors font-medium text-xs sm:text-base">
-                    Subscribe
-                  </button>
-                </div>
+                <p className="text-gray-400 text-xs sm:text-sm mb-3">
+                  Get the latest updates on new locations, special offers, and camping tips!
+                </p>
+
+                <form onSubmit={handleSubscription} className="space-y-3">
+                  <div className="flex">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      disabled={subscriptionState === "loading"}
+                      className={`flex-1 px-3 sm:px-4 py-2 bg-gray-800 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-white placeholder-gray-400 text-xs sm:text-base transition-colors ${
+                        subscriptionState === "error"
+                          ? "border-red-500"
+                          : subscriptionState === "success"
+                          ? "border-green-500"
+                          : "border-gray-700"
+                      } ${subscriptionState === "loading" ? "opacity-50" : ""}`}
+                    />
+                    <button
+                      type="submit"
+                      disabled={subscriptionState === "loading"}
+                      className={`px-4 sm:px-6 py-2 rounded-r-lg transition-all font-medium text-xs sm:text-base flex items-center space-x-2 ${
+                        subscriptionState === "loading"
+                          ? "bg-gray-600 cursor-not-allowed"
+                          : subscriptionState === "success"
+                          ? "bg-green-600 hover:bg-green-700"
+                          : "bg-emerald-600 hover:bg-emerald-700"
+                      }`}
+                    >
+                      {subscriptionState === "loading" ? (
+                        <>
+                          <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                          <span>Subscribing...</span>
+                        </>
+                      ) : subscriptionState === "success" ? (
+                        <>
+                          <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span>Subscribed!</span>
+                        </>
+                      ) : (
+                        <span>Subscribe</span>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Status Message */}
+                  {message && (
+                    <div
+                      className={`flex items-center space-x-2 p-2 rounded-lg text-xs sm:text-sm ${
+                        subscriptionState === "success"
+                          ? "bg-green-900/20 border border-green-800 text-green-400"
+                          : subscriptionState === "error"
+                          ? "bg-red-900/20 border border-red-800 text-red-400"
+                          : "bg-blue-900/20 border border-blue-800 text-blue-400"
+                      }`}
+                    >
+                      {subscriptionState === "success" ? (
+                        <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                      ) : subscriptionState === "error" ? (
+                        <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                      ) : null}
+                      <span>{message}</span>
+                    </div>
+                  )}
+
+                  {/* Enhanced Newsletter Policy with Unsubscribe Link */}
+                  <div className="text-gray-500 text-xs space-y-1">
+                    <p>By subscribing, you agree to receive marketing emails.</p>
+                    <div className="flex items-center space-x-2">
+                      <span>Already subscribed?</span>
+                      <a
+                        href="/unsubscribe"
+                        className="inline-flex items-center space-x-1 text-red-400 hover:text-red-300 transition-colors underline"
+                      >
+                        <UserX className="h-3 w-3" />
+                        <span>Unsubscribe</span>
+                      </a>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
 
@@ -203,7 +358,7 @@ const Footer = () => {
                   <div>
                     <p className="text-gray-400">No-795/6,Wilhelm Garden</p>
                     <p className="text-gray-400">Welipillewa , Dadigamuwa</p>
-                  <p className="text-gray-400">Sri Lanka</p>
+                    <p className="text-gray-400">Sri Lanka</p>
                   </div>
                 </div>
 
@@ -222,7 +377,7 @@ const Footer = () => {
                   Emergency Hotline
                 </h4>
                 <p className="text-red-300 font-bold text-base sm:text-lg">
-                   +9471 358 5926
+                  +9471 358 5926
                 </p>
               </div>
             </div>
@@ -258,12 +413,19 @@ const Footer = () => {
                 >
                   Cookie Policy
                 </a>
+                {/* Added Unsubscribe Link in Footer Links */}
+                <a
+                  href="/unsubscribe"
+                  className="hover:text-red-300 text-red-400 transition-colors"
+                >
+                  Unsubscribe
+                </a>
               </div>
             </div>
           </div>
 
           {/* Certifications */}
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-800">
+          {/* <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-800">
             <div className="flex flex-wrap justify-center items-center space-x-4 sm:space-x-8 opacity-60">
               <div className="text-xs text-gray-500 text-center">
                 <p className="font-semibold">Licensed by</p>
@@ -278,7 +440,7 @@ const Footer = () => {
                 <p>Adventure Travel Association</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </footer>
     </>

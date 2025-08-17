@@ -1,0 +1,19 @@
+[
+  {
+    "email": "athukorala007i@gmail.com",
+    "subscribedAt": "2025-08-16T13:44:57.332Z",
+    "lastUpdated": "2025-08-16T13:44:57.332Z",
+    "source": "footer_signup",
+    "active": false,
+    "id": "1755351897332",
+    "unsubscribedAt": "2025-08-17T04:06:29.636Z"
+  },
+  {
+    "email": "shirantha0071@gmail.com",
+    "subscribedAt": "2025-08-17T03:49:18.394Z",
+    "lastUpdated": "2025-08-17T03:49:18.394Z",
+    "source": "footer_signup",
+    "active": true,
+    "id": "1755402558394"
+  }
+]

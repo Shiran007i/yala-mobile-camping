@@ -1,9 +1,17 @@
-// MobileNav.jsx
+// src/components/Navigation/MobileNav.jsx
 import React, { useState } from "react";
-import { Menu, X, Phone, Mail } from "lucide-react";
+import { Menu, X, Mail } from "lucide-react";
 
-const MobileNav = ({ scrollToSection, textClassName = "" }) => {
+const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleTransportationClick = () => {
+    // Navigate to transportation page using hash routing
+    window.location.hash = '#transportation';
+    // Trigger a page reload to ensure the route change is detected
+    window.location.reload();
+    setIsMenuOpen(false);
+  };
 
   return (
     <>
@@ -30,6 +38,7 @@ const MobileNav = ({ scrollToSection, textClassName = "" }) => {
                 setIsMenuOpen(false);
               }}
               className={"block px-3 py-2 w-full text-left " + textClassName}
+              style={style}
             >
               Home
             </button>
@@ -39,6 +48,7 @@ const MobileNav = ({ scrollToSection, textClassName = "" }) => {
                 setIsMenuOpen(false);
               }}
               className={"block px-3 py-2 w-full text-left " + textClassName}
+              style={style}
             >
               Locations
             </button>
@@ -48,19 +58,19 @@ const MobileNav = ({ scrollToSection, textClassName = "" }) => {
                 setIsMenuOpen(false);
               }}
               className={"block px-3 py-2 w-full text-left " + textClassName}
+              style={style}
             >
               Services
             </button>
+            <button
+              onClick={handleTransportationClick}
+              className={"block px-3 py-2 w-full text-left " + textClassName}
+              style={style}
+            >
+              Transportation
+            </button>
 
             <div className="px-3 py-2 border-t border-white/20 flex flex-col gap-1 text-sm">
-              {/* <a
-                href="tel:+94771234567"
-                className={textClassName + " flex items-center mb-1 break-all"}
-                aria-label="Call Yala Mobile Camping"
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                <span className="truncate">94716335000</span>
-              </a> */}
               <a
                 href="mailto:info@yalamobilecamping.com"
                 className={textClassName + " flex items-center break-all"}

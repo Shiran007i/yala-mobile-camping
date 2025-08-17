@@ -36,8 +36,9 @@ export const SERVICES_DATA = [
   },
   {
     icon: "Car",
-    title: "Transportation",
+    title: "Transportation Services",
     description:
-      "Convenient pickup and drop-off services from major cities in Sri Lanka.",
+      "Convenient pickup and drop-off services from major cities in Sri Lanka. Click to explore our full transportation options.",
+    isTransportationLink: true,
   },
 ];

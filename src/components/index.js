@@ -11,5 +11,6 @@ export { default as ImageGallery } from './ImageGallery';
 export { default as SafariActivitiesSection } from './SafariActivitiesSection';
 export { default as AboutUsSection } from './AboutUsSection';
 export { default as LocationDetail } from './LocationDetail';
-export { default as BookingForm } from './BookingForm';
+//export { default as BookingForm } from './BookingForm';
 export { default as TripAdvisorSection } from './TripAdvisorSection';
+export { default as Unsubscribe } from './Unsubscribe';
