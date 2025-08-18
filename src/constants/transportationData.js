@@ -1,4 +1,23 @@
-// src/constants/transportationData.js
+// src/constants/transportationData.js - Fixed for Vite with proper imports
+
+// Import all destination images at the top
+import kandyTempleImage from '../assets/images/destinations/kandy-temple-tooth.webp';
+import colomboTowerImage from '../assets/images/destinations/colombo-lotus-tower.webp';
+import mirissaBeachImage from '../assets/images/destinations/mirissa-beach.webp';
+import ellaRockImage from '../assets/images/destinations/ella-rock.webp';
+import bentotaBeachImage from '../assets/images/destinations/bentota-beach.webp';
+import gallefortImage from '../assets/images/destinations/galle-fort.webp';
+import nuwereliateaImage from '../assets/images/destinations/nuwara-eliya-tea.webp';
+import sigiriyaRockImage from '../assets/images/destinations/sigiriya-rock.webp';
+
+// Import new images (add these to your src/assets/images/destinations/ folder)
+import colomboAirportImage from '../assets/images/destinations/colombo-airport.webp';
+import arugamBayImage from '../assets/images/destinations/arugam-bay.webp';
+import udawalaweImage from '../assets/images/destinations/udawalawe-elephants.webp';
+import kataragamaImage from '../assets/images/destinations/kataragama-temple.webp';
+import hambantotaImage from '../assets/images/destinations/hambantota-port.webp';
+import tissaLakeImage from '../assets/images/destinations/tissa-lake.webp';
+
 export const TRANSPORTATION_DATA = [
   {
     id: 1,
@@ -6,7 +25,7 @@ export const TRANSPORTATION_DATA = [
     description: "Comfortable pickup and drop-off from Bandaranaike International Airport (CMB) to Yala National Park area.",
     destination: {
       name: "Colombo Airport",
-      image: "colombo-airport.webp"
+      image: colomboAirportImage  // Use imported image
     },
     features: [
       "Air-conditioned vehicles",
@@ -25,7 +44,7 @@ export const TRANSPORTATION_DATA = [
     description: "Direct transfer from Colombo city hotels to your camping location in Yala.",
     destination: {
       name: "Colombo City",
-      image: "colombo-lotus-tower.webp"
+      image: colomboTowerImage  // Use imported image
     },
     features: [
       "Hotel pickup service",
@@ -44,7 +63,7 @@ export const TRANSPORTATION_DATA = [
     description: "Transportation between cultural capital Kandy and Yala National Park.",
     destination: {
       name: "Kandy",
-      image: "kandy-temple-tooth.webp"
+      image: kandyTempleImage  // Use imported image
     },
     features: [
       "Flexible pickup times",
@@ -63,7 +82,7 @@ export const TRANSPORTATION_DATA = [
     description: "Scenic transfer from the beautiful hill station of Ella to Yala camping sites.",
     destination: {
       name: "Ella Rock",
-      image: "ella-rock.webp"
+      image: ellaRockImage  // Use imported image
     },
     features: [
       "Mountain scenic route",
@@ -82,7 +101,7 @@ export const TRANSPORTATION_DATA = [
     description: "Historical coastal transfer from UNESCO World Heritage Galle Fort to Yala.",
     destination: {
       name: "Galle Fort",
-      image: "galle-fort.webp"
+      image: gallefortImage  // Use imported image
     },
     features: [
       "Coastal scenic route",
@@ -101,7 +120,7 @@ export const TRANSPORTATION_DATA = [
     description: "Coastal transfer from the stunning Mirissa Beach area to Yala National Park.",
     destination: {
       name: "Mirissa Beach",
-      image: "mirissa-beach.webp"
+      image: mirissaBeachImage  // Use imported image
     },
     features: [
       "Beach to wildlife transition",
@@ -116,61 +135,61 @@ export const TRANSPORTATION_DATA = [
   }
 ];
 
-// Trending Destinations Data
+// Trending Destinations with imported images
 export const TRENDING_DESTINATIONS = [
   {
     id: 1,
     name: "Sigiriya Rock",
-    image: "sigiriya-rock.webp",
+    image: sigiriyaRockImage,
     distance: "2.5 hours from Yala",
     description: "Ancient rock fortress"
   },
   {
     id: 2,
     name: "Nuwara Eliya",
-    image: "nuwara-eliya-tea.webp", 
+    image: nuwereliateaImage, 
     distance: "4 hours from Yala",
     description: "Hill country tea plantations"
   },
   {
     id: 3,
     name: "Bentota Beach",
-    image: "bentota-beach.webp",
+    image: bentotaBeachImage,
     distance: "3 hours from Yala", 
     description: "Golden sandy beaches"
   },
   {
     id: 4,
     name: "Arugam Bay",
-    image: "arugam-bay.webp",
+    image: arugamBayImage,
     distance: "1 hour from Yala",
     description: "Surfing paradise"
   },
   {
     id: 5,
     name: "Udawalawe",
-    image: "udawalawe-elephants.webp",
+    image: udawalaweImage,
     distance: "2 hours from Yala",
     description: "Elephant sanctuary"
   },
   {
     id: 6,
     name: "Kataragama",
-    image: "kataragama-temple.webp",
+    image: kataragamaImage,
     distance: "30 minutes from Yala",
     description: "Sacred pilgrimage site"
   },
   {
     id: 7,
     name: "Hambantota",
-    image: "hambantota-port.webp", 
+    image: hambantotaImage, 
     distance: "1.5 hours from Yala",
     description: "Modern port city"
   },
   {
     id: 8,
     name: "Tissamaharama",
-    image: "tissa-lake.webp",
+    image: tissaLakeImage,
     distance: "20 minutes from Yala", 
     description: "Ancient royal city"
   }
