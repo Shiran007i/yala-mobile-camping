@@ -79,7 +79,7 @@ const Footer = () => {
         setSubscriptionState("success");
         setMessage("🎉 Successfully subscribed! Welcome to our community!");
         setEmail(""); // Clear the input
-        
+
         // Reset to idle after 5 seconds
         setTimeout(() => {
           setSubscriptionState("idle");
@@ -96,7 +96,7 @@ const Footer = () => {
           ? "You're already subscribed to our newsletter!"
           : "Oops! Something went wrong. Please try again."
       );
-      
+
       // Reset to idle after 5 seconds
       setTimeout(() => {
         setSubscriptionState("idle");
@@ -159,7 +159,16 @@ const Footer = () => {
 
               {/* Social Media */}
               <div className="flex space-x-3 sm:space-x-4 mb-4 sm:mb-6">
-                <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://www.facebook.com/profile.php?id=61579679243080",
+                      "_blank"
+                    )
+                  }
+                  className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group"
+                >
+                  
                   <Facebook className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
                 <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">
@@ -180,7 +189,8 @@ const Footer = () => {
                   <span>Stay Updated</span>
                 </h4>
                 <p className="text-gray-400 text-xs sm:text-sm mb-3">
-                  Get the latest updates on new locations, special offers, and camping tips!
+                  Get the latest updates on new locations, special offers, and
+                  camping tips!
                 </p>
 
                 <form onSubmit={handleSubscription} className="space-y-3">
@@ -248,7 +258,9 @@ const Footer = () => {
 
                   {/* Enhanced Newsletter Policy with Unsubscribe Link */}
                   <div className="text-gray-500 text-xs space-y-1">
-                    <p>By subscribing, you agree to receive marketing emails.</p>
+                    <p>
+                      By subscribing, you agree to receive marketing emails.
+                    </p>
                     <div className="flex items-center space-x-2">
                       <span>Already subscribed?</span>
                       <a
