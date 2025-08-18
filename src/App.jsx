@@ -407,7 +407,7 @@ const App = () => {
             <SafariActivitiesSection
               onInquireNow={() => handleBookNow(locations[0])}
             />
-            <TripAdvisorSection />
+            {/* <TripAdvisorSection /> */}
           </>
         );
       case "camping":
@@ -416,14 +416,14 @@ const App = () => {
             <TabSections activeTab={activeTab} />
             <ImageGallery activeTab={activeTab} />
             <CampingSection onInquireNow={() => handleBookNow(locations[0])} />
-            <TripAdvisorSection />
+            {/* <TripAdvisorSection /> */}
           </>
         );
       case "about":
         return (
           <>
             <AboutUsSection />
-            <TripAdvisorSection />
+            {/* <TripAdvisorSection /> */}
           </>
         );
       default:
@@ -434,7 +434,7 @@ const App = () => {
             <SafariActivitiesSection
               onInquireNow={() => handleBookNow(locations[0])}
             />
-            <TripAdvisorSection />
+            {/* <TripAdvisorSection /> */}
           </>
         );
     }
@@ -547,6 +547,7 @@ const App = () => {
           </header>
           
           <TransportationSection />
+          
           <Footer />
           
           <FloatingActionButtons
@@ -702,6 +703,8 @@ const App = () => {
 
           {/* Why Choose Us Section */}
           <WhyChooseUsSection />
+
+          <TripAdvisorSection />
 
           {/* Call to Action Section */}
           <CallToActionSection

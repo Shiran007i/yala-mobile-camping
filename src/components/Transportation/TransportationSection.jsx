@@ -1,5 +1,5 @@
 // src/components/Transportation/TransportationSection.jsx
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { 
   Tent, 
   Mountain, 
@@ -12,14 +12,17 @@ import {
   DollarSign,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   ExternalLink,
   Phone,
-  Mail
+  Mail,
+  MapPin
 } from "lucide-react";
 import { Helmet } from "react-helmet";
-import { TRANSPORTATION_DATA, ARROW_TOURS_DATA } from "../../constants/transportationData";
+import { TRANSPORTATION_DATA, TRENDING_DESTINATIONS, ARROW_TOURS_DATA } from "../../constants/transportationData";
 import { WHATSAPP_NUMBER, COMPANY_PHONE } from "../../constants";
-
+import HappyGirl from "../../assets/images/safari/Yala_mibile_camping_safari18.webp";
 const iconMap = {
   Tent,
   Mountain,
@@ -29,9 +32,17 @@ const iconMap = {
   Car,
 };
 
+// Updated image mapping function
+const getDestinationImage = (service) => {
+  const imagePath = `/src/assets/images/destinations/${service.destination.image}`;
+ 
+  return imagePath;
+};
+
 const TransportationSection = () => {
   const [expandedCard, setExpandedCard] = useState(null);
   const [showArrowTours, setShowArrowTours] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   const toggleCard = (id) => {
     setExpandedCard(expandedCard === id ? null : id);
@@ -54,6 +65,21 @@ const TransportationSection = () => {
     window.open(ARROW_TOURS_DATA.websiteUrl, "_blank");
   };
 
+  const scroll = (direction) => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 280; // Width of one card plus gap
+      const currentScroll = scrollContainerRef.current.scrollLeft;
+      const newScroll = direction === 'left' 
+        ? currentScroll - scrollAmount 
+        : currentScroll + scrollAmount;
+      
+      scrollContainerRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -69,7 +95,6 @@ const TransportationSection = () => {
       </Helmet>
 
       <section id="transportation" className="py-20 bg-slate-50 relative">
-      
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-16">
@@ -88,11 +113,12 @@ const TransportationSection = () => {
                 {TRANSPORTATION_DATA.map((service) => {
                   const IconComponent = iconMap[service.icon];
                   const isExpanded = expandedCard === service.id;
+                  const destinationImage = getDestinationImage(service);
                   
                   return (
                     <div
                       key={service.id}
-                      className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 flex flex-col overflow-hidden transform hover:scale-105 hover:rotate-0"
+                      className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 flex flex-col overflow-hidden transform hover:scale-105"
                     >
                       {/* Header Section */}
                       <div className="p-6 pb-2">
@@ -110,15 +136,15 @@ const TransportationSection = () => {
                           </div>
                         </div>
                         
-                        {/* Duration & Vehicle Info */}
+                        {/* Duration & Destination Info */}
                         <div className="flex items-center justify-between text-slate-500 mb-3">
                           <div className="flex items-center space-x-2">
                             <Clock className="h-4 w-4" />
                             <span className="font-medium">{service.duration}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Users className="h-4 w-4" />
-                            <span className="font-medium">{service.vehicleTypes[0]}</span>
+                            <MapPin className="h-4 w-4" />
+                            <span className="font-medium text-sm">{service.destination.name}</span>
                           </div>
                         </div>
 
@@ -130,21 +156,57 @@ const TransportationSection = () => {
 
                       {/* Image Area - Shows when not expanded */}
                       {!isExpanded && (
-                        <div className="mx-6 mb-4 h-32 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg relative overflow-hidden transition-all duration-300">
-                          <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="mx-6 mb-4 h-40 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg relative overflow-hidden">
+                          <img
+                            src={destinationImage}
+                            alt={service.destination.name}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                          {/* Fallback content */}
+                          <div className="absolute inset-0 hidden items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
                             {IconComponent && <IconComponent className="h-12 w-12 text-slate-400" />}
                           </div>
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent"></div>
-                          {/* Decorative elements */}
-                          <div className="absolute top-2 left-2 w-6 h-6 bg-blue-200/30 rounded-full"></div>
-                          <div className="absolute bottom-2 right-2 w-4 h-4 bg-slate-300/40 rounded-full"></div>
+                          {/* Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                          {/* Destination label */}
+                          <div className="absolute bottom-2 left-2 text-white">
+                            <p className="font-semibold text-sm bg-black/50 px-2 py-1 rounded">
+                              {service.destination.name}
+                            </p>
+                          </div>
                         </div>
                       )}
 
-                      {/* Expanded Details - Shows when expanded */}
+                      {/* Expanded Details */}
                       {isExpanded && (
                         <div className="px-6 mb-4 animate-fadeIn">
                           <div className="pt-2 border-t border-slate-100 space-y-6">
+                            {/* Destination Image - Larger when expanded */}
+                            <div className="h-48 rounded-lg overflow-hidden relative">
+                              <img
+                                src={destinationImage}
+                                alt={service.destination.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.nextSibling.style.display = 'flex';
+                                }}
+                              />
+                              {/* Fallback */}
+                              <div className="absolute inset-0 hidden items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
+                                {IconComponent && <IconComponent className="h-16 w-16 text-slate-400" />}
+                              </div>
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+                              <div className="absolute bottom-3 left-3 text-white">
+                                <h4 className="font-bold text-lg">{service.destination.name}</h4>
+                                <p className="text-sm text-white/80">Transfer Destination</p>
+                              </div>
+                            </div>
+
                             {/* Features */}
                             <div>
                               <h4 className="font-semibold text-slate-800 mb-3">
@@ -180,7 +242,7 @@ const TransportationSection = () => {
                         </div>
                       )}
 
-                      {/* Fixed Action Buttons */}
+                      {/* Action Buttons */}
                       <div className="flex space-x-3 mt-auto px-6 pb-6">
                         <button
                           onClick={() => handleWhatsAppContact(service)}
@@ -299,13 +361,91 @@ const TransportationSection = () => {
             )}
           </div>
 
-          {/* Bottom CTA Section with Image */}
+          {/* Trending Destinations Scroll Section */}
+          <div className="mt-20">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-slate-800 mb-4">
+                Trending Travel Destinations
+              </h3>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                Discover popular destinations around Yala and plan your next adventure
+              </p>
+            </div>
+
+            <div className="relative">
+              {/* Scroll Buttons */}
+              <button
+                onClick={() => scroll('left')}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 hover:scale-110"
+              >
+                <ChevronLeft className="h-5 w-5 text-slate-600" />
+              </button>
+              
+              <button
+                onClick={() => scroll('right')}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 hover:scale-110"
+              >
+                <ChevronRight className="h-5 w-5 text-slate-600" />
+              </button>
+
+              {/* Scrollable Container */}
+              <div 
+                ref={scrollContainerRef}
+                className="flex space-x-4 overflow-x-auto scrollbar-hide pb-4"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {TRENDING_DESTINATIONS.map((destination) => (
+                  <div
+                    key={destination.id}
+                    className="flex-none w-64 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group cursor-pointer hover:scale-105"
+                  >
+                    <div className="relative h-40">
+                      <img
+                        src={`/src/assets/images/destinations/${destination.image}`}
+                        alt={destination.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      {/* Fallback */}
+                      <div className="absolute inset-0 hidden items-center justify-center bg-gradient-to-br from-blue-100 to-slate-100">
+                        <MapPin className="h-12 w-12 text-slate-400" />
+                      </div>
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                      {/* Distance badge */}
+                      <div className="absolute top-3 right-3 bg-white/90 text-slate-800 px-2 py-1 rounded-full text-xs font-medium">
+                        {destination.distance}
+                      </div>
+                    </div>
+                    
+                    <div className="p-4">
+                      <h4 className="font-bold text-slate-800 mb-1">
+                        {destination.name}
+                      </h4>
+                      <p className="text-slate-600 text-sm">
+                        {destination.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom CTA Section */}
           <div className="mt-16 bg-white rounded-xl border border-slate-200 overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               {/* Left Column - Image */}
               <div className="h-64 lg:h-auto bg-gradient-to-br from-blue-100 to-slate-100 relative overflow-hidden">
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Car className="h-24 w-24 text-blue-300" />
+                  <img
+    src={HappyGirl}
+    alt="Happy girl safari"
+    className="h-100 w-124 object-cover rounded-lg"
+  />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-transparent"></div>
                 {/* Decorative elements */}
@@ -344,6 +484,23 @@ const TransportationSection = () => {
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </>
   );
 };

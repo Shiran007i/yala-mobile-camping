@@ -37,16 +37,15 @@ const ServicesSection = ({ services }) => {
     }
   };
 
-  // Enhanced function with better UX
+  // Enhanced function with better UX and proper positioning
   const handleTransportationClick = () => {
-    // Add a subtle loading state or animation
     const element = document.getElementById("transportation");
+    
     if (element) {
-      // Scroll with offset for better positioning (account for fixed headers)
-      const headerOffset = 80; // Adjust this value based on your header height
+      // Calculate proper scroll position with header offset
+      const headerOffset = 100; // Adjust this value based on your header height
       const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition =
-        elementPosition + window.pageYOffset - headerOffset;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
       window.scrollTo({
         top: offsetPosition,
@@ -64,13 +63,41 @@ const ServicesSection = ({ services }) => {
       }, 800);
     } else {
       // Handle case where transportation section is not on current page
-      //console.log("Transportation section not found");
-      // Navigate to transportation page using hash routing
-    window.location.hash = '#transportation';
-    // Trigger a page reload to ensure the route change is detected
-    //window.location.reload();
-      // You can implement navigation to a separate page here
-      // For example: window.location.href = '/services#transportation';
+      // Navigate to transportation page with proper hash handling
+      const currentUrl = window.location.href.split('#')[0]; // Remove existing hash
+      
+      // Set the hash first
+      window.location.hash = '#transportation';
+      
+      // Use setTimeout to ensure DOM is ready after navigation
+      setTimeout(() => {
+        const transportElement = document.getElementById("transportation");
+        if (transportElement) {
+          // Scroll to top of the transportation section with offset
+          const headerOffset = 100; // Adjust based on your header height
+          const elementRect = transportElement.getBoundingClientRect();
+          const absoluteElementTop = elementRect.top + window.pageYOffset;
+          const targetPosition = absoluteElementTop - headerOffset;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth"
+          });
+        } else {
+          // Fallback: scroll to a position that shows the section properly
+          setTimeout(() => {
+            const fallbackElement = document.getElementById("transportation");
+            if (fallbackElement) {
+              const rect = fallbackElement.getBoundingClientRect();
+              const scrollTop = window.pageYOffset + rect.top - 100;
+              window.scrollTo({
+                top: scrollTop,
+                behavior: "smooth"
+              });
+            }
+          }, 100);
+        }
+      }, 100);
     }
   };
 

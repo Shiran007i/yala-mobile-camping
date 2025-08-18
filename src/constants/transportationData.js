@@ -4,6 +4,10 @@ export const TRANSPORTATION_DATA = [
     id: 1,
     title: "Airport Transfer Service",
     description: "Comfortable pickup and drop-off from Bandaranaike International Airport (CMB) to Yala National Park area.",
+    destination: {
+      name: "Colombo Airport",
+      image: "colombo-airport.webp"
+    },
     features: [
       "Air-conditioned vehicles",
       "Professional drivers", 
@@ -19,6 +23,10 @@ export const TRANSPORTATION_DATA = [
     id: 2,
     title: "Colombo City Transfer",
     description: "Direct transfer from Colombo city hotels to your camping location in Yala.",
+    destination: {
+      name: "Colombo City",
+      image: "colombo-lotus-tower.webp"
+    },
     features: [
       "Hotel pickup service",
       "Scenic route options",
@@ -32,67 +40,143 @@ export const TRANSPORTATION_DATA = [
   },
   {
     id: 3,
-    title: "Inter-City Transport",
-    description: "Transportation between major cities like Kandy, Galle, Nuwara Eliya and Yala.",
+    title: "Kandy Transfer Service",
+    description: "Transportation between cultural capital Kandy and Yala National Park.",
+    destination: {
+      name: "Kandy",
+      image: "kandy-temple-tooth.webp"
+    },
     features: [
       "Flexible pickup times",
-      "Multiple city connections",
+      "Cultural city connection",
       "Experienced local drivers",
       "Tourist guide available"
     ],
-    duration: "2-6 hours",
+    duration: "3-4 hours",
     vehicleTypes: ["Car", "Van", "Tuk-Tuk"],
-    price: "From $50 USD",
+    price: "From $60 USD",
     icon: "Shield"
   },
   {
     id: 4,
-    title: "Safari Vehicle Service",
-    description: "Specialized 4WD safari vehicles for Yala National Park game drives.",
+    title: "Ella Hill Country Transfer",
+    description: "Scenic transfer from the beautiful hill station of Ella to Yala camping sites.",
+    destination: {
+      name: "Ella Rock",
+      image: "ella-rock.webp"
+    },
     features: [
-      "Open-top safari jeeps",
-      "Experienced safari drivers",
-      "Park entry assistance",
-      "Photography equipment storage"
+      "Mountain scenic route",
+      "Photography stops",
+      "Local guide insights",
+      "Comfortable vehicles"
     ],
-    duration: "3-6 hours",
-    vehicleTypes: ["4WD Safari Jeep (up to 6 pax)"],
+    duration: "2-3 hours",
+    vehicleTypes: ["Car", "Van"],
     price: "From $45 USD",
     icon: "Camera"
   },
   {
     id: 5,
-    title: "Custom Tour Transport",
-    description: "Personalized transportation for multi-day tours and custom itineraries.",
+    title: "Galle Fort Transfer",
+    description: "Historical coastal transfer from UNESCO World Heritage Galle Fort to Yala.",
+    destination: {
+      name: "Galle Fort",
+      image: "galle-fort.webp"
+    },
     features: [
-      "Flexible scheduling",
-      "Multiple destination stops",
-      "English-speaking drivers",
-      "Customizable routes"
+      "Coastal scenic route",
+      "Historical insights",
+      "Professional drivers",
+      "Flexible timing"
     ],
-    duration: "As per itinerary",
-    vehicleTypes: ["Car", "Van", "Bus", "Luxury Vehicle"],
-    price: "Contact for quote",
+    duration: "2 hours",
+    vehicleTypes: ["Car", "Van", "Bus"],
+    price: "From $40 USD",
     icon: "Coffee"
   },
   {
     id: 6,
-    title: "Local Area Shuttle",
-    description: "Short-distance transportation within Yala area for shopping, dining, or sightseeing.",
+    title: "Mirissa Beach Transfer",
+    description: "Coastal transfer from the stunning Mirissa Beach area to Yala National Park.",
+    destination: {
+      name: "Mirissa Beach",
+      image: "mirissa-beach.webp"
+    },
     features: [
-      "On-demand service",
-      "Local area expertise",
+      "Beach to wildlife transition",
+      "Scenic coastal drive",
       "Quick response time",
       "Affordable rates"
     ],
-    duration: "30 minutes - 2 hours",
-    vehicleTypes: ["Tuk-Tuk", "Car"],
-    price: "From $15 USD",
+    duration: "1.5 hours",
+    vehicleTypes: ["Tuk-Tuk", "Car", "Van"],
+    price: "From $35 USD",
     icon: "Tent"
   }
 ];
 
-// Arrow Ceylon Tours Advertisement Data
+// Trending Destinations Data
+export const TRENDING_DESTINATIONS = [
+  {
+    id: 1,
+    name: "Sigiriya Rock",
+    image: "sigiriya-rock.webp",
+    distance: "2.5 hours from Yala",
+    description: "Ancient rock fortress"
+  },
+  {
+    id: 2,
+    name: "Nuwara Eliya",
+    image: "nuwara-eliya-tea.webp", 
+    distance: "4 hours from Yala",
+    description: "Hill country tea plantations"
+  },
+  {
+    id: 3,
+    name: "Bentota Beach",
+    image: "bentota-beach.webp",
+    distance: "3 hours from Yala", 
+    description: "Golden sandy beaches"
+  },
+  {
+    id: 4,
+    name: "Arugam Bay",
+    image: "arugam-bay.webp",
+    distance: "1 hour from Yala",
+    description: "Surfing paradise"
+  },
+  {
+    id: 5,
+    name: "Udawalawe",
+    image: "udawalawe-elephants.webp",
+    distance: "2 hours from Yala",
+    description: "Elephant sanctuary"
+  },
+  {
+    id: 6,
+    name: "Kataragama",
+    image: "kataragama-temple.webp",
+    distance: "30 minutes from Yala",
+    description: "Sacred pilgrimage site"
+  },
+  {
+    id: 7,
+    name: "Hambantota",
+    image: "hambantota-port.webp", 
+    distance: "1.5 hours from Yala",
+    description: "Modern port city"
+  },
+  {
+    id: 8,
+    name: "Tissamaharama",
+    image: "tissa-lake.webp",
+    distance: "20 minutes from Yala", 
+    description: "Ancient royal city"
+  }
+];
+
+// Arrow Ceylon Tours Advertisement Data (unchanged)
 export const ARROW_TOURS_DATA = {
   companyName: "Arrow Ceylon Tours",
   tagline: "Your Gateway to Sri Lanka's Wonders",
