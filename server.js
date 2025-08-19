@@ -1054,6 +1054,15 @@ app.get("/unsubscribe", (req, res) => {
   res.redirect(redirectUrl);
 });
 
+// Handle root redirect properly
+app.get('/', (req, res, next) => {
+  // If this is an API server request, let it pass through
+  if (req.headers['user-agent']?.includes('bot') || req.headers.accept?.includes('text/html')) {
+    return next();
+  }
+  next();
+});
+
 // ===================================================================
 // ERROR HANDLING MIDDLEWARE
 // ===================================================================

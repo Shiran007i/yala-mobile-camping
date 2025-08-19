@@ -434,12 +434,12 @@ const Footer = () => {
                   Cookie Policy
                 </a>
                 {/* Added Unsubscribe Link in Footer Links */}
-                <a
+                {/* <a
                   href="/unsubscribe"
                   className="hover:text-red-300 text-red-400 transition-colors"
                 >
-                  Unsubscribe
-                </a>
+                  Unsubscribe1
+                </a> */}
               </div>
             </div>
           </div>
