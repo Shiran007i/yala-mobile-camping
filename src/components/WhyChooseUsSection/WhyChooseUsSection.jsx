@@ -1,6 +1,6 @@
 // src/components/WhyChooseUsSection/WhyChooseUsSection.jsx
 import React from "react";
-import yalaElephants from '/src/assets/images/camping/yala_elephants.webp';
+import yalaElephants from '/src/assets/images/camping/yala_swamp.webp';
 import safariGuide from '/src/assets/images/safari/Yala_mibile_camping_safari4.webp';
 import campingBed from '/src/assets/images/camping/Camping_bed.webp';
 
