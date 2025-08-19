@@ -250,7 +250,7 @@ const generateStructuredData = (activeTab, selectedLocation) => {
 
 // Main App component
 const App = () => {
-  const [activeTab, setActiveTab] = useState("safaris");
+  const [activeTab, setActiveTab] = useState("camping");
   const [pageLoading, setPageLoading] = useState(true);
   const [currentView, setCurrentView] = useState("main"); // main, unsubscribe, transportation
 

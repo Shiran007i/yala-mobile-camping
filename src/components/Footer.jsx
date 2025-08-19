@@ -171,7 +171,15 @@ const Footer = () => {
                   
                   <Facebook className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
-                <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://www.instagram.com/yalamobilecamping/",
+                      "_blank"
+                    )
+                  }
+                  className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group"
+                >
                   <Instagram className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
                 <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">

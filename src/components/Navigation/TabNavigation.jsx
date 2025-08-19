@@ -24,6 +24,16 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
     <div id="tab-navigation" className="bg-white shadow-md">
       <div className="max-w-6xl mx-auto px-4">
         <nav className="flex justify-center space-x-8 py-4 overflow-x-auto">
+           <button
+            onClick={() => handleTabClick("camping")}
+            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
+              activeTab === "camping"
+                ? "text-amber-600 border-amber-600"
+                : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
+            }`}
+          >
+            Mobile Camping
+          </button>
           <button
             onClick={() => handleTabClick("safaris")}
             className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
@@ -34,16 +44,7 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
           >
             Safaris
           </button>
-          <button
-            onClick={() => handleTabClick("camping")}
-            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
-              activeTab === "camping"
-                ? "text-amber-600 border-amber-600"
-                : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
-            }`}
-          >
-            Camping
-          </button>
+         
           {/* <button
             onClick={() => handleTabClick("transportation")}
             className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
