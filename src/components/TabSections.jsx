@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CheckCircle, Clock, MapPin, Tent, Sunrise, Moon } from "lucide-react";
 import { Helmet } from "react-helmet";
+import yalaElephantsImg from '../assets/images/camping/yala_elephants.webp';
+import morningSafariImg from '../assets/images/activities/morning-safari.webp';
 
 const TabSections = ({ activeTab }) => {
   const sectionRef = useRef(null);
@@ -94,7 +96,7 @@ const TabSections = ({ activeTab }) => {
               <div className={`order-1 ${fadeInClass}`}>
                 <div className="relative overflow-hidden rounded-lg shadow-2xl">
                   <img
-                    src="src/assets/images/camping/yala_elephants.webp"
+                    src={yalaElephantsImg}
                     alt="Yala Mobile Camping Experience with Wild Elephants in Yala National Park Sri Lanka"
                     title="Mobile Camping Safari in Yala National Park - Encounter Wild Elephants"
                     className="w-full h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover transition-transform duration-700 hover:scale-105"
@@ -250,7 +252,7 @@ const TabSections = ({ activeTab }) => {
               <div className={`order-1 lg:order-2 ${fadeInClass}`}>
                 <div className="relative overflow-hidden rounded-lg shadow-2xl">
                   <img
-                    src="src/assets/images/activities/morning-safari.webp"
+                    src={morningSafariImg}
                     alt="Morning Safari Game Drive in Yala National Park Sri Lanka - Leopard and Wildlife Spotting"
                     title="Yala Morning Safari Tour - Professional Wildlife Game Drive Experience"
                     className="w-full h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover transition-transform duration-700 hover:scale-105"
