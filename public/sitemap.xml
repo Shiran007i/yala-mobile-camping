@@ -105,12 +105,18 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-  
-  <url>
-    <loc>https://www.yalamobilecamping.com/unsubscribe</loc>
+ <url>
+    <loc>https://www.yalamobilecamping.com/transportation</loc>
     <lastmod>2025-08-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.8</priority>  
+    <image:image>
+      <image:loc>https://www.yalamobilecamping.com/assets/images/transportation.jpg</image:loc>
+      <image:title>Transportation Services</image:title>
+    </image:image>
   </url>
   <url>
+   
+
+
 </urlset>
