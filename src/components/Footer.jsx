@@ -156,7 +156,7 @@ const Footer = () => {
                 experiences. We provide safe, comfortable, and memorable
                 adventures that connect you with nature and local culture.
               </p>
-             
+
               {/* Social Media - Updated for Business Pages */}
               <div className="flex space-x-3 sm:space-x-4 mb-4 sm:mb-6">
                 <button
@@ -354,16 +354,16 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-  href="#faq"
-  onClick={(e) => {
-    e.preventDefault(); // Prevent default jump
-    window.location.hash = '#faq';
-    window.location.reload();
-  }}
-  className="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 transform"
->
-  FAQ
-</a>
+                    href="#faq"
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent default jump
+                      window.location.hash = "#faq";
+                      window.location.reload();
+                    }}
+                    className="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 transform"
+                  >
+                    FAQ
+                  </a>
                 </li>
               </ul>
             </div>
@@ -438,12 +438,25 @@ const Footer = () => {
 
               <div className="flex flex-wrap justify-center md:justify-end space-x-4 sm:space-x-6 text-xs sm:text-sm text-gray-400">
                 <a
-                  href="#/privacy"
+                  href="#privacy"
                   className="hover:text-white transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default jump
+                    window.location.hash = "#privacy";
+                    window.location.reload();
+                  }}
                 >
                   Privacy Policy
                 </a>
-                <a href="#/terms" className="hover:text-white transition-colors">
+                <a
+                  href="#terms"
+                  className="hover:text-white transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default jump
+                    window.location.hash = "#terms";
+                    window.location.reload();
+                  }}
+                >
                   Terms of Service
                 </a>
                 <a
