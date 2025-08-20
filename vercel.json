@@ -23,12 +23,36 @@
       "dest": "/dist/sitemap.xml"
     },
     {
-      "src": "/robots.txt",
+      "src": "/robots.txt", 
       "dest": "/dist/robots.txt"
     },
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2))",
+      "src": "/favicon.ico",
+      "dest": "/dist/favicon.ico"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|map))",
       "dest": "/dist/$1"
+    },
+    {
+      "src": "/faq",
+      "dest": "/dist/index.html"
+    },
+    {
+      "src": "/privacy",
+      "dest": "/dist/index.html"
+    },
+    {
+      "src": "/terms",
+      "dest": "/dist/index.html"
+    },
+    {
+      "src": "/transportation", 
+      "dest": "/dist/index.html"
+    },
+    {
+      "src": "/unsubscribe",
+      "dest": "/dist/index.html"
     },
     {
       "src": "/(.*)",
@@ -37,5 +61,10 @@
   ],
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "server.js": {
+      "maxDuration": 10
+    }
   }
 }
