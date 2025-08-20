@@ -1,8 +1,8 @@
-// Complete FAQ.jsx
+// Updated FAQ.jsx - With Navigation Props
 import React from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
-const FAQ = () => {
+const FAQ = ({ onBackToMain }) => {
   const [openItems, setOpenItems] = React.useState([]);
 
   const faqs = [
@@ -56,9 +56,14 @@ const FAQ = () => {
     );
   };
 
-  const handleBackToMain = () => {
-   window.history.pushState(null, '', '/');
-  window.location.reload(); 
+  const handleBackClick = () => {
+    if (onBackToMain) {
+      onBackToMain();
+    } else {
+      // Fallback navigation
+      window.history.pushState(null, '', '/');
+      window.location.reload(); 
+    }
   };
 
   return (
@@ -68,7 +73,7 @@ const FAQ = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <button
-              onClick={handleBackToMain}
+              onClick={handleBackClick}
               className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-md p-2"
             >
               <ChevronRight className="h-4 w-4 mr-1 rotate-180" />

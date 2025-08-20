@@ -1,4 +1,4 @@
-// src/App.jsx - SEO Optimized & Production Ready with Transportation as Separate Page
+// src/App.jsx - SEO Optimized & Production Ready with Path-based Routing
 import React, { useState, useMemo, useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ChevronRight } from "lucide-react";
@@ -52,44 +52,50 @@ const SEO_CONFIG = {
   ogImage: "/images/yala-camping-hero.webp",
 };
 
-// Check current page type
+// Enhanced page detection using pathname instead of hash
 const getCurrentPage = () => {
   const path = window.location.pathname;
+  const params = new URLSearchParams(window.location.search);
+  
+  // Direct path matching (primary method)
+  if (path === "/unsubscribe") return "unsubscribe";
+  if (path === "/transportation") return "transportation";
+  if (path === "/faq") return "faq";
+  if (path === "/privacy") return "privacy";
+  if (path === "/terms") return "terms";
+  
+  // Fallback to query params for compatibility
+  const page = params.get('page');
+  if (page) return page;
+  
+  // Legacy hash support (will redirect to proper path)
   const hash = window.location.hash;
-  const search = window.location.search;
-
-  if (
-    path === "/unsubscribe" ||
-    hash === "#unsubscribe" ||
-    search.includes("page=unsubscribe")
-  ) {
-    return "unsubscribe";
-  }
-  if (
-    path === "/transportation" ||
-    hash === "#transportation" ||
-    search.includes("page=transportation")
-  ) {
-    return "transportation";
-  }
-  if (path === "/faq" || hash === "#faq" || search.includes("page=faq")) {
-    return "faq";
-  }
-  if (
-    path === "/privacy" ||
-    hash === "#privacy" ||
-    search.includes("page=privacy")
-  ) {
-    return "privacy";
-  }
-  if (path === "/terms" || hash === "#terms" || search.includes("page=terms")) {
-    return "terms";
-  }
+  if (hash === "#unsubscribe") return "unsubscribe";
+  if (hash === "#transportation") return "transportation";
+  if (hash === "#faq") return "faq";
+  if (hash === "#privacy") return "privacy";
+  if (hash === "#terms") return "terms";
+  
   return "main";
 };
 
+// Helper function to update URL properly
+const updateURL = (page) => {
+  const newPath = page === "main" ? "/" : `/${page}`;
+  
+  // Update URL without reload
+  if (window.location.pathname !== newPath) {
+    window.history.pushState({ page }, '', newPath);
+  }
+  
+  // Clear any hash fragments for clean URLs
+  if (window.location.hash) {
+    window.history.replaceState({ page }, '', newPath);
+  }
+};
+
 // FIXED: Proper Schema.org structured data with correct itemReviewed
-const generateStructuredData = (activeTab, selectedLocation) => {
+const generateStructuredData = (activeTab, selectedLocation, currentView) => {
   // Base business/organization schema
   const baseOrganization = {
     "@context": "https://schema.org",
@@ -134,7 +140,33 @@ const generateStructuredData = (activeTab, selectedLocation) => {
     },
   };
 
-  // Tourism attraction schema
+  // Page-specific schemas
+  if (currentView === "faq") {
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "What's included in the mobile camping package?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Our packages include comfortable safari tents, all meals, professional safari guide, park entrance fees, safari vehicle, and camping equipment."
+          }
+        },
+        {
+          "@type": "Question", 
+          name: "What's the best time to visit Yala National Park?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "February to July offers the best wildlife viewing with 85% leopard sighting success rate."
+          }
+        }
+      ]
+    };
+  }
+
+  // Tourism attraction schema for main pages
   const touristAttraction = {
     "@context": "https://schema.org",
     "@type": "TouristAttraction",
@@ -276,25 +308,40 @@ const generateStructuredData = (activeTab, selectedLocation) => {
 const App = () => {
   const [activeTab, setActiveTab] = useState("camping");
   const [pageLoading, setPageLoading] = useState(true);
-  const [currentView, setCurrentView] = useState("main"); // main, unsubscribe, transportation
+  const [currentView, setCurrentView] = useState("main");
 
   // Enhanced check for current page on mount and URL changes
   useEffect(() => {
     const checkCurrentPage = () => {
       const currentPage = getCurrentPage();
-      console.log("🔍 Current page detected:", currentPage);
+      console.log("📍 Current page detected:", currentPage);
+      
+      // Handle legacy hash URLs by redirecting to proper paths
+      if (window.location.hash) {
+        const hashPage = window.location.hash.substring(1);
+        if (['unsubscribe', 'transportation', 'faq', 'privacy', 'terms'].includes(hashPage)) {
+          updateURL(hashPage);
+          setCurrentView(hashPage);
+          return;
+        }
+      }
+      
       setCurrentView(currentPage);
     };
 
     checkCurrentPage();
 
-    // Listen for URL changes
-    window.addEventListener("popstate", checkCurrentPage);
-    window.addEventListener("hashchange", checkCurrentPage);
+    // Listen for URL changes (back/forward)
+    const handlePopState = (event) => {
+      const currentPage = getCurrentPage();
+      console.log("🔄 URL changed via back/forward:", currentPage);
+      setCurrentView(currentPage);
+    };
+
+    window.addEventListener("popstate", handlePopState);
 
     return () => {
-      window.removeEventListener("popstate", checkCurrentPage);
-      window.removeEventListener("hashchange", checkCurrentPage);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, []);
 
@@ -440,6 +487,12 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Function to handle navigation with proper URL updates
+  const handleNavigation = (page) => {
+    updateURL(page);
+    setCurrentView(page);
+  };
+
   // Function to render content based on active tab
   const renderTabContent = () => {
     switch (activeTab) {
@@ -451,7 +504,6 @@ const App = () => {
             <SafariActivitiesSection
               onInquireNow={() => handleBookNow(locations[0])}
             />
-            {/* <TripAdvisorSection /> */}
           </>
         );
       case "camping":
@@ -460,14 +512,12 @@ const App = () => {
             <TabSections activeTab={activeTab} />
             <ImageGallery activeTab={activeTab} />
             <CampingSection onInquireNow={() => handleBookNow(locations[0])} />
-            {/* <TripAdvisorSection /> */}
           </>
         );
       case "about":
         return (
           <>
             <AboutUsSection />
-            {/* <TripAdvisorSection /> */}
           </>
         );
       default:
@@ -478,7 +528,6 @@ const App = () => {
             <SafariActivitiesSection
               onInquireNow={() => handleBookNow(locations[0])}
             />
-            {/* <TripAdvisorSection /> */}
           </>
         );
     }
@@ -557,11 +606,17 @@ const App = () => {
       {/* JSON-LD structured data - exclude from unsubscribe page */}
       {currentView !== "unsubscribe" && (
         <script type="application/ld+json">
-          {JSON.stringify(generateStructuredData(activeTab, selectedLocation))}
+          {JSON.stringify(generateStructuredData(activeTab, selectedLocation, currentView))}
         </script>
       )}
     </Helmet>
   );
+
+  // Back to main handler with proper URL update
+  const handleBackToMain = () => {
+    updateURL("main");
+    setCurrentView("main");
+  };
 
   // Transportation Page
   if (currentView === "transportation") {
@@ -580,16 +635,12 @@ const App = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-between items-center py-4">
                 <button
-                  onClick={() => {
-                    window.location.hash = "";
-                    setCurrentView("main");
-                  }}
+                  onClick={handleBackToMain}
                   className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                 >
                   <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
                   Back to Main Site
                 </button>
-                {/* <h1 className="text-xl font-bold text-gray-900">Transportation Services</h1> */}
                 <div></div> {/* Spacer for flex layout */}
               </div>
             </div>
@@ -597,7 +648,7 @@ const App = () => {
 
           <TransportationSection />
 
-          <Footer />
+          <Footer onNavigate={handleNavigation} />
 
           <FloatingActionButtons
             onBookNow={() => handleBookNow()}
@@ -620,7 +671,7 @@ const App = () => {
           canonical={`${SEO_CONFIG.siteUrl}/unsubscribe`}
         />
         <div className="min-h-screen">
-          <Unsubscribe />
+          <Unsubscribe onBackToMain={handleBackToMain} />
         </div>
       </HelmetProvider>
     );
@@ -644,7 +695,7 @@ const App = () => {
             onBackToLocations={handleBackToLocations}
             onBookNow={handleBookNow}
           />
-          <Footer />
+          <Footer onNavigate={handleNavigation} />
           <FloatingActionButtons
             onBookNow={() => handleBookNow()}
             onWhatsAppContact={handleWhatsAppContact}
@@ -690,7 +741,6 @@ const App = () => {
     );
   }
 
-  // Add these conditional renders before the main page layout
   // FAQ Page
   if (currentView === "faq") {
     return (
@@ -701,7 +751,7 @@ const App = () => {
           keywords={tabMetadata.keywords}
           canonical={`${SEO_CONFIG.siteUrl}/faq`}
         />
-        <FAQ />
+        <FAQ onBackToMain={handleBackToMain} />
       </HelmetProvider>
     );
   }
@@ -716,7 +766,7 @@ const App = () => {
           keywords={tabMetadata.keywords}
           canonical={`${SEO_CONFIG.siteUrl}/privacy`}
         />
-        <Privacy />
+        <Privacy onBackToMain={handleBackToMain} />
       </HelmetProvider>
     );
   }
@@ -731,7 +781,7 @@ const App = () => {
           keywords={tabMetadata.keywords}
           canonical={`${SEO_CONFIG.siteUrl}/terms`}
         />
-        <Terms />
+        <Terms onBackToMain={handleBackToMain} />
       </HelmetProvider>
     );
   }
@@ -744,7 +794,7 @@ const App = () => {
         title={tabMetadata.title}
         description={tabMetadata.description}
         keywords={tabMetadata.keywords}
-        canonical={`${SEO_CONFIG.siteUrl}#${activeTab}`}
+        canonical={`${SEO_CONFIG.siteUrl}${activeTab !== 'camping' ? `#${activeTab}` : ''}`}
       />
 
       <div className="min-h-screen bg-white">
@@ -794,8 +844,6 @@ const App = () => {
           {/* Services Section */}
           <ServicesSection services={SERVICES_DATA} />
 
-          {/* Transportation Section - REMOVED from main page */}
-
           {/* Why Choose Us Section */}
           <WhyChooseUsSection />
 
@@ -808,7 +856,7 @@ const App = () => {
           />
         </main>
 
-        <Footer />
+        <Footer onNavigate={handleNavigation} />
       </div>
     </HelmetProvider>
   );

@@ -1,12 +1,12 @@
-// Complete Privacy.jsx
-import React from 'react';
-import { ChevronRight } from 'lucide-react';
-
-const Privacy = () => {
-  const handleBackToMain = () => {
-   // Instead of window.location.href = '/'
-    window.history.pushState(null, '', '/');
-  window.location.reload(); 
+// Updated Privacy.jsx - With Navigation Props
+const Privacy = ({ onBackToMain }) => {
+  const handleBackClick = () => {
+    if (onBackToMain) {
+      onBackToMain();
+    } else {
+      window.history.pushState(null, '', '/');
+      window.location.reload(); 
+    }
   };
 
   return (
@@ -16,7 +16,7 @@ const Privacy = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <button
-              onClick={handleBackToMain}
+              onClick={handleBackClick}
               className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-md p-2"
             >
               <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
