@@ -32,8 +32,8 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/dist/index.html",
-      "s": 200
+      "dest": "/dist/index.html"
+      
     }
   ],
   "env": {
