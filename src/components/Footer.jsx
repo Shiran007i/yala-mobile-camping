@@ -354,11 +354,16 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="#/faq"
-                    className="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 transform"
-                  >
-                    FAQ
-                  </a>
+  href="#faq"
+  onClick={(e) => {
+    e.preventDefault(); // Prevent default jump
+    window.location.hash = '#faq';
+    window.location.reload();
+  }}
+  className="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 transform"
+>
+  FAQ
+</a>
                 </li>
               </ul>
             </div>
