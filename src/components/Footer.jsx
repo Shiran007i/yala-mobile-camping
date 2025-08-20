@@ -156,25 +156,24 @@ const Footer = () => {
                 experiences. We provide safe, comfortable, and memorable
                 adventures that connect you with nature and local culture.
               </p>
-
-              {/* Social Media */}
+             
+              {/* Social Media - Updated for Business Pages */}
               <div className="flex space-x-3 sm:space-x-4 mb-4 sm:mb-6">
                 <button
                   onClick={() =>
                     window.open(
-                      "https://www.facebook.com/profile.php?id=61579679243080",
+                      "https://www.facebook.com/yalamobilecamping", // Update to your business page
                       "_blank"
                     )
                   }
                   className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group"
                 >
-                  
                   <Facebook className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
                 <button
                   onClick={() =>
                     window.open(
-                      "https://www.instagram.com/yalamobilecamping/",
+                      "https://www.instagram.com/yalamobilecamping", // Keep this if it's business-only
                       "_blank"
                     )
                   }
@@ -182,14 +181,29 @@ const Footer = () => {
                 >
                   <Instagram className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
-                <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">
-                  <Twitter className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
-                </button>
-                <button className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group">
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://www.tiktok.com/@yalamobilecamping", // Consider TikTok for travel content
+                      "_blank"
+                    )
+                  }
+                  className="bg-gray-800 hover:bg-emerald-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group"
+                >
                   <Globe className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
                 </button>
+                <button
+                  onClick={() =>
+                    window.open(
+                      "https://wa.me/94713585926?text=Hello! I'm interested in Yala Mobile Camping",
+                      "_blank"
+                    )
+                  }
+                  className="bg-gray-800 hover:bg-green-600 p-2 sm:p-3 rounded-lg transition-colors duration-200 group"
+                >
+                  <Phone className="h-4 w-4 sm:h-5 sm:w-5 group-hover:scale-110 transition-transform" />
+                </button>
               </div>
-
               {/* Enhanced Newsletter Signup */}
               <div className="max-w-md">
                 <h4 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center space-x-2">
