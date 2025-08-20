@@ -354,7 +354,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/faq"
+                    href="#/faq"
                     className="text-gray-400 hover:text-white transition-colors duration-200 hover:translate-x-1 transform"
                   >
                     FAQ
@@ -433,12 +433,12 @@ const Footer = () => {
 
               <div className="flex flex-wrap justify-center md:justify-end space-x-4 sm:space-x-6 text-xs sm:text-sm text-gray-400">
                 <a
-                  href="/privacy"
+                  href="#/privacy"
                   className="hover:text-white transition-colors"
                 >
                   Privacy Policy
                 </a>
-                <a href="/terms" className="hover:text-white transition-colors">
+                <a href="#/terms" className="hover:text-white transition-colors">
                   Terms of Service
                 </a>
                 <a
