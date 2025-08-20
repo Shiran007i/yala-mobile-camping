@@ -20,6 +20,9 @@ import {
   WhyChooseUsSection,
   CallToActionSection,
   Unsubscribe,
+  FAQ,
+  Privacy,
+  Terms,
 } from "./components";
 
 import BookingForm from "./components/Booking";
@@ -54,14 +57,35 @@ const getCurrentPage = () => {
   const path = window.location.pathname;
   const hash = window.location.hash;
   const search = window.location.search;
-  
-  if (path === '/unsubscribe' || hash === '#unsubscribe' || search.includes('page=unsubscribe')) {
-    return 'unsubscribe';
+
+  if (
+    path === "/unsubscribe" ||
+    hash === "#unsubscribe" ||
+    search.includes("page=unsubscribe")
+  ) {
+    return "unsubscribe";
   }
-  if (path === '/transportation' || hash === '#transportation' || search.includes('page=transportation')) {
-    return 'transportation';
+  if (
+    path === "/transportation" ||
+    hash === "#transportation" ||
+    search.includes("page=transportation")
+  ) {
+    return "transportation";
   }
-  return 'main';
+  if (path === "/faq" || hash === "#faq" || search.includes("page=faq")) {
+    return "faq";
+  }
+  if (
+    path === "/privacy" ||
+    hash === "#privacy" ||
+    search.includes("page=privacy")
+  ) {
+    return "privacy";
+  }
+  if (path === "/terms" || hash === "#terms" || search.includes("page=terms")) {
+    return "terms";
+  }
+  return "main";
 };
 
 // FIXED: Proper Schema.org structured data with correct itemReviewed
@@ -258,19 +282,19 @@ const App = () => {
   useEffect(() => {
     const checkCurrentPage = () => {
       const currentPage = getCurrentPage();
-      console.log('🔍 Current page detected:', currentPage);
+      console.log("🔍 Current page detected:", currentPage);
       setCurrentView(currentPage);
     };
 
     checkCurrentPage();
-    
+
     // Listen for URL changes
-    window.addEventListener('popstate', checkCurrentPage);
-    window.addEventListener('hashchange', checkCurrentPage);
-    
+    window.addEventListener("popstate", checkCurrentPage);
+    window.addEventListener("hashchange", checkCurrentPage);
+
     return () => {
-      window.removeEventListener('popstate', checkCurrentPage);
-      window.removeEventListener('hashchange', checkCurrentPage);
+      window.removeEventListener("popstate", checkCurrentPage);
+      window.removeEventListener("hashchange", checkCurrentPage);
     };
   }, []);
 
@@ -301,7 +325,8 @@ const App = () => {
           "sustainable tourism, wildlife conservation, eco-tourism Sri Lanka, responsible travel",
       },
       transportation: {
-        title: "Transportation Services | Yala Mobile Camping - Airport & Safari Transfers",
+        title:
+          "Transportation Services | Yala Mobile Camping - Airport & Safari Transfers",
         description:
           "Reliable transportation services for Yala National Park including airport transfers, city transfers, and safari vehicle rentals with professional drivers.",
         keywords:
@@ -312,6 +337,25 @@ const App = () => {
         description:
           "Unsubscribe from Yala Mobile Camping newsletter. We're sorry to see you go!",
         keywords: "unsubscribe newsletter, Yala Mobile Camping email",
+      },
+      faq: {
+        title: "FAQ | Yala Mobile Camping - Frequently Asked Questions",
+        description:
+          "Get answers to frequently asked questions about Yala Mobile Camping, safari tours, booking process, and camping experiences.",
+        keywords:
+          "yala camping faq, safari questions, mobile camping guide, booking help",
+      },
+      privacy: {
+        title: "Privacy Policy | Yala Mobile Camping - Data Protection",
+        description:
+          "Learn how Yala Mobile Camping protects your privacy and handles your personal information.",
+        keywords: "privacy policy, data protection, personal information",
+      },
+      terms: {
+        title: "Terms of Service | Yala Mobile Camping - Booking Terms",
+        description:
+          "Read our terms of service for safari bookings, camping experiences, and service conditions.",
+        keywords: "terms of service, booking conditions, safari terms",
       },
     };
     return metadata[currentView] || metadata[activeTab] || metadata.safaris;
@@ -469,7 +513,12 @@ const App = () => {
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content={SEO_CONFIG.author} />
-      <meta name="robots" content={currentView === "unsubscribe" ? "noindex, nofollow" : "index, follow"} />
+      <meta
+        name="robots"
+        content={
+          currentView === "unsubscribe" ? "noindex, nofollow" : "index, follow"
+        }
+      />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
 
@@ -516,7 +565,7 @@ const App = () => {
 
   // Transportation Page
   if (currentView === "transportation") {
-    console.log('🚗 Rendering transportation page');
+    console.log("🚗 Rendering transportation page");
     return (
       <HelmetProvider>
         <SEOHead
@@ -532,8 +581,8 @@ const App = () => {
               <div className="flex justify-between items-center py-4">
                 <button
                   onClick={() => {
-                    window.location.hash = '';
-                    setCurrentView('main');
+                    window.location.hash = "";
+                    setCurrentView("main");
                   }}
                   className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
                 >
@@ -545,11 +594,11 @@ const App = () => {
               </div>
             </div>
           </header>
-          
+
           <TransportationSection />
-          
+
           <Footer />
-          
+
           <FloatingActionButtons
             onBookNow={() => handleBookNow()}
             onWhatsAppContact={handleWhatsAppContact}
@@ -561,7 +610,7 @@ const App = () => {
 
   // Unsubscribe Page
   if (currentView === "unsubscribe") {
-    console.log('📧 Rendering unsubscribe page');
+    console.log("📧 Rendering unsubscribe page");
     return (
       <HelmetProvider>
         <SEOHead
@@ -641,8 +690,54 @@ const App = () => {
     );
   }
 
+  // Add these conditional renders before the main page layout
+  // FAQ Page
+  if (currentView === "faq") {
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title={tabMetadata.title}
+          description={tabMetadata.description}
+          keywords={tabMetadata.keywords}
+          canonical={`${SEO_CONFIG.siteUrl}/faq`}
+        />
+        <FAQ />
+      </HelmetProvider>
+    );
+  }
+
+  // Privacy Page
+  if (currentView === "privacy") {
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title={tabMetadata.title}
+          description={tabMetadata.description}
+          keywords={tabMetadata.keywords}
+          canonical={`${SEO_CONFIG.siteUrl}/privacy`}
+        />
+        <Privacy />
+      </HelmetProvider>
+    );
+  }
+
+  // Terms Page
+  if (currentView === "terms") {
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title={tabMetadata.title}
+          description={tabMetadata.description}
+          keywords={tabMetadata.keywords}
+          canonical={`${SEO_CONFIG.siteUrl}/terms`}
+        />
+        <Terms />
+      </HelmetProvider>
+    );
+  }
+
   // Main page layout
-  console.log('🏠 Rendering main page layout');
+  console.log("🏠 Rendering main page layout");
   return (
     <HelmetProvider>
       <SEOHead
@@ -720,4 +815,3 @@ const App = () => {
 };
 
 export default App;
-            

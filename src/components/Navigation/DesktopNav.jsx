@@ -5,9 +5,9 @@ import { Mail } from "lucide-react";
 const DesktopNav = ({ scrollToSection, textClassName = "", style }) => {
   const handleTransportationClick = () => {
     // Navigate to transportation page using hash routing
-    window.location.hash = '#transportation';
+    window.location.href = '/transportation';
     // Trigger a page reload to ensure the route change is detected
-    window.location.reload();
+    //window.location.reload();
   };
 
   return (

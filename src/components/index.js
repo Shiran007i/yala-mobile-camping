@@ -14,3 +14,8 @@ export { default as LocationDetail } from './LocationDetail';
 //export { default as BookingForm } from './BookingForm';
 export { default as TripAdvisorSection } from './TripAdvisorSection';
 export { default as Unsubscribe } from './Unsubscribe';
+
+// Add these exports
+export { default as FAQ } from './FAQ';
+export { default as Privacy } from './Privacy';
+export { default as Terms } from './Terms';

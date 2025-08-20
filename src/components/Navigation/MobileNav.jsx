@@ -7,10 +7,8 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
 
   const handleTransportationClick = () => {
     // Navigate to transportation page using hash routing
-    window.location.hash = '#transportation';
-    // Trigger a page reload to ensure the route change is detected
-    window.location.reload();
-    setIsMenuOpen(false);
+   window.location.href = '/transportation';
+  setIsMenuOpen(false);
   };
 
   return (
