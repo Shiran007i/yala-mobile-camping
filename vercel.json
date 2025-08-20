@@ -35,23 +35,23 @@
       "dest": "/dist/$1"
     },
     {
-      "src": "/faq",
+      "src": "/faq/?",
       "dest": "/dist/index.html"
     },
     {
-      "src": "/privacy",
+      "src": "/privacy/?",
       "dest": "/dist/index.html"
     },
     {
-      "src": "/terms",
+      "src": "/terms/?",
       "dest": "/dist/index.html"
     },
     {
-      "src": "/transportation", 
+      "src": "/transportation/?", 
       "dest": "/dist/index.html"
     },
     {
-      "src": "/unsubscribe",
+      "src": "/unsubscribe/?",
       "dest": "/dist/index.html"
     },
     {

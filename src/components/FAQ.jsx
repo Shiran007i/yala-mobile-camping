@@ -57,7 +57,8 @@ const FAQ = () => {
   };
 
   const handleBackToMain = () => {
-    window.location.href = '/';
+   window.history.pushState(null, '', '/');
+  window.location.reload(); 
   };
 
   return (

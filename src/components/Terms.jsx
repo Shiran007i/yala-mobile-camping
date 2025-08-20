@@ -4,7 +4,8 @@ import { ChevronRight } from 'lucide-react';
 
 const Terms = () => {
   const handleBackToMain = () => {
-    window.location.href = '/';
+   window.history.pushState(null, '', '/');
+  window.location.reload(); 
   };
 
   return (
