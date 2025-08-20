@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import camp3Img from "/src//assets/images/about/camp3.webp";
+import aboutUsImg from "/src/assets/images/about/aboutus.webp";
 
 const AboutUsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,39 +29,14 @@ const AboutUsSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const teamMembers = [
-    {
-      name: "Roshan Perera",
-      role: "Founder & Wildlife Expert",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-      description:
-        "20+ years of experience in Sri Lankan wildlife conservation and eco-tourism.",
-    },
-    {
-      name: "Amara Silva",
-      role: "Operations Manager",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&q=80",
-      description:
-        "Expert in sustainable tourism practices and guest experience management.",
-    },
-    {
-      name: "Kasun Fernando",
-      role: "Lead Safari Guide",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
-      description:
-        "Certified naturalist with extensive knowledge of Yala National Park wildlife.",
-    },
-  ];
+  const teamInfo = {
+    image: aboutUsImg,
+    title: "Our Dedicated Team",
+    description: "Our team consists of dedicated, well-trained, and highly experienced professionals who are passionate about Yala's wildlife and committed to providing exceptional camping experiences. Each member brings years of expertise in wildlife conservation, sustainable tourism, and guest safety to ensure your adventure is both memorable and meaningful."
+  };
 
   const achievements = [
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Excellence Award 2023",
-      description: "Best Eco-Tourism Provider in Sri Lanka",
-    },
+    
     {
       icon: <Users className="w-8 h-8" />,
       title: "5000+ Happy Guests",
@@ -151,7 +127,6 @@ const AboutUsSection = () => {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          {" "}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
               <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -202,11 +177,10 @@ const AboutUsSection = () => {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          {" "}
           <h3 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
             Our Achievements
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
             {achievements.map((achievement, index) => (
               <div
                 key={index}
@@ -231,34 +205,20 @@ const AboutUsSection = () => {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          {" "}
           <h3 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
-            Meet Our Team
+            {teamInfo.title}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
-            {teamMembers.map((member, index) => (
-              <div
-                key={index}
-                className="bg-white/90 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-32 sm:h-48 object-cover"
-                />
-                <div className="p-4 sm:p-6">
-                  <h4 className="font-bold text-gray-900 text-base sm:text-lg mb-1">
-                    {member.name}
-                  </h4>
-                  <p className="text-emerald-600 font-medium mb-2 sm:mb-3 text-xs sm:text-base">
-                    {member.role}
-                  </p>
-                  <p className="text-gray-600 text-xs sm:text-sm">
-                    {member.description}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="bg-white/90 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-xl max-w-4xl mx-auto">
+            <img
+              src={teamInfo.image}
+              alt="Our Team at Yala Mobile Camping"
+              className="w-full h-48 sm:h-64 md:h-80 object-cover"
+            />
+            <div className="p-6 sm:p-8 md:p-10">
+              <p className="text-gray-700 text-base sm:text-lg leading-relaxed text-center">
+                {teamInfo.description}
+              </p>
+            </div>
           </div>
         </div>
         {/* Our Mission */}
@@ -267,7 +227,6 @@ const AboutUsSection = () => {
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          {" "}
           <h3 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">
             Our Mission
           </h3>
