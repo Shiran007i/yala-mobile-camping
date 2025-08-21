@@ -2,6 +2,8 @@
 import React from 'react';
 import { ChevronRight, Calendar, User, Share2 } from 'lucide-react';
 
+import camp3 from '../../assets/images/camp3.webp';
+
 const BlogPost = ({ onBackToMain }) => {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -47,7 +49,7 @@ const BlogPost = ({ onBackToMain }) => {
         {/* Featured Image */}
         <div className="mb-8">
           <img 
-            src="/src/assets/images/camp3.webp" 
+            src={camp3}
             alt="Mobile camping setup in Yala National Park"
             className="w-full h-96 object-cover rounded-lg shadow-lg"
           />
