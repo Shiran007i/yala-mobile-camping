@@ -29,7 +29,7 @@ import BookingForm from "./components/Booking";
 import BookingManager from "./components/Booking";
 
 import { TransportationSection } from "./components/Transportation";
-import BlogPost from "./components/blog/BlogPost";
+import BlogPost from "/src/components/blog/BlogPost";
 
 // Custom hooks
 import { useBookingHandlers } from "./hooks";
