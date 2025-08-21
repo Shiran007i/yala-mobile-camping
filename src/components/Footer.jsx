@@ -111,16 +111,21 @@ const Footer = ({ onNavigate }) => {
             </div>
 
             {/* Social Links */}
+            {/* Social Links */}
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://www.facebook.com/yalamobilecamping"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-slate-700 hover:bg-slate-600 p-2 rounded-md transition-colors duration-200"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/yalamobilecamping/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-slate-700 hover:bg-slate-600 p-2 rounded-md transition-colors duration-200"
                 aria-label="Instagram"
               >
@@ -221,6 +226,17 @@ const Footer = ({ onNavigate }) => {
                 </div>
               </div>
             </div>
+               {/* ADD THIS NEW SECTION - Developer Credit */}
+<div className="mt-8 pt-6">
+  <div className="text-center">
+    <p className="text-slate-500 text-sm mb-2">
+      Powered by <span className="text-red-700 font-semibold">Artisan</span>
+    </p>
+    <p className="text-slate-600 text-xs">
+      "Crafting Digital Excellence Through IT Solutions & Strategic Advertising"
+    </p>
+  </div>
+</div>
           </div>
         </div>
 
@@ -250,8 +266,11 @@ const Footer = ({ onNavigate }) => {
                 FAQ
               </button>
             </div>
+            
           </div>
+          
         </div>
+  
       </div>
     </footer>
   );
