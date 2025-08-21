@@ -6,6 +6,12 @@ import { fileURLToPath, URL } from 'node:url';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  
+  // ADDED: Ensure title stays consistent and prevent "Vite + React" from showing
+  define: {
+    __APP_TITLE__: '"Yala Mobile Camping - Mobile Camping in Sri Lanka"'
+  },
+  
   server: {
     proxy: {
       '/api': 'http://localhost:5000', // Proxy API requests to the Express server
@@ -37,6 +43,19 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
         },
       },
+    },
+    // ADDED: Ensure proper title in production build
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+      // Ensure no title overrides during build
+      external: (id) => {
+        // Don't bundle anything that might override document.title
+        return false;
+      }
     },
   },
   preview: {

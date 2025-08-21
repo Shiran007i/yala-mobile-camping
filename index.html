@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
 
-    <title>Yala Mobile Camping - Safari Adventures in Sri Lanka</title>
+    <!-- FIXED: Ensure title stays consistent -->
+   <title>Yala Mobile Camping - Mobile Camping in Sri Lanka</title>
     
-     <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags -->
     <meta name="description" content="Experience exclusive Yala Mobile Camping adventures at Yala National Park. Professional wildlife guides, luxury safari camping, and unforgettable Sri Lankan wildlife adventures with highest leopard density globally." />
     <meta name="keywords" content="yala mobile camping, yala moble camping, yalamobilecamping, Yala National Park Safari, Mobile Camping Sri Lanka, Yala Safari Tours, Sri Lanka Wildlife Camping, Leopard Safari Yala, Elephant Safari, Wildlife Photography, Safari Camping, Yala Park Tours, Mobile Safari, Camping Sri Lanka, Yala Wildlife Tours" />
     <meta name="author" content="Yala Mobile Camping" />
@@ -18,33 +19,38 @@
     <meta name="alternate-spellings" content="yala mobile camping, yalamobilecamping, yala moble camping" />
     <meta name="brand-variations" content="Yala Mobile Camping, YalaMobileCamping, Yala Moble Camping" />
     
-    <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="Yala Mobile Camping - Safari Adventures in Sri Lanka" />
+    <!-- FIXED: Open Graph Meta Tags - Use proper OG image -->
+    <meta property="og:title" content="Yala Mobile Camping - Mobile Camping in Sri Lanka" />
     <meta property="og:description" content="Experience exclusive safari camping at Yala National Park with professional guides and luxury accommodations. 85% leopard sighting success rate!" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://yalamobilecamping.com" />
-    <meta property="og:image" content="https://yalamobilecamping.com/logo.png" />
+    <!-- CHANGED: Use a proper OG image (1200x630px minimum) -->
+    <meta property="og:image" content="https://yalamobilecamping.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Yala Mobile Camping - Safari Adventures in Sri Lanka" />
     <meta property="og:site_name" content="Yala Mobile Camping" />
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Yala Mobile Camping - Safari Adventures" />
+    <meta name="twitter:title" content="Yala Mobile Camping - Mobile Camping in Sri Lanka" />
     <meta name="twitter:description" content="Exclusive safari camping at Yala National Park with professional guides and luxury accommodations." />
-    <meta name="twitter:image" content="https://yalamobilecamping.com/logo.png" />
+    <!-- CHANGED: Use proper Twitter image -->
+    <meta name="twitter:image" content="https://yalamobilecamping.com/og-image.jpg" />
     
     <!-- Theme Color for Mobile Browsers -->
     <meta name="theme-color" content="#16a34a" />
     
-    <!-- Structured Data for Better SEO -->
+    <!-- ENHANCED: Structured Data with TripAdvisor reference -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TouristAttraction",
       "name": "Yala Mobile Camping",
-      "description": "Experience exclusive Mobile camping at Yala National Park with professional wildlife guides and luxury accommodations.",
+      "description": "Experience exclusive Mobile camping at Yala National Park with professional wildlife guides and luxury accommodations. Rated 5 stars on TripAdvisor.",
       "url": "https://yalamobilecamping.com",
       "logo": "https://yalamobilecamping.com/logo.png",
-      "image": "https://yalamobilecamping.com/logo.png",
+      "image": "https://yalamobilecamping.com/og-image.jpg",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "LK",
@@ -57,16 +63,40 @@
       },
       "priceRange": "$$$",
       "telephone": "+94713585926",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": "6",
+        "bestRating": "5"
+      },
       "sameAs": [
         "https://www.facebook.com/yalamobilecamping",
-        "https://www.instagram.com/yalamobilecamping"
+        "https://www.instagram.com/yalamobilecamping",
+        "https://www.tripadvisor.com/Attraction_Review-g19899440-d33411134-Reviews-Yala_Mobile_Camping-Yala_Southern_Province.html"
       ]
     }
     </script>
     
     <!-- Preload critical content for faster loading -->
     <link rel="preload" href="/logo.png" as="image">
+    <link rel="preload" href="/og-image.jpg" as="image">
     <link rel="preload" href="/src/main.jsx" as="script" crossorigin>
+    
+    <!-- ADDED: Prevent title override -->
+    <script>
+      // Prevent any framework from changing the title during development
+      if (typeof document !== 'undefined') {
+        Object.defineProperty(document, 'title', {
+          get: function() { return 'Yala Mobile Camping - Mobile Camping in Sri Lanka'; },
+          set: function(newTitle) { 
+            // Only allow our title or similar variations
+            if (newTitle && !newTitle.includes('Vite') && !newTitle.includes('React')) {
+              document.getElementsByTagName('title')[0].textContent = newTitle;
+            }
+          }
+        });
+      }
+    </script>
     
     <!-- Enhanced styles to prevent ALL flickers and flickering -->
     <style>
