@@ -39,10 +39,11 @@ export default defineConfig({
       },
     },
   },
-  // Add this to handle trailing slashes
   preview: {
     port: 4173,
     strictPort: true,
+    // This helps with SPA routing in preview mode
+    open: true,
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
