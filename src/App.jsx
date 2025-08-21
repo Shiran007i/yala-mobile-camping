@@ -345,6 +345,13 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+  // Scroll to top when currentView changes (for page navigation)
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}, [currentView]);
+
   // SEO metadata based on current view and active tab
   const tabMetadata = useMemo(() => {
     const metadata = {
@@ -487,11 +494,16 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Function to handle navigation with proper URL updates
-  const handleNavigation = (page) => {
-    updateURL(page);
-    setCurrentView(page);
-  };
+  // Also update your handleNavigation function to ensure immediate scroll:
+const handleNavigation = (page) => {
+  // Immediate scroll to top
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
+  updateURL(page);
+  setCurrentView(page);
+};
 
   // Function to render content based on active tab
   const renderTabContent = () => {
@@ -613,10 +625,16 @@ const App = () => {
   );
 
   // Back to main handler with proper URL update
-  const handleBackToMain = () => {
-    updateURL("main");
-    setCurrentView("main");
-  };
+ // Update your handleBackToMain function:
+const handleBackToMain = () => {
+  // Immediate scroll to top
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  
+  updateURL("main");
+  setCurrentView("main");
+};
 
   // Transportation Page
   if (currentView === "transportation") {

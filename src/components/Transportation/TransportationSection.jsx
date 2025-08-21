@@ -42,6 +42,19 @@ const TransportationSection = () => {
   const [showArrowTours, setShowArrowTours] = useState(true);
   const scrollContainerRef = useRef(null);
 
+  //  // Scroll to top when component mounts
+  // useEffect(() => {
+  // // Smooth scroll to top when component mounts
+  // window.scrollTo({ 
+  //   top: 0, 
+  //   behavior: 'smooth' 
+  // });
+  
+  // Fallback for older browsers
+//   document.documentElement.scrollTop = 0;
+//   document.body.scrollTop = 0;
+// }, []);
+
   const toggleCard = (id) => {
     setExpandedCard(expandedCard === id ? null : id);
   };

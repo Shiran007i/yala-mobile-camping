@@ -1,5 +1,15 @@
-// Updated Privacy.jsx - With Navigation Props
+// Updated Privacy.jsx - With Navigation Props and Scroll to Top
+import React, { useEffect } from 'react';
+import { ChevronRight } from 'lucide-react';
+
 const Privacy = ({ onBackToMain }) => {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
   const handleBackClick = () => {
     if (onBackToMain) {
       onBackToMain();

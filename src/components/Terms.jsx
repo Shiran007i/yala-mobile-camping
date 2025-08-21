@@ -1,11 +1,22 @@
-// Complete Terms.jsx
-import React from 'react';
+// Updated Terms.jsx - With Navigation Props and Scroll to Top
+import React, { useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 
-const Terms = () => {
-  const handleBackToMain = () => {
-   window.history.pushState(null, '', '/');
-  window.location.reload(); 
+const Terms = ({ onBackToMain }) => {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  const handleBackClick = () => {
+    if (onBackToMain) {
+      onBackToMain();
+    } else {
+      window.history.pushState(null, '', '/');
+      window.location.reload(); 
+    }
   };
 
   return (
@@ -15,7 +26,7 @@ const Terms = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <button
-              onClick={handleBackToMain}
+              onClick={handleBackClick}
               className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-md p-2"
             >
               <ChevronRight className="h-4 w-4 mr-1 rotate-180" />

@@ -1,5 +1,5 @@
 {
-  "name": "sri-lanka-camping",
+  "name": "yala-mobile-camping",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,10 +8,14 @@
     "client": "vite",
     "server": "node server.js",
     "server:dev": "nodemon server.js",
-    "build": "vite build",
+    "build": "vite build && npm run generate-sitemap",
+    "build:vercel": "vite build && npm run generate-sitemap",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test:email": "node test-booking-email.js"
+    "generate-sitemap": "node generate-sitemap.js",
+    "test:email": "node test-booking-email.js",
+    "test-emails": "node complete-email-test.js",
+    "seo:audit": "lighthouse --chrome-flags='--headless' --output=html --output-path=./seo-audit.html http://localhost:5173"
   },
   "dependencies": {
     "@types/nodemailer": "^6.4.17",
@@ -47,6 +51,7 @@
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "lighthouse": "^11.4.0",
     "nodemon": "^3.0.1",
     "postcss": "^8.5.6",
     "sharp": "^0.34.3",

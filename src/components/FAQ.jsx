@@ -1,9 +1,16 @@
-// Updated FAQ.jsx - With Navigation Props
-import React from 'react';
+// Updated FAQ.jsx - With Navigation Props and Scroll to Top
+import React, { useEffect } from 'react';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
 const FAQ = ({ onBackToMain }) => {
   const [openItems, setOpenItems] = React.useState([]);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
 
   const faqs = [
     {
@@ -40,7 +47,7 @@ const FAQ = ({ onBackToMain }) => {
     },
     {
       question: "What is the cancellation policy?",
-      answer: "Cancellations must be made 48 hours in advance for a full refund. Weather-related cancellations will receive a full refund or reschedule option. No-shows are non-refundable."
+      answer: "Cancellations must be made 48 hours in advance for a full refund. Cancellations within 48 hours are subject to 50% charge. Weather-related cancellations will receive a full refund or reschedule option. No-shows are non-refundable."
     },
     {
       question: "Do you provide transportation from Colombo?",
