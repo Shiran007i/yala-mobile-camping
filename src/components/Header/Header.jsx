@@ -5,7 +5,7 @@ import MobileNav from "../Navigation/MobileNav";
 import HeroSection from "./HeroSection";
 import TabNavigation from "../Navigation/TabNavigation";
 
-const Header = ({ activeTab, setActiveTab, onInquireNow }) => {
+const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
   const [showUpButton, setShowUpButton] = useState(false);
   const [menuDark, setMenuDark] = useState(false);
 
@@ -74,6 +74,7 @@ const Header = ({ activeTab, setActiveTab, onInquireNow }) => {
             <div className="hidden md:block">
               <DesktopNav
                 scrollToSection={scrollToSection}
+                onNavigate={onNavigate}
                 textClassName={
                   `transition-colors duration-300 text-[1.15rem] px-3 py-1 rounded` +
                   ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${
@@ -88,6 +89,7 @@ const Header = ({ activeTab, setActiveTab, onInquireNow }) => {
             <div className="md:hidden">
               <MobileNav
                 scrollToSection={scrollToSection}
+                onNavigate={onNavigate}
                 textClassName={
                   `transition-colors duration-300 text-lg px-3 py-1 rounded` +
                   ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${
@@ -139,6 +141,16 @@ const Header = ({ activeTab, setActiveTab, onInquireNow }) => {
 };
 
 export default Header;
+
+/* Add this to your global CSS or Tailwind config:
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
+*/
 
 /* Add this to your global CSS or Tailwind config:
 @keyframes fade-in-up {

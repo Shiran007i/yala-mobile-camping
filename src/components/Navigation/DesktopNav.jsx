@@ -2,51 +2,78 @@
 import React from "react";
 import { Mail } from "lucide-react";
 
-const DesktopNav = ({ scrollToSection, textClassName = "", style }) => {
+const DesktopNav = ({ scrollToSection, textClassName = "", style, onNavigate }) => {
   const handleTransportationClick = () => {
-    // Navigate to transportation page using hash routing
-    window.location.hash = '#transportation';
-    // Trigger a page reload to ensure the route change is detected
-    window.location.reload();
+    if (onNavigate) {
+      onNavigate('transportation');
+    } else {
+      // Fallback for hash routing
+      window.location.hash = '#transportation';
+      window.location.reload();
+    }
+  };
+
+  const handleBlogClick = () => {
+    if (onNavigate) {
+      onNavigate('blog');
+    } else {
+      // Fallback for hash routing
+      window.location.hash = '#blog';
+      window.location.reload();
+    }
   };
 
   return (
     <nav className="hidden md:flex items-center space-x-8">
       <button 
         onClick={() => scrollToSection("home")} 
-        className={textClassName}
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
+        aria-label="Go to Home section"
       >
         Home
       </button>
       <button
         onClick={() => scrollToSection("locations")}
-        className={textClassName}
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
+        aria-label="Go to Locations section"
       >
         Locations
       </button>
       <button
         onClick={() => scrollToSection("services")}
-        className={textClassName}
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
+        aria-label="Go to Services section"
       >
         Services
       </button>
       <button
         onClick={handleTransportationClick}
-        className={textClassName}
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
+        aria-label="Go to Transportation page"
       >
-        Transportation      </button>
+        Transportation
+      </button>
+      <button
+        onClick={handleBlogClick}
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
+        style={style}
+        aria-label="Go to Blog page"
+      >
+        Blog
+      </button>
 
       {/* Contact Info */}
-      <div className="hidden md:flex items-center space-x-4 text-sm whitespace-nowrap overflow-hidden">
+      <div className="hidden lg:flex items-center space-x-4 text-sm whitespace-nowrap overflow-hidden">
         <a
           href="mailto:info@yalamobilecamping.com"
-          className={textClassName + " flex items-center"}
+          className={`${textClassName} flex items-center font-inter hover:scale-105 transition-transform duration-200`}
+          aria-label="Email Yala Mobile Camping"
         >
-          <Mail className="h-4 w-4 mr-1" />
+          <Mail className="h-4 w-4 mr-1" aria-hidden="true" />
           <span className="truncate">info@yalamobilecamping.com</span>
         </a>
       </div>

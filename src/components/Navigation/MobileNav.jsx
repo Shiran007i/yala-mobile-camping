@@ -2,14 +2,28 @@
 import React, { useState } from "react";
 import { Menu, X, Mail } from "lucide-react";
 
-const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
+const MobileNav = ({ scrollToSection, textClassName = "", style, onNavigate }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTransportationClick = () => {
-    // Navigate to transportation page using hash routing
-    window.location.hash = '#transportation';
-    // Trigger a page reload to ensure the route change is detected
-    window.location.reload();
+    if (onNavigate) {
+      onNavigate('transportation');
+    } else {
+      // Fallback for hash routing
+      window.location.hash = '#transportation';
+      window.location.reload();
+    }
+    setIsMenuOpen(false);
+  };
+
+  const handleBlogClick = () => {
+    if (onNavigate) {
+      onNavigate('blog');
+    } else {
+      // Fallback for hash routing
+      window.location.hash = '#blog';
+      window.location.reload();
+    }
     setIsMenuOpen(false);
   };
 
@@ -18,12 +32,14 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
       <div className="md:hidden flex items-center">
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className={textClassName + " focus:outline-none"}
+          className={`${textClassName} focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded p-1`}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMenuOpen}
         >
           {isMenuOpen ? (
-            <X className="h-6 w-6" />
+            <X className="h-6 w-6" aria-hidden="true" />
           ) : (
-            <Menu className="h-6 w-6" />
+            <Menu className="h-6 w-6" aria-hidden="true" />
           )}
         </button>
       </div>
@@ -31,14 +47,15 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 mt-2 mx-4">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/50 backdrop-blur-md rounded-lg border-t border-white/20">
+          <nav className="px-2 pt-2 pb-3 space-y-1 bg-black/50 backdrop-blur-md rounded-lg border-t border-white/20">
             <button
               onClick={() => {
                 scrollToSection("home");
                 setIsMenuOpen(false);
               }}
-              className={"block px-3 py-2 w-full text-left " + textClassName}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
+              aria-label="Go to Home section"
             >
               Home
             </button>
@@ -47,8 +64,9 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
                 scrollToSection("locations");
                 setIsMenuOpen(false);
               }}
-              className={"block px-3 py-2 w-full text-left " + textClassName}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
+              aria-label="Go to Locations section"
             >
               Locations
             </button>
@@ -57,30 +75,40 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
                 scrollToSection("services");
                 setIsMenuOpen(false);
               }}
-              className={"block px-3 py-2 w-full text-left " + textClassName}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
+              aria-label="Go to Services section"
             >
               Services
             </button>
             <button
               onClick={handleTransportationClick}
-              className={"block px-3 py-2 w-full text-left " + textClassName}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
+              aria-label="Go to Transportation page"
             >
               Transportation
+            </button>
+            <button
+              onClick={handleBlogClick}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
+              style={style}
+              aria-label="Go to Blog page"
+            >
+              Blog
             </button>
 
             <div className="px-3 py-2 border-t border-white/20 flex flex-col gap-1 text-sm">
               <a
                 href="mailto:info@yalamobilecamping.com"
-                className={textClassName + " flex items-center break-all"}
+                className={`${textClassName} flex items-center break-all font-inter hover:bg-white/10 rounded p-2 transition-colors`}
                 aria-label="Email Yala Mobile Camping"
               >
-                <Mail className="h-4 w-4 mr-2" />
+                <Mail className="h-4 w-4 mr-2 flex-shrink-0" aria-hidden="true" />
                 <span className="truncate">info@yalamobilecamping.com</span>
               </a>
             </div>
-          </div>
+          </nav>
         </div>
       )}
     </>

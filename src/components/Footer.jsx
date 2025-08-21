@@ -161,6 +161,14 @@ const Footer = ({ onNavigate }) => {
                   Transportation
                 </button>
               </li>
+               <li>
+                <button
+                  onClick={(e) => handleNavClick('blog', e)}
+                  className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
+                >
+                  Blog
+                </button>
+              </li>
               <li>
                 <button
                   onClick={(e) => handleNavClick('faq', e)}

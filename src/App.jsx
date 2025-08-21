@@ -29,6 +29,7 @@ import BookingForm from "./components/Booking";
 import BookingManager from "./components/Booking";
 
 import { TransportationSection } from "./components/Transportation";
+import BlogPost from "./components/blog/BlogPost";
 
 // Custom hooks
 import { useBookingHandlers } from "./hooks";
@@ -311,6 +312,9 @@ const App = () => {
   const [currentView, setCurrentView] = useState("main");
 
   // Enhanced check for current page on mount and URL changes
+  // In your App component:
+
+  
   useEffect(() => {
     const checkCurrentPage = () => {
       const currentPage = getCurrentPage();
@@ -676,7 +680,20 @@ const handleBackToMain = () => {
       </HelmetProvider>
     );
   }
-
+// In your App.jsx, add this case:
+if (currentView === "blog") {
+  return (
+    <HelmetProvider>
+      <SEOHead
+        title="Mobile Camping Blog | Yala National Park Wildlife Adventures"
+        description="Read about revolutionary mobile camping experiences in Yala National Park, wildlife encounters, and safari adventures in Sri Lanka."
+        keywords="yala mobile camping blog, sri lanka safari blog, wildlife camping stories"
+        canonical={`${SEO_CONFIG.siteUrl}/blog`}
+      />
+      <BlogPost onBackToMain={handleBackToMain} />
+    </HelmetProvider>
+  );
+}
   // Unsubscribe Page
   if (currentView === "unsubscribe") {
     console.log("📧 Rendering unsubscribe page");
@@ -834,6 +851,7 @@ const handleBackToMain = () => {
         <Header
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          onNavigate={handleNavigation}
           onInquireNow={() => handleBookNow(locations[0])}
         />
 
