@@ -15,6 +15,8 @@ import {
   Send,
 } from "lucide-react";
 
+import logo from "/logo.png"; // Ensure this path is correct
+
 const BookingForm = ({ selectedLocation, onBookingComplete }) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -33,8 +35,8 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
 
   // *** UPDATED PRICING CALCULATION ***
   const calculatePricing = (persons, nights) => {
-    const BASE_PRICE_2_PERSONS = 950;
-    const ADDITIONAL_PERSON_PRICE = 950 / 2 - 25; // $450 per additional person
+    const BASE_PRICE_2_PERSONS = 700;
+    const ADDITIONAL_PERSON_PRICE = 700 / 2 - 25; // $325 per additional person
 
     let total = BASE_PRICE_2_PERSONS * nights; // Base price for 2 persons
 
@@ -154,7 +156,7 @@ const BookingForm = ({ selectedLocation, onBookingComplete }) => {
         total: pricing.total,
         location: {
           ...selectedLocation,
-          price_per_night: 950, // Base price for 2 persons per night
+          price_per_night: 700, // Base price for 2 persons per night
         },
         pricing: pricing, // Include detailed pricing breakdown
         specialRequests: formData.specialRequests,
@@ -300,15 +302,15 @@ Accommodation: ${finalBookingData.accommodationType}
 Meal Plan: ${finalBookingData.mealPlan}
 
 💰 PRICING BREAKDOWN:
-Base Package (2 persons): $950 × ${finalBookingData.nights} nights = $${
-      950 * finalBookingData.nights
+Base Package (2 persons): $700 × ${finalBookingData.nights} nights = $${
+      700 * finalBookingData.nights
     }
 ${
   finalBookingData.groupSize > 2
-    ? `Additional Persons (${finalBookingData.groupSize - 2}): $450 × ${
+    ? `Additional Persons (${finalBookingData.groupSize - 2}): $325 × ${
         finalBookingData.groupSize - 2
       } × ${finalBookingData.nights} nights = $${
-        (finalBookingData.groupSize - 2) * 450 * finalBookingData.nights
+        (finalBookingData.groupSize - 2) * 325 * finalBookingData.nights
       }`
     : ""
 }
@@ -332,7 +334,7 @@ Best regards,
 ${finalBookingData.firstName} ${finalBookingData.lastName}
     `.trim();
 
-    const mailtoLink = `mailto:bookings@yalamobilecamping.com?subject=${encodeURIComponent(
+    const mailtoLink = `mailto:info@yalamobilecamping.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(emailBody)}`;
     window.open(mailtoLink, "_blank");
@@ -352,53 +354,7 @@ Next steps:
 
   // WhatsApp message with updated pricing
   const createWhatsAppMessage = (bookingData) => {
-    return `🕏️ *NEW BOOKING REQUEST*
-
-📋 *Booking ID:* ${bookingData.bookingId}
-📅 *Date:* ${new Date().toLocaleString()}
-
-👤 *Guest Details:*
-• Name: ${bookingData.firstName} ${bookingData.lastName}
-• Email: ${bookingData.email}
-• Phone: ${bookingData.phone}
-
-🕏️ *Accommodation:*
-• Location: ${bookingData.location.name}
-• Address: ${bookingData.location.location}
-• Check-in: ${bookingData.checkIn}
-• Check-out: ${bookingData.checkOut}
-• Duration: ${bookingData.nights} nights
-• Guests: ${bookingData.groupSize}
-• Accommodation: ${bookingData.accommodationType}
-• Meal Plan: ${bookingData.mealPlan}
-
-💰 *Pricing:*
-• Base Package (2 persons): $950 × ${bookingData.nights} = $${
-      950 * bookingData.nights
-    }
-${
-  bookingData.groupSize > 2
-    ? `• Additional Persons (${bookingData.groupSize - 2}): $450 × ${
-        bookingData.groupSize - 2
-      } × ${bookingData.nights} = $${
-        (bookingData.groupSize - 2) * 450 * bookingData.nights
-      }`
-    : ""
-}
-${
-  bookingData.groupSize > 2
-    ? `• *Your Savings:* $${
-        (bookingData.groupSize - 2) * 25 * bookingData.nights
-      } ($25 off per additional person!)`
-    : ""
-}
-• *TOTAL: $${bookingData.total}*
-
-${
-  bookingData.specialRequests
-    ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n`
-    : ""
-}Please confirm availability and send payment details. Thank you! 🙏`;
+    return `🕏️ *NEW BOOKING REQUEST*\n\n📋 *Booking ID:* ${bookingData.bookingId}\n📅 *Date:* ${new Date().toLocaleString()}\n\n👤 *Guest Details:*\n• Name: ${bookingData.firstName} ${bookingData.lastName}\n• Email: ${bookingData.email}\n• Phone: ${bookingData.phone}\n\n🕏️ *Accommodation:*\n• Location: ${bookingData.location.name}\n• Address: ${bookingData.location.location}\n• Check-in: ${bookingData.checkIn}\n• Check-out: ${bookingData.checkOut}\n• Duration: ${bookingData.nights} nights\n• Guests: ${bookingData.groupSize}\n• Accommodation: ${bookingData.accommodationType}\n• Meal Plan: ${bookingData.mealPlan}\n\n💰 *Pricing:*\n• Base Package (2 persons): $700 × ${bookingData.nights} = $${700 * bookingData.nights}\n${bookingData.groupSize > 2 ? `• Additional Persons (${bookingData.groupSize - 2}): $325 × ${bookingData.groupSize - 2} × ${bookingData.nights} = $${(bookingData.groupSize - 2) * 325 * bookingData.nights}` : ""}\n${bookingData.groupSize > 2 ? `• *Your Savings:* $${(bookingData.groupSize - 2) * 25 * bookingData.nights} ($25 off per additional person!)` : ""}\n• *TOTAL: $${bookingData.total}*\n\n${bookingData.specialRequests ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n` : ""}Please confirm availability and send payment details. Thank you! 🙏`;
   };
 
   const handleWhatsAppBooking = (bookingData = null) => {
@@ -416,17 +372,10 @@ ${
     };
 
     const message = createWhatsAppMessage(finalBookingData);
-    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(
-      message
-    )}`;
+    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
 
-    alert(`📱 Opening WhatsApp...
-
-📋 Booking ID: ${finalBookingData.bookingId}
-💬 WhatsApp message prepared and ready to send!
-
-We'll respond quickly via WhatsApp with confirmation and payment details.`);
+    alert(`📱 Opening WhatsApp...\n\n📋 Booking ID: ${finalBookingData.bookingId}\n💬 WhatsApp message prepared and ready to send!\n\nWe'll respond quickly via WhatsApp with confirmation and payment details.`);
 
     onBookingComplete && onBookingComplete(finalBookingData);
   };
@@ -481,13 +430,13 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-3xl font-bold text-emerald-600">
-                    $950
+                    $700
                   </div>
                   <div className="text-sm text-emerald-700 font-medium">
                     Complete package for 2 persons
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
-                    Additional person: $450/night (save $25!)
+                    Additional person: $325/night (save $25!)
                   </div>
 
                   <div className="flex items-center text-sm mt-3">
@@ -755,17 +704,17 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
                       Base Package (2 persons) × {calculateNights()}{" "}
                       {calculateNights() === 1 ? "night" : "nights"}
                     </span>
-                    <span>${950 * calculateNights()}</span>
+                    <span>${700 * calculateNights()}</span>
                   </div>
                   {formData.groupSize > 2 && (
                     <>
                       <div className="flex justify-between">
                         <span>
-                          Additional Persons ({formData.groupSize - 2}) × ${450}{" "}
+                          Additional Persons ({formData.groupSize - 2}) × ${325}{" "}
                           × {calculateNights()}
                         </span>
                         <span>
-                          ${(formData.groupSize - 2) * 450 * calculateNights()}
+                          ${(formData.groupSize - 2) * 325 * calculateNights()}
                         </span>
                       </div>
                       <div className="flex justify-between text-green-600">
@@ -859,6 +808,40 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
         </form>
       </div>
 
+      {/* Trust Badges & Social Proof */}
+      <div className="mt-8 flex flex-col md:flex-row gap-6 justify-center items-center">
+        <div className="bg-white border border-green-200 rounded-xl p-6 flex items-center shadow-md w-full md:w-1/2">
+          <a
+            href="https://www.tripadvisor.com/Attraction_Review-g19899440-d33411134-Reviews-Yala_Mobile_Camping-Yala_Southern_Province.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center group mr-4"
+            aria-label="TripAdvisor"
+          >
+            <img
+              src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_logomark.svg"
+              alt="TripAdvisor"
+              className="h-10 w-10 group-hover:scale-110 transition-transform duration-200"
+            />
+            <span className="ml-2 text-green-700 font-semibold text-base group-hover:underline">TripAdvisor</span>
+          </a>
+          <div>
+            <p className="font-semibold text-green-700">Listed on TripAdvisor</p>
+            <p className="text-xs text-gray-600">Please Add Reviews...</p>
+          </div>
+        </div>
+        <div className="bg-white border border-blue-200 rounded-xl p-6 flex items-center shadow-md w-full md:w-1/2">
+          <img src={logo} alt="Google Reviews" className="h-12 w-12 mr-3" />
+          <div>
+            <p className="font-semibold text-blue-700">100% Satisfaction Guarantee</p>
+            <div className="flex items-center mt-1">
+              {/* <img src={logo} alt="Google Icon" className="h-5 w-5 mr-1" /> */}
+              <span className="text-xs text-gray-600">Book with confidence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Information Cards */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-blue-50 p-6 rounded-lg">
@@ -868,7 +851,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
             Get detailed confirmation and documentation via email
           </p>
           <p className="text-sm font-medium text-blue-900">
-            📧 bookings@yalamobilecamping.com
+            📧 info@yalamobilecamping.com
           </p>
         </div>
 
@@ -881,7 +864,7 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
             Instant communication and quick responses
           </p>
           <p className="text-sm font-medium text-green-900">
-            📱 +94 71 399 1051
+            📱 +9471 358 5926
           </p>
         </div>
       </div>
@@ -894,10 +877,10 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="text-amber-800 mb-2">
-              <strong>Base Package:</strong> $950 for 2 persons per night
+              <strong>Base Package:</strong> $700 for 2 persons per night
             </p>
             <p className="text-amber-800">
-              <strong>Additional Persons:</strong> $450 per person per night
+              <strong>Additional Persons:</strong> $325 per person per night
             </p>
           </div>
           <div>
@@ -905,53 +888,123 @@ We'll respond quickly via WhatsApp with confirmation and payment details.`);
               <strong>💰 You Save:</strong> $25 per additional person per night
             </p>
             <p className="text-amber-800">
-              <strong>Formula:</strong> ($950 ÷ 2) - $25 = $450
+              <strong>Formula:</strong> ($700 ÷ 2) - $25 = $325
             </p>
           </div>
         </div>
         <div className="mt-4 p-3 bg-amber-100 rounded border-l-4 border-amber-400">
           <p className="text-xs text-amber-800">
-            <strong>Example:</strong> 4 people, 2 nights = $950×2 + $450×2×2 =
-            $3,700 (You save $100 compared to individual rates!)
+            <strong>Example:</strong> 4 people, 2 nights = $700×2 + $325×2×2 =
+            $2,600 (You save $100 compared to individual rates!)
           </p>
         </div>
       </div>
 
-      {/* Debug Info (remove in production) */}
-      {/* {process.env.NODE_ENV === "development" && (
-        <div className="mt-8 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-          <h4 className="font-semibold text-yellow-800 mb-2">
-            Debug Info (Development Only)
-          </h4>
-          <div className="text-sm text-yellow-700">
-            <p>Selected Location: {selectedLocation?.name || "None"}</p>
-            <p>Form Valid: {isFormValid() ? "Yes" : "No"}</p>
-            <p>Group Size: {formData.groupSize}</p>
-            <p>Nights: {calculateNights()}</p>
-            {calculateNights() > 0 && (
-              <>
-                <p>Base Cost: ${950 * calculateNights()}</p>
-                {formData.groupSize > 2 && (
-                  <>
-                    <p>Additional Persons: {formData.groupSize - 2}</p>
-                    <p>
-                      Additional Cost: $
-                      {(formData.groupSize - 2) * 450 * calculateNights()}
-                    </p>
-                    <p>
-                      Savings: $
-                      {(formData.groupSize - 2) * 25 * calculateNights()}
-                    </p>
-                  </>
-                )}
-                <p>Total: ${getCurrentPricing().total}</p>
-              </>
-            )}
-            <p>API Endpoint: /api/booking</p>
-            <p>Environment: {process.env.NODE_ENV}</p>
+      {/* FAQ Section for SEO & User Trust */}
+      <div className="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+        <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+          ❓ Frequently Asked Questions
+        </h4>
+        <div className="space-y-4 text-sm">
+          <div>
+            <strong>Is Yala Mobile Camping safe?</strong>
+            <p>Yes! Our campsites are secure, guided by local experts, and follow strict safety protocols for guests and wildlife.</p>
+          </div>
+          <div>
+            <strong>What is included in the package?</strong>
+            <p>Accommodation, meals, guided safaris, park entry, and all camping amenities. See above for full details.</p>
+          </div>
+          <div>
+            <strong>How do I get to Yala?</strong>
+            <p>We offer pickup options from major cities and airports. Contact us for details or see our Locations page.</p>
+          </div>
+          <div>
+            <strong>Can I book for large groups or families?</strong>
+            <p>Yes, we accommodate up to 8 guests per camp. Family tents and custom arrangements available.</p>
+          </div>
+          <div>
+            <strong>Is the camp eco-friendly?</strong>
+            <p>Absolutely! We use sustainable practices, minimize waste, and support local conservation efforts.</p>
           </div>
         </div>
-      )} */}
+      </div>
+
+    
+
+      {/* Why Choose Us Section */}
+      <div className="mt-8 bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+        <h4 className="font-semibold text-emerald-900 mb-3 flex items-center">
+          🌟 Why Choose Yala Mobile Camping?
+        </h4>
+        <ul className="list-disc pl-6 text-sm text-emerald-800 space-y-2">
+          <li>Mobile camping in Sri Lanka's premier wildlife park</li>
+          <li>Expert local guides & personalized service</li>
+          <li>Eco-friendly, sustainable tourism</li>
+          <li>Flexible packages for families, couples, and groups</li>
+          <li>Direct access to Yala National Park safaris</li>
+          <li>Trusted by 1000+ happy guests</li>
+        </ul>
+      </div>
+
+      {/* Internal Links for SEO */}
+      <div className="mt-8 text-center text-sm text-gray-600">
+        <a href="/about" className="underline mx-2">About Us</a>
+        <a href="/activities" className="underline mx-2">Activities</a>
+        <a href="/locations" className="underline mx-2">Locations</a>
+        <a href="/reviews" className="underline mx-2">Guest Reviews (coming soon)</a>
+      </div>
+
+      {/* FAQ Schema Markup for Google Rich Results */}
+      <script type="application/ld+json">
+        {`
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is Yala Mobile Camping safe?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Our campsites are secure, guided by local experts, and follow strict safety protocols for guests and wildlife."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is included in the package?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Accommodation, meals, guided safaris, park entry, and all camping amenities. See above for full details."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I get to Yala?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We offer pickup options from major cities and airports. Contact us for details or see our Locations page."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I book for large groups or families?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, we accommodate up to 8 guests per camp. Family tents and custom arrangements available."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is the camp eco-friendly?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely! We use sustainable practices, minimize waste, and support local conservation efforts."
+              }
+            }
+          ]
+        }
+        `}
+      </script>
     </div>
   );
 };

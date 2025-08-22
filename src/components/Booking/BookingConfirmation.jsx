@@ -60,7 +60,21 @@ Accommodation: ${accommodationType}
 Meal Plan: ${mealPlan}
 
 PRICING:
-Rate: $${location.price_per_night}/night
+Base Package (2 persons): $700 × ${nights} nights = $${700 * nights}
+${
+  groupSize > 2
+    ? `Additional Persons (${groupSize - 2}): $325 × ${
+        groupSize - 2
+      } × ${nights} nights = $${(groupSize - 2) * 325 * nights}`
+    : ""
+}
+${
+  groupSize > 2
+    ? `Savings: $${
+        (groupSize - 2) * 25 * nights
+      } ($25 discount per additional person per night)`
+    : ""
+}
 Total: $${total}
 
 SPECIAL REQUESTS:
@@ -226,7 +240,7 @@ Thank you for choosing Yala Mobile Camping!
                 <span className="text-gray-700">
                   Base Package (2 persons) × {nights} nights
                 </span>
-                <span className="font-medium">${950 * nights}</span>
+                <span className="font-medium">${700 * nights}</span>
               </div>
 
               {/* Additional Persons (only show if group > 2) */}
@@ -234,11 +248,11 @@ Thank you for choosing Yala Mobile Camping!
                 <>
                   <div className="flex justify-between">
                     <span className="text-gray-700">
-                      Additional Persons ({groupSize - 2}) × $450 × {nights}{" "}
+                      Additional Persons ({groupSize - 2}) × $325 × {nights}{" "}
                       nights
                     </span>
                     <span className="font-medium">
-                      ${(groupSize - 2) * 450 * nights}
+                      ${(groupSize - 2) * 325 * nights}
                     </span>
                   </div>
                   <div className="flex justify-between text-green-600">

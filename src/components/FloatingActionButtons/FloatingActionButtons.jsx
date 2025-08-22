@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
+import { createPortal } from "react-dom";
 
 // Import the chat data configuration
 // You'll need to create this file: src/data/chatData.js
-
-
 
 const CHAT_CONFIG = {
   companyName: "Yala Mobile Camping",
@@ -223,8 +222,6 @@ const FloatingChatSystem = ({ onBookNow, onWhatsAppContact }) => {
   const [pendingQuestion, setPendingQuestion] = useState(""); // FIXED: Track pending question
   const messagesEndRef = useRef(null);
 
-
-  
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -332,43 +329,48 @@ Can you help me with this?`);
     }
   };
 
-//   const WhatsAppWidget = () => {
-//   useEffect(() => {
-//     // Check if the script is already added
-//     if (!document.getElementById('elfsight-platform')) {
-//       const script = document.createElement('script');
-//       script.src = 'https://elfsightcdn.com/platform.js';
-//       script.async = true;
-//       script.id = 'elfsight-platform';
-//       document.body.appendChild(script);
-//     }
-//   }, []);
+  //   const WhatsAppWidget = () => {
+  //   useEffect(() => {
+  //     // Check if the script is already added
+  //     if (!document.getElementById('elfsight-platform')) {
+  //       const script = document.createElement('script');
+  //       script.src = 'https://elfsightcdn.com/platform.js';
+  //       script.async = true;
+  //       script.id = 'elfsight-platform';
+  //       document.body.appendChild(script);
+  //     }
+  //   }, []);
 
-//   return (
-//     <div>
-//       {/* Elfsight WhatsApp Chat Widget */}
-//       <div
-//         className="elfsight-app-9746b739-f9ae-4670-981f-6bf0ead1b6be"
-//         data-elfsight-app-lazy
-//       ></div>
-//     </div>
-//   );
-// };
+  //   return (
+  //     <div>
+  //       {/* Elfsight WhatsApp Chat Widget */}
+  //       <div
+  //         className="elfsight-app-9746b739-f9ae-4670-981f-6bf0ead1b6be"
+  //         data-elfsight-app-lazy
+  //       ></div>
+  //     </div>
+  //   );
+  // };
 
-  return (
-    <div className="fixed bottom-6 right-6 z-50">
-     {/* <div className="fixed bottom-6 right-6 z-50">
-  <WhatsAppWidget />
-</div> */}
+  // Render floating buttons using portal to document.body for guaranteed visibility
+  return createPortal(
+    <div
+      className="fixed bottom-6 right-6 z-[99999] pointer-events-auto"
+      style={{ overflow: "visible" }}
+      aria-label="Floating Action Buttons"
+    >
       {/* Chat Window */}
       {isOpen && (
-        <div className="mb-4 w-80 sm:w-96 h-[700px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden">
+        <div
+          className="mb-4 w-80 sm:w-96 h-[700px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden"
+          style={{ zIndex: 99999 }}
+          aria-label="Chat Window"
+        >
           {/* Header */}
           <div className="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                 <MessageCircle size={20} />
-                
               </div>
               <div>
                 <h3 className="font-semibold">{CHAT_CONFIG.companyName}</h3>
@@ -494,24 +496,29 @@ Can you help me with this?`);
 
       {/* Floating Action Buttons - Only show when chat is closed */}
       {!isOpen && (
-        <div className="flex flex-col space-y-3">
+        <div
+          className="flex flex-col space-y-3"
+          style={{ zIndex: 99999 }}
+          aria-label="Floating Buttons"
+        >
           {/* WhatsApp Button */}
           <button
             onClick={() => openWhatsApp()}
-            className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group"
+            className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-green-500"
             title="Chat on WhatsApp"
+            aria-label="Chat on WhatsApp"
           >
             <MessageCircle size={24} />
             <span className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               WhatsApp
             </span>
           </button>
-
           {/* Chat Button */}
           <button
             onClick={() => setIsOpen(true)}
-            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group"
+            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-orange-500"
             title="Open chat"
+            aria-label="Open chat"
           >
             <MessageCircle size={24} />
             <span className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 bg-black text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -520,7 +527,8 @@ Can you help me with this?`);
           </button>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 };
 

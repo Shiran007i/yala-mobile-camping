@@ -9,8 +9,8 @@
  * This ensures consistent pricing calculations across all templates
  */
 const calculateEmailPricing = (data) => {
-  const basePrice = data.location.price_per_night || 950;
-  const additionalPersonPrice = 450;
+  const basePrice = data.location.price_per_night || 700;
+  const additionalPersonPrice = 325;
   const groupSize = parseInt(data.groupSize) || 2;
   const nights = parseInt(data.nights) || 1;
 
@@ -44,12 +44,12 @@ const calculateEmailPricing = (data) => {
  */
 const getUniqueAdminEmails = (env) => {
   const adminEmails = [];
-  
+
   // Add ADMIN_EMAIL if configured
   if (process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL.trim()) {
     adminEmails.push(process.env.ADMIN_EMAIL.trim().toLowerCase());
   }
-  
+
   // Add ZOHO_USER if configured and NOT already in list
   if (process.env.ZOHO_USER && process.env.ZOHO_USER.trim()) {
     const zohoEmail = process.env.ZOHO_USER.trim().toLowerCase();
@@ -57,19 +57,19 @@ const getUniqueAdminEmails = (env) => {
       adminEmails.push(zohoEmail);
     }
   }
-  
+
   // Remove any empty or invalid emails
-  const validEmails = adminEmails.filter(email => 
-    email && 
-    email.includes('@') && 
-    email.includes('.')
+  const validEmails = adminEmails.filter(
+    (email) => email && email.includes("@") && email.includes(".")
   );
-  
-  console.log(`📧 ADMIN EMAILS (deduplicated): ${validEmails.length} unique addresses`);
+
+  console.log(
+    `📧 ADMIN EMAILS (deduplicated): ${validEmails.length} unique addresses`
+  );
   validEmails.forEach((email, index) => {
     console.log(`   ${index + 1}. ${email}`);
   });
-  
+
   return validEmails;
 };
 
@@ -158,23 +158,35 @@ export const generateCustomerEmailTemplate = (data, env) => {
  * @param {string} htmlContent - Email HTML content
  * @returns {Promise<Array>} Results array
  */
-export const sendDeduplicatedAdminEmails = async (data, env, transporter, subject, htmlContent) => {
+export const sendDeduplicatedAdminEmails = async (
+  data,
+  env,
+  transporter,
+  subject,
+  htmlContent
+) => {
   const uniqueAdminEmails = getUniqueAdminEmails(env);
-  
+
   if (uniqueAdminEmails.length === 0) {
     console.warn("⚠️ No valid admin emails configured!");
-    return [{
-      email: "NO_ADMIN_EMAILS_CONFIGURED",
-      status: "❌ No admin emails found in environment variables"
-    }];
+    return [
+      {
+        email: "NO_ADMIN_EMAILS_CONFIGURED",
+        status: "❌ No admin emails found in environment variables",
+      },
+    ];
   }
 
-  console.log(`📧 Sending admin notifications to ${uniqueAdminEmails.length} unique email(s)...`);
+  console.log(
+    `📧 Sending admin notifications to ${uniqueAdminEmails.length} unique email(s)...`
+  );
 
   const emailPromises = uniqueAdminEmails.map(async (adminEmail, index) => {
     try {
       const result = await transporter.sendMail({
-        from: `"${env.EMAIL_FROM_NAME || 'Yala Mobile Camping'}" <${env.EMAIL_USER}>`,
+        from: `"${env.EMAIL_FROM_NAME || "Yala Mobile Camping"}" <${
+          env.EMAIL_USER
+        }>`,
         to: adminEmail,
         subject: subject,
         html: htmlContent,
@@ -184,29 +196,36 @@ export const sendDeduplicatedAdminEmails = async (data, env, transporter, subjec
           "X-MSMail-Priority": "High",
           Importance: "high",
           "X-Booking-ID": data.bookingId,
-          "X-Admin-Notification": `${index + 1}/${uniqueAdminEmails.length}`
+          "X-Admin-Notification": `${index + 1}/${uniqueAdminEmails.length}`,
         },
       });
-      
-      console.log(`✅ Admin notification ${index + 1}/${uniqueAdminEmails.length} sent to: ${adminEmail}`);
-      return { 
-        email: adminEmail, 
+
+      console.log(
+        `✅ Admin notification ${index + 1}/${
+          uniqueAdminEmails.length
+        } sent to: ${adminEmail}`
+      );
+      return {
+        email: adminEmail,
         status: "✅ Sent via Gmail",
         messageId: result.messageId,
-        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`,
       };
     } catch (error) {
-      console.error(`❌ Failed to send admin notification to ${adminEmail}:`, error.message);
-      return { 
-        email: adminEmail, 
+      console.error(
+        `❌ Failed to send admin notification to ${adminEmail}:`,
+        error.message
+      );
+      return {
+        email: adminEmail,
         status: `❌ Failed: ${error.message}`,
-        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`,
       };
     }
   });
 
   const results = await Promise.allSettled(emailPromises);
-  
+
   return results.map((result, index) => {
     if (result.status === "fulfilled") {
       return result.value;
@@ -214,7 +233,7 @@ export const sendDeduplicatedAdminEmails = async (data, env, transporter, subjec
       return {
         email: uniqueAdminEmails[index],
         status: `❌ Promise rejected: ${result.reason}`,
-        sequence: `${index + 1}/${uniqueAdminEmails.length}`
+        sequence: `${index + 1}/${uniqueAdminEmails.length}`,
       };
     }
   });
