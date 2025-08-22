@@ -37,13 +37,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-        },
-      },
-    },
+    
     // ADDED: Ensure proper title in production build
     rollupOptions: {
       output: {
