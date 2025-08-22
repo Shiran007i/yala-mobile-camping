@@ -372,18 +372,23 @@ const TransportationSection = () => {
   // Memoized schema data
   const schemaData = useMemo(() => ({
     "@context": "https://schema.org",
-    "@type": "TouristAttraction",
+    "@type": "LocalBusiness",
     "name": "Yala Mobile Camping Transportation Services",
     "description": "Professional transportation services for Yala National Park visitors including airport transfers, city transfers, and safari vehicle rentals",
     "url": "https://www.yalamobilecamping.com/transportation",
     "telephone": COMPANY_PHONE,
     "priceRange": "$80-$150",
     "serviceType": "Transportation Service",
-    "provider": {
-      "@type": "Organization",
-      "name": "Yala Mobile Camping",
-      "telephone": COMPANY_PHONE,
-      "url": "https://www.yalamobilecamping.com"
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "LK",
+      "addressRegion": "Southern Province",
+      "addressLocality": "Yala National Park"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "6.3724",
+      "longitude": "81.3869"
     },
     "areaServed": {
       "@type": "Place",
@@ -394,23 +399,35 @@ const TransportationSection = () => {
         "addressRegion": "Southern Province"
       }
     },
-    "offers": TRANSPORTATION_DATA.map(service => ({
-      "@type": "Offer",
-      "name": service.title,
-      "price": service.price.replace(/[^\d.-]/g, ''),
-      "priceCurrency": "USD",
-      "description": service.description,
-      "availability": "https://schema.org/InStock",
-      "validFrom": new Date().toISOString(),
-      "itemOffered": {
-        "@type": "Service",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Transportation Services",
+      "itemListElement": TRANSPORTATION_DATA.map(service => ({
+        "@type": "Offer",
         "name": service.title,
+        "price": service.price.replace(/[^\d.-]/g, ''),
+        "priceCurrency": "USD",
         "description": service.description,
-        "category": "Transportation"
-      }
-    })),
+        "availability": "https://schema.org/InStock",
+        "validFrom": new Date().toISOString(),
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.title,
+          "description": service.description,
+          "category": "Transportation",
+          "provider": {
+            "@type": "Organization",
+            "name": "Yala Mobile Camping"
+          }
+        }
+      }))
+    },
     "aggregateRating": {
       "@type": "AggregateRating",
+      "itemReviewed": {
+        "@type": "LocalBusiness",
+        "name": "Yala Mobile Camping Transportation Services"
+      },
       "ratingValue": "4.8",
       "reviewCount": "127",
       "bestRating": "5",
@@ -456,9 +473,39 @@ const TransportationSection = () => {
         <meta name="geo.position" content="6.3724;81.3869" />
         <meta name="ICBM" content="6.3724, 81.3869" />
         
-        {/* Schema Markup */}
+        {/* Schema Markup - Main Business */}
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
+        </script>
+        
+        {/* Schema Markup - Individual Services */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Transportation Services",
+            "description": "List of transportation services offered by Yala Mobile Camping",
+            "itemListElement": TRANSPORTATION_DATA.map((service, index) => ({
+              "@type": "Service",
+              "position": index + 1,
+              "name": service.title,
+              "description": service.description,
+              "provider": {
+                "@type": "LocalBusiness",
+                "name": "Yala Mobile Camping"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": service.price.replace(/[^\d.-]/g, ''),
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+              },
+              "areaServed": {
+                "@type": "Place",
+                "name": service.destination.name
+              }
+            }))
+          })}
         </script>
         
         {/* Breadcrumb Schema */}
