@@ -42,5 +42,11 @@ Allow: /assets/
 Allow: /*.css
 Allow: /*.js
 
-# Crawl delay (optional - helps with server load)
+# Additional directives for better SEO
+User-agent: Googlebot
+Allow: /
 Crawl-delay: 1
+
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 2

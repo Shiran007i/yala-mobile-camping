@@ -38,6 +38,8 @@ import { useBookingHandlers } from "./hooks";
 import { SERVICES_DATA } from "./constants";
 import camp3 from "/src/assets/images/camp3.webp";
 
+
+
 // SEO Constants
 const SEO_CONFIG = {
   siteName: "Yala Mobile Camping",
