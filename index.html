@@ -9,7 +9,6 @@
       rel="stylesheet"
     />
 
-    <!-- FIXED: Ensure title stays consistent -->
     <title>Yala Mobile Camping - Mobile Camping in Sri Lanka</title>
 
     <!-- SEO Meta Tags -->
@@ -35,7 +34,7 @@
       content="Yala Mobile Camping, YalaMobileCamping, Yala Moble Camping"
     />
 
-    <!-- FIXED: Open Graph Meta Tags - Use proper OG image -->
+    <!-- Open Graph Meta Tags -->
     <meta
       property="og:title"
       content="Yala Mobile Camping - Mobile Camping in Sri Lanka"
@@ -46,7 +45,6 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://yalamobilecamping.com" />
-    <!-- CHANGED: Use a proper OG image (1200x630px minimum) -->
     <meta
       property="og:image"
       content="https://yalamobilecamping.com/og-image.png"
@@ -69,7 +67,6 @@
       name="twitter:description"
       content="Exclusive safari camping at Yala National Park with professional guides and luxury accommodations."
     />
-    <!-- CHANGED: Use proper Twitter image -->
     <meta
       name="twitter:image"
       content="https://yalamobilecamping.com/og-image.png"
@@ -78,7 +75,7 @@
     <!-- Theme Color for Mobile Browsers -->
     <meta name="theme-color" content="#16a34a" />
 
-    <!-- FIXED: Structured Data with LocalBusiness type for proper AggregateRating -->
+    <!-- Structured Data - TravelAgency -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -102,8 +99,7 @@
           "latitude": "6.3712",
           "longitude": "81.5197"
         },
-        "priceRange": "$$",
-        "telephone": "+94713585926",
+        "priceRange": "$",
         "aggregateRating": {
           "@type": "AggregateRating",
           "itemReviewed": {
@@ -161,16 +157,14 @@
     <link rel="preload" href="/og-image.png" as="image" />
     <link rel="preload" href="/src/main.jsx" as="script" crossorigin />
 
-    <!-- ADDED: Prevent title override -->
+    <!-- Prevent title override -->
     <script>
-      // Prevent any framework from changing the title during development
       if (typeof document !== "undefined") {
         Object.defineProperty(document, "title", {
           get: function () {
             return "Yala Mobile Camping - Mobile Camping in Sri Lanka";
           },
           set: function (newTitle) {
-            // Only allow our title or similar variations
             if (
               newTitle &&
               !newTitle.includes("Vite") &&
@@ -183,7 +177,7 @@
       }
     </script>
 
-    <!-- Enhanced styles to prevent ALL flickers and flickering -->
+    <!-- Enhanced styles to prevent flickers -->
     <style>
       * {
         box-sizing: border-box;
@@ -193,17 +187,15 @@
         margin: 0;
         background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
         font-family: "Lora", serif;
-        overflow-x: hidden; /* Prevent horizontal scroll flickering */
+        overflow-x: hidden;
       }
 
       #root {
         min-height: 100vh;
         position: relative;
-        /* Prevent layout shift during routing */
         contain: layout style paint;
       }
 
-      /* Hide content until React loads to prevent flash */
       #root:empty::before {
         content: "";
         position: fixed;
@@ -215,7 +207,6 @@
         z-index: 1000;
       }
 
-      /* Modern View Transitions API support for smooth route changes */
       @supports (view-transition-name: page-transition) {
         ::view-transition-old(root),
         ::view-transition-new(root) {
@@ -254,26 +245,22 @@
         }
       }
 
-      /* Fallback for browsers without View Transitions */
       @media (prefers-reduced-motion: no-preference) {
         * {
           transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
         }
       }
 
-      /* Prevent flicker during image loads */
       img {
         display: block;
         max-width: 100%;
         height: auto;
       }
 
-      /* Smooth scrolling to prevent jarring jumps */
       html {
         scroll-behavior: smooth;
       }
 
-      /* Prevent white flash on route changes */
       [data-route-wrapper] {
         background: inherit;
         min-height: 100vh;
@@ -281,9 +268,7 @@
     </style>
   </head>
   <body>
-    <!-- React app will mount here -->
     <div id="root"></div>
-
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
