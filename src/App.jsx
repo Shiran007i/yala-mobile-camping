@@ -429,7 +429,7 @@ const App = () => {
         name: "Yala Mobile Camp",
         location: "Yala National Park",
         coordinates: [6.3725, 81.5185],
-        price_per_night: 950,
+        price_per_night: 700,
         rating: 4.9,
         max_guests: 10,
         difficulty: "Easy",
@@ -438,7 +438,7 @@ const App = () => {
         image_url: camp3,
         gallery: [camp3],
         description:
-          "An exclusive camping experience inside the heart of Yala jungle. For $950 (per 2 persons), enjoy full-board meals, a full-day guided safari, and one night in our comfortable safari tents — surrounded by the raw sights and sounds of the wild.",
+          "An exclusive camping experience inside the heart of Yala jungle. For $700 (per 2 persons), enjoy full-board meals, a full-day guided safari, and one night in our comfortable safari tents — surrounded by the raw sights and sounds of the wild.",
         detailed_description:
           "Yala Wilderness Camp offers a truly unique opportunity to stay inside the untouched wilderness of Sri Lanka's most iconic national park. Nestled deep within Yala's jungle, our camp blends comfort with raw adventure — where leopards roam, elephants wander nearby, and the calls of nocturnal creatures become your night's soundtrack. This $950 package for two includes full-board meals, a full-day guided safari, park entrance fees, and one night's stay in a fully equipped safari tent, ensuring an unforgettable immersion in nature.",
         amenities: [
