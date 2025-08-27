@@ -6,6 +6,7 @@ import { fileURLToPath, URL } from 'node:url';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: "/",
   
   // ADDED: Ensure title stays consistent and prevent "Vite + React" from showing
   define: {
