@@ -31,7 +31,7 @@
       "dest": "/dist/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/((?!api|sitemap\\.xml|robots\\.txt|.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2)).*)",
       "dest": "/dist/index.html",
       "headers": {
         "cache-control": "s-maxage=0"
