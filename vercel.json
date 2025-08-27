@@ -23,7 +23,7 @@
       "dest": "/dist/sitemap.xml"
     },
     {
-      "src": "/robots.txt", 
+      "src": "/robots.txt",
       "dest": "/dist/robots.txt"
     },
     {
@@ -35,7 +35,7 @@
       "dest": "/dist/assets/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/.*",
       "dest": "/dist/index.html"
     }
   ],
