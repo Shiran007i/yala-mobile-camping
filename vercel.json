@@ -19,6 +19,22 @@
       "dest": "/server.js"
     },
     {
+      "src": "/sitemap.xml",
+      "dest": "/dist/sitemap.xml"
+    },
+    {
+      "src": "/robots.txt", 
+      "dest": "/dist/robots.txt"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|json))",
+      "dest": "/dist/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/dist/assets/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/index.html"
     }
