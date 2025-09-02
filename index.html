@@ -2,7 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo.png" />
+    
+    <!-- Multiple favicon formats for better compatibility -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Fallback to your logo.png -->
+    <link rel="shortcut icon" href="/logo.png" type="image/png" />
+    <link rel="icon" href="/logo.png" type="image/png" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Lora:wght@400;500&display=swap"
@@ -11,6 +22,7 @@
 
     <title>Yala Mobile Camping - Mobile Camping in Sri Lanka</title>
 
+    <!-- Rest of your existing meta tags... -->
     <!-- Canonical URL -->
     <link rel="canonical" href="https://www.yalamobilecamping.com/" />
 
@@ -78,7 +90,7 @@
     <!-- Theme Color for Mobile Browsers -->
     <meta name="theme-color" content="#16a34a" />
 
-    <!-- Structured Data - TravelAgency -->
+    <!-- Your existing structured data... -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -160,7 +172,7 @@
     <link rel="preload" href="/og-image.png" as="image" />
     <link rel="preload" href="/src/main.jsx" as="script" crossorigin />
 
-    <!-- Prevent title override -->
+    <!-- Your existing scripts and styles... -->
     <script>
       if (typeof document !== "undefined") {
         Object.defineProperty(document, "title", {
@@ -180,7 +192,6 @@
       }
     </script>
 
-    <!-- Enhanced styles to prevent flickers -->
     <style>
       * {
         box-sizing: border-box;
