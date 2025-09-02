@@ -1,10 +1,17 @@
 // src/components/Blog/BlogPost.jsx
 import React from 'react';
 import { ChevronRight, Calendar, User, Share2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 import camp3 from '../../assets/images/camp3.webp';
 
-const BlogPost = ({ onBackToMain }) => {
+const BlogPost = () => {
+  const navigate = useNavigate();
+
+  const handleBackToMain = () => {
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -12,11 +19,11 @@ const BlogPost = ({ onBackToMain }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <button
-              onClick={onBackToMain}
+              onClick={handleBackToMain}
               className="flex items-center text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
             >
               <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
-              Back to Main Site
+              Back to Yala Camping
             </button>
             <div className="flex items-center space-x-4">
               <Share2 className="h-5 w-5 text-gray-600" />
@@ -83,7 +90,7 @@ const BlogPost = ({ onBackToMain }) => {
                 Beyond Traditional Safari Lodges
               </h3>
               
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed mb-10">
                 Unlike conventional safari lodges positioned outside park boundaries, mobile camping places you directly in the heart of the action. While "campsite accommodation is available inside the park" with specific restrictions, our mobile camping concept takes this further by establishing temporary, eco-friendly camps in remote areas where wildlife naturally congregates.
               </p>
             </div>
@@ -371,10 +378,10 @@ const BlogPost = ({ onBackToMain }) => {
                 Book Now via WhatsApp
               </a>
               <button 
-                onClick={onBackToMain}
+                onClick={handleBackToMain}
                 className="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white px-10 py-4 rounded-full font-semibold transition-all duration-300"
               >
-                Back to Main Site
+                Back to Yala Camping
               </button>
             </div>
           </div>

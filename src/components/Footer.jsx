@@ -1,5 +1,6 @@
 // Updated Footer.jsx - Path-based Navigation for SEO
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Mail,
   Phone,
@@ -10,7 +11,7 @@ import {
 } from "lucide-react";
 import { WHATSAPP_NUMBER, COMPANY_PHONE, COMPANY_EMAIL } from "../constants";
 
-const Footer = ({ onNavigate }) => {
+const Footer = () => {
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscribeMessage, setSubscribeMessage] = useState("");
@@ -56,20 +57,6 @@ const Footer = ({ onNavigate }) => {
       setSubscribeMessage("Network error. Please try again later.");
     } finally {
       setIsSubscribing(false);
-    }
-  };
-
-  // Handle navigation with proper URL updates
-  const handleNavClick = (page, e) => {
-    e.preventDefault();
-
-    if (onNavigate) {
-      onNavigate(page);
-    } else {
-      // Fallback for direct URL navigation
-      const newPath = page === "main" ? "/" : `/${page}`;
-      window.history.pushState({ page }, "", newPath);
-      window.location.reload();
     }
   };
 
@@ -128,7 +115,6 @@ const Footer = ({ onNavigate }) => {
             </div>
 
             {/* Social Links */}
-            {/* Social Links */}
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/yalamobilecamping"
@@ -176,36 +162,36 @@ const Footer = ({ onNavigate }) => {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <button
-                  onClick={(e) => handleNavClick("main", e)}
-                  className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
+                <Link
+                  to="/"
+                  className="text-slate-300 hover:text-white transition-colors duration-200"
                 >
                   Home
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={(e) => handleNavClick("transportation", e)}
-                  className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
+                <Link
+                  to="/transportation"
+                  className="text-slate-300 hover:text-white transition-colors duration-200"
                 >
                   Transportation
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={(e) => handleNavClick("blog", e)}
-                  className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
+                <Link
+                  to="/blog"
+                  className="text-slate-300 hover:text-white transition-colors duration-200"
                 >
                   Blog
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={(e) => handleNavClick("faq", e)}
-                  className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
+                <Link
+                  to="/faq"
+                  className="text-slate-300 hover:text-white transition-colors duration-200"
                 >
                   FAQ
-                </button>
+                </Link>
               </li>
               <li>
                 <a
@@ -287,24 +273,24 @@ const Footer = ({ onNavigate }) => {
               <p>&copy; 2025 Yala Mobile Camping. All rights reserved.</p>
             </div>
             <div className="flex space-x-6 text-sm">
-              <button
-                onClick={(e) => handleNavClick("privacy", e)}
+              <Link
+                to="/privacy"
                 className="text-slate-400 hover:text-white transition-colors duration-200"
               >
                 Privacy Policy
-              </button>
-              <button
-                onClick={(e) => handleNavClick("terms", e)}
+              </Link>
+              <Link
+                to="/terms"
                 className="text-slate-400 hover:text-white transition-colors duration-200"
               >
                 Terms of Service
-              </button>
-              <button
-                onClick={(e) => handleNavClick("faq", e)}
+              </Link>
+              <Link
+                to="/faq"
                 className="text-slate-400 hover:text-white transition-colors duration-200"
               >
                 FAQ
-              </button>
+              </Link>
             </div>
           </div>
         </div>

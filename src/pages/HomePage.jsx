@@ -1,130 +1,117 @@
-import React, { useState } from 'react'
-import { Helmet } from 'react-helmet-async'
-import { Link, useNavigate } from 'react-router-dom'
-
-// Import existing components
-import Header from '../components/Header'
-import TabSections from '../components/TabSections'
-import ImageGallery from '../components/ImageGallery'
-import CampingSection from '../components/CampingSection'
-import SafariActivitiesSection from '../components/SafariActivitiesSection'
-import AboutUsSection from '../components/AboutUsSection'
-import YalaWildlifeMap from '../components/YalaWildlifeMap'
-import ServicesSection from '../components/ServicesSection'
-import WhyChooseUsSection from '../components/WhyChooseUsSection'
-import TripAdvisorSection from '../components/TripAdvisorSection'
-import CallToActionSection from '../components/CallToActionSection'
-import Footer from '../components/Footer'
-import { SERVICES_DATA } from '../constants'
+// src/pages/HomePage.jsx
+import React, { useState } from "react";
+import { TabSections, CampingSection, YalaWildlifeMap, ImageGallery, SafariActivitiesSection, TripAdvisorSection, ServicesSection, WhyChooseUsSection, CallToActionSection, TabNavigation } from "../components";
+import SEO from "../components/SEO.jsx";
+import { useBookingUI } from "../contexts/BookingUIContext";
+import { SERVICES_DATA } from "../constants";
 
 const HomePage = () => {
-  const [activeTab, setActiveTab] = useState('camping')
-  const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState("camping");
+  const { locations, handleBookNow, handleWhatsAppContact } = useBookingUI();
 
-  const handleBookNow = (locationId = '2') => {
-    navigate(`/book/${locationId}`)
-  }
+  const tabMetadata = {
+    safaris: {
+      title:
+        "Safari Adventures | Yala Mobile Camping - Wildlife Tours Sri Lanka",
+      description:
+        "Join expert-guided safari tours in Yala National Park. Spot leopards, elephants, and 200+ bird species. Best safari experience in Sri Lanka.",
+      keywords:
+        "Yala safari tours, Sri Lankan wildlife, leopard spotting, elephant watching, bird watching tours",
+    },
+    camping: {
+      title:
+        "Luxury Mobile Camping | Yala National Park Accommodation Sri Lanka",
+      description:
+        "Experience premium mobile camping at Yala National Park. Comfortable tents, gourmet meals, and unforgettable wildlife encounters.",
+      keywords:
+        "mobile camping Sri Lanka, glamping Yala, eco-friendly accommodation, luxury tents",
+    },
+    about: {
+      title: "About Us | Yala Mobile Camping - Sustainable Wildlife Tourism",
+      description:
+        "Learn about our commitment to sustainable tourism and wildlife conservation. Expert guides, eco-friendly practices, authentic experiences.",
+      keywords:
+        "sustainable tourism, wildlife conservation, eco-tourism Sri Lanka, responsible travel",
+    },
+  };
 
-  const handleWhatsAppContact = () => {
-    const phoneNumber = "+94713585926"
-    const message = encodeURIComponent("Hi! I'm interested in booking a safari camping experience at Yala National Park.")
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank')
-  }
+  const currentSEO = tabMetadata[activeTab] || tabMetadata.camping;
 
-  const handleNavigation = (path) => {
-    navigate(path)
-  }
-
-  // Function to render content based on active tab
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'safaris':
+      case "safaris":
         return (
           <>
+            <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
             <ImageGallery activeTab={activeTab} />
-            <SafariActivitiesSection onInquireNow={() => handleBookNow()} />
+            <SafariActivitiesSection
+              onInquireNow={() => handleBookNow(locations[0])}
+            />
           </>
-        )
-      case 'camping':
+        );
+      case "camping":
         return (
           <>
+            <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
             <ImageGallery activeTab={activeTab} />
-            <CampingSection onInquireNow={() => handleBookNow()} />
+            <CampingSection onInquireNow={() => handleBookNow(locations[0])} />
           </>
-        )
-      case 'about':
+        );
+      case "about":
         return (
           <>
-            <AboutUsSection />
+            <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
+            <ImageGallery activeTab={activeTab} />
           </>
-        )
+        );
       default:
         return (
           <>
+            <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
             <ImageGallery activeTab={activeTab} />
-            <CampingSection onInquireNow={() => handleBookNow()} />
+            <SafariActivitiesSection
+              onInquireNow={() => handleBookNow(locations[0])}
+            />
           </>
-        )
+        );
     }
-  }
+  };
 
   return (
     <>
-      <Helmet>
-        <title>Yala Mobile Camping | Premium Safari & Wildlife Camping Experience in Sri Lanka</title>
-        <meta name="description" content="Experience luxury mobile camping in Yala National Park, Sri Lanka. Witness leopards, elephants & exotic wildlife. Book your adventure today!" />
-        <meta name="keywords" content="Yala National Park, mobile camping Sri Lanka, safari camping, wildlife viewing, leopard spotting, eco-tourism, luxury camping" />
-        <link rel="canonical" href="https://yalamobilecamping.com/" />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Yala Mobile Camping | Premium Safari & Wildlife Camping Experience in Sri Lanka" />
-        <meta property="og:description" content="Experience luxury mobile camping in Yala National Park, Sri Lanka. Witness leopards, elephants & exotic wildlife. Book your adventure today!" />
-        <meta property="og:url" content="https://yalamobilecamping.com/" />
-        <meta property="og:type" content="website" />
-        
-        {/* JSON-LD Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "TravelAgency",
-            "name": "Yala Mobile Camping",
-            "url": "https://yalamobilecamping.com",
-            "description": "Premium mobile camping experience in Sri Lanka's most famous national park",
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "LK",
-              "addressRegion": "Southern Province",
-              "addressLocality": "Tissamaharama"
-            },
-            "telephone": "+94713585926",
-            "email": "info@yalamobilecamping.com"
-          })}
-        </script>
-      </Helmet>
-
-      <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onNavigate={handleNavigation}
-        onInquireNow={() => handleBookNow()}
+      <SEO
+        title={currentSEO.title}
+        description={currentSEO.description}
+        keywords={currentSEO.keywords}
       />
-      
-      <TabSections activeTab={activeTab} />
-      
-      {renderTabContent()}
-      
-      <YalaWildlifeMap />
+      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      <section
+        id="tab-content"
+        aria-live="polite"
+        aria-label={`${activeTab} content`}
+      >
+        {renderTabContent()}
+      </section>
+
+      <section
+        id="locations"
+        className="py-20 bg-gray-50"
+        aria-label="Featured camping locations"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <YalaWildlifeMap />
+        </div>
+      </section>
+
       <ServicesSection services={SERVICES_DATA} />
       <WhyChooseUsSection />
       <TripAdvisorSection />
       <CallToActionSection
-        onBookNow={handleBookNow}
+        onBookNow={() => handleBookNow()}
         onWhatsAppContact={handleWhatsAppContact}
       />
-      
-      <Footer onNavigate={handleNavigation} />
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

@@ -1,33 +1,35 @@
 // src/pages/SafariPage.jsx
-import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import Header from '../components/Header'
-import TabSections from '../components/TabSections'
-import SafariActivitiesSection from '../components/SafariActivitiesSection'
-import ImageGallery from '../components/ImageGallery'
-import YalaWildlifeMap from '../components/YalaWildlifeMap'
-import WhyChooseUsSection from '../components/WhyChooseUsSection'
-import CallToActionSection from '../components/CallToActionSection'
-import Footer from '../components/Footer'
+import React from "react";
+import {
+  ImageGallery,
+  SafariActivitiesSection,
+} from "../components";
+import SEO from "../components/SEO.jsx";
+import { useBookingUI } from "../contexts/BookingUIContext";
 
 const SafariPage = () => {
+  const { locations, handleBookNow } = useBookingUI();
+
+  const safariSEO = {
+    title: "Safari Adventures | Yala Mobile Camping - Wildlife Tours Sri Lanka",
+    description:
+      "Join expert-guided safari tours in Yala National Park. Spot leopards, elephants, and 200+ bird species. Best safari experience in Sri Lanka.",
+    keywords:
+      "Yala safari tours, Sri Lankan wildlife, leopard spotting, elephant watching, bird watching tours",
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Safari Tours | Yala Mobile Camping</title>
-        <meta name="description" content="Explore wildlife safari tours in Yala National Park. Spot leopards, elephants, and exotic birds with our expert guides." />
-      </Helmet>
-      
-      <Header />
-      <TabSections activeTab="safaris" />
+      <SEO
+        title={safariSEO.title}
+        description={safariSEO.description}
+        keywords={safariSEO.keywords}
+        canonical="https://yalamobilecamping.com/safaris"
+      />
       <ImageGallery activeTab="safaris" />
-      <SafariActivitiesSection />
-      <YalaWildlifeMap />
-      <WhyChooseUsSection />
-      <CallToActionSection />
-      <Footer />
+      <SafariActivitiesSection onInquireNow={() => handleBookNow(locations[0])} />
     </>
-  )
-}
+  );
+};
 
-export default SafariPage
+export default SafariPage;

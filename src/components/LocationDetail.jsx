@@ -16,7 +16,6 @@ import {
   Phone,
   CheckCircle,
 } from "lucide-react";
-import { Helmet } from "react-helmet";
 
 const LocationDetail = ({ location, onBackToLocations, onBookNow }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -39,30 +38,6 @@ const LocationDetail = ({ location, onBackToLocations, onBookNow }) => {
     window.open(whatsappUrl, "_blank");
   };
 
-  // SEO Meta tags (would be handled by a proper router in production)
-  React.useEffect(() => {
-    document.title = `${location.name} - Premium Camping Experience in ${location.location} | Yala Mobilecamping`;
-
-    const metaDescription = document.createElement("meta");
-    metaDescription.name = "description";
-    metaDescription.content = `Experience ${location.name} camping in ${location.location}. ${location.description} Book your adventure with Yala Mobile Camping today! Starting from $${location.price_per_night}/night.`;
-    document.head.appendChild(metaDescription);
-
-    const metaKeywords = document.createElement("meta");
-    metaKeywords.name = "keywords";
-    metaKeywords.content = `${location.name}, camping ${
-      location.location
-    }, Sri Lanka camping, adventure tourism, eco camping, ${location.amenities.join(
-      ", "
-    )}`;
-    document.head.appendChild(metaKeywords);
-
-    return () => {
-      document.head.removeChild(metaDescription);
-      document.head.removeChild(metaKeywords);
-    };
-  }, [location]);
-
   const getDifficultyColor = (difficulty) => {
     switch (difficulty.toLowerCase()) {
       case "easy":
@@ -78,32 +53,6 @@ const LocationDetail = ({ location, onBackToLocations, onBookNow }) => {
 
   return (
     <div className="pt-20">
-      <Helmet>
-        <title>Yala Safari Locations | Yala Mobile Camping and Safari</title>
-        <meta
-          name="description"
-          content="Explore the best safari locations in Yala National Park with Yala Mobile Camping and Safari. Find your perfect wildlife adventure spot in Sri Lanka."
-        />
-        <meta
-          name="keywords"
-          content="yala safari locations, yala mobile camping, sri lanka safari, yala national park, wildlife locations, camping spots"
-        />
-        <meta
-          property="og:title"
-          content="Yala Safari Locations | Yala Mobile Camping and Safari"
-        />
-        <meta
-          property="og:description"
-          content="Discover top safari and camping locations in Yala National Park, Sri Lanka with Yala Mobile Camping and Safari."
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://yalamobilecamping.com/og-locations.webp"
-        />
-        <link rel="canonical" href="https://yalamobilecamping.com/locations" />
-      </Helmet>
-
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

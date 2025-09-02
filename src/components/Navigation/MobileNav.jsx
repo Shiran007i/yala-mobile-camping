@@ -1,31 +1,10 @@
 // src/components/Navigation/MobileNav.jsx
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, Mail } from "lucide-react";
 
-const MobileNav = ({ scrollToSection, textClassName = "", style, onNavigate }) => {
+const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleTransportationClick = () => {
-    if (onNavigate) {
-      onNavigate('transportation');
-    } else {
-      // Fallback for hash routing
-      window.location.hash = '#transportation';
-      window.location.reload();
-    }
-    setIsMenuOpen(false);
-  };
-
-  const handleBlogClick = () => {
-    if (onNavigate) {
-      onNavigate('blog');
-    } else {
-      // Fallback for hash routing
-      window.location.hash = '#blog';
-      window.location.reload();
-    }
-    setIsMenuOpen(false);
-  };
 
   return (
     <>
@@ -81,22 +60,24 @@ const MobileNav = ({ scrollToSection, textClassName = "", style, onNavigate }) =
             >
               Services
             </button>
-            <button
-              onClick={handleTransportationClick}
+            <Link
+              to="/transportation"
+              onClick={() => setIsMenuOpen(false)}
               className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
               aria-label="Go to Transportation page"
             >
               Transportation
-            </button>
-            <button
-              onClick={handleBlogClick}
+            </Link>
+            <Link
+              to="/blog"
+              onClick={() => setIsMenuOpen(false)}
               className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
               style={style}
               aria-label="Go to Blog page"
             >
               Blog
-            </button>
+            </Link>
 
             <div className="px-3 py-2 border-t border-white/20 flex flex-col gap-1 text-sm">
               <a

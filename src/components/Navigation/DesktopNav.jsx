@@ -1,28 +1,9 @@
 // src/components/Navigation/DesktopNav.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 
-const DesktopNav = ({ scrollToSection, textClassName = "", style, onNavigate }) => {
-  const handleTransportationClick = () => {
-    if (onNavigate) {
-      onNavigate('transportation');
-    } else {
-      // Fallback for hash routing
-      window.location.hash = '#transportation';
-      window.location.reload();
-    }
-  };
-
-  const handleBlogClick = () => {
-    if (onNavigate) {
-      onNavigate('blog');
-    } else {
-      // Fallback for hash routing
-      window.location.hash = '#blog';
-      window.location.reload();
-    }
-  };
-
+const DesktopNav = ({ scrollToSection, textClassName = "", style }) => {
   return (
     <nav className="hidden md:flex items-center space-x-8">
       <button 
@@ -49,22 +30,22 @@ const DesktopNav = ({ scrollToSection, textClassName = "", style, onNavigate }) 
       >
         Services
       </button>
-      <button
-        onClick={handleTransportationClick}
+      <Link
+        to="/transportation"
         className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
         aria-label="Go to Transportation page"
       >
         Transportation
-      </button>
-      <button
-        onClick={handleBlogClick}
+      </Link>
+      <Link
+        to="/blog"
         className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}
         aria-label="Go to Blog page"
       >
         Blog
-      </button>
+      </Link>
 
       {/* Contact Info */}
       <div className="hidden lg:flex items-center space-x-4 text-sm whitespace-nowrap overflow-hidden">

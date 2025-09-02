@@ -1,27 +1,28 @@
-
 // src/pages/FAQPage.jsx
-import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import Header from '../components/Header'
-import FAQ from '../components/FAQ'
-import Footer from '../components/Footer'
+import React from "react";
+import { FAQ } from "../components";
+import SEO from "../components/SEO.jsx";
 
 const FAQPage = () => {
+  const faqSEO = {
+    title: "FAQ | Yala Mobile Camping - Frequently Asked Questions",
+    description:
+      "Get answers to frequently asked questions about Yala Mobile Camping, safari tours, booking process, and camping experiences.",
+    keywords:
+      "yala camping faq, safari questions, mobile camping guide, booking help",
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Frequently Asked Questions | Yala Mobile Camping</title>
-        <meta name="description" content="Find answers to common questions about Yala National Park camping, safari tours, and booking procedures." />
-      </Helmet>
-      
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Frequently Asked Questions</h1>
-        <FAQ />
-      </div>
-      <Footer />
+      <SEO
+        title={faqSEO.title}
+        description={faqSEO.description}
+        keywords={faqSEO.keywords}
+        canonical="https://yalamobilecamping.com/faq"
+      />
+      <FAQ />
     </>
-  )
-}
+  );
+};
 
-export default FAQPage
+export default FAQPage;

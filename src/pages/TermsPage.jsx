@@ -1,26 +1,27 @@
 // src/pages/TermsPage.jsx
-import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import Header from '../components/Header'
-import Terms from '../components/Terms'
-import Footer from '../components/Footer'
+import React from "react";
+import { Terms } from "../components";
+import SEO from "../components/SEO.jsx";
 
 const TermsPage = () => {
+  const termsSEO = {
+    title: "Terms of Service | Yala Mobile Camping - Booking Terms",
+    description:
+      "Read our terms of service for safari bookings, camping experiences, and service conditions.",
+    keywords: "terms of service, booking conditions, safari terms",
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Terms of Service | Yala Mobile Camping</title>
-        <meta name="description" content="Read our terms of service for booking and using Yala Mobile Camping services." />
-      </Helmet>
-      
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
-        <Terms />
-      </div>
-      <Footer />
+      <SEO
+        title={termsSEO.title}
+        description={termsSEO.description}
+        keywords={termsSEO.keywords}
+        canonical="https://yalamobilecamping.com/terms"
+      />
+      <Terms />
     </>
-  )
-}
+  );
+};
 
-export default TermsPage
+export default TermsPage;

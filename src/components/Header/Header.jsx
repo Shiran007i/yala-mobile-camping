@@ -5,7 +5,7 @@ import MobileNav from "../Navigation/MobileNav";
 import HeroSection from "./HeroSection";
 import TabNavigation from "../Navigation/TabNavigation";
 
-const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
+const Header = ({ onInquireNow }) => {
   const [showUpButton, setShowUpButton] = useState(false);
   const [menuDark, setMenuDark] = useState(false);
 
@@ -30,11 +30,6 @@ const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
     <>
       {/* Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-sm transition-colors duration-300">
-        {/* Google Fonts for brush script */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo + Text Grouped Left */}
@@ -74,12 +69,9 @@ const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
             <div className="hidden md:block">
               <DesktopNav
                 scrollToSection={scrollToSection}
-                onNavigate={onNavigate}
                 textClassName={
                   `transition-colors duration-300 text-[1.15rem] px-3 py-1 rounded` +
-                  ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${
-                    menuDark ? "text-emerald-900" : "text-white"
-                  }`
+                  ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${menuDark ? "text-emerald-900" : "text-white"}`
                 }
                 style={{ fontFamily: "Dancing Script, cursive" }}
               />
@@ -89,12 +81,9 @@ const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
             <div className="md:hidden">
               <MobileNav
                 scrollToSection={scrollToSection}
-                onNavigate={onNavigate}
                 textClassName={
                   `transition-colors duration-300 text-lg px-3 py-1 rounded` +
-                  ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${
-                    menuDark ? "text-emerald-900" : "text-white"
-                  }`
+                  ` drop-shadow-lg hover:text-emerald-600 hover:bg-emerald-50 ${menuDark ? "text-emerald-900" : "text-white"}`
                 }
                 style={{ fontFamily: "Dancing Script, cursive" }}
               />
@@ -133,31 +122,8 @@ const Header = ({ activeTab, setActiveTab, onInquireNow, onNavigate }) => {
 
       {/* Hero Section */}
       <HeroSection onInquireNow={onInquireNow} />
-
-      {/* Tab Navigation */}
-      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
     </>
   );
 };
 
 export default Header;
-
-/* Add this to your global CSS or Tailwind config:
-@keyframes fade-in-up {
-  0% { opacity: 0; transform: translateY(40px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s cubic-bezier(0.4,0,0.2,1) both;
-}
-*/
-
-/* Add this to your global CSS or Tailwind config:
-@keyframes fade-in-up {
-  0% { opacity: 0; transform: translateY(40px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s cubic-bezier(0.4,0,0.2,1) both;
-}
-*/

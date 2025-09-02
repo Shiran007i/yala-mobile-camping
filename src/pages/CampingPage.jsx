@@ -1,34 +1,35 @@
 // src/pages/CampingPage.jsx
-import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import Header from '../components/Header'
-import TabSections from '../components/TabSections'
-import CampingSection from '../components/CampingSection'
-import ImageGallery from '../components/ImageGallery'
-import ServicesSection from '../components/ServicesSection'
-import WhyChooseUsSection from '../components/WhyChooseUsSection'
-import CallToActionSection from '../components/CallToActionSection'
-import Footer from '../components/Footer'
-import { SERVICES_DATA } from '../constants'
+import React from "react";
+import {
+  ImageGallery,
+  CampingSection,
+} from "../components";
+import SEO from "../components/SEO.jsx";
+import { useBookingUI } from "../contexts/BookingUIContext";
 
 const CampingPage = () => {
+  const { locations, handleBookNow } = useBookingUI();
+
+  const campingSEO = {
+    title: "Luxury Mobile Camping | Yala National Park Accommodation Sri Lanka",
+    description:
+      "Experience premium mobile camping at Yala National Park. Comfortable tents, gourmet meals, and unforgettable wildlife encounters.",
+    keywords:
+      "mobile camping Sri Lanka, glamping Yala, eco-friendly accommodation, luxury tents",
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Mobile Camping | Yala Mobile Camping</title>
-        <meta name="description" content="Experience luxury mobile camping in Yala National Park with premium amenities and wildlife viewing opportunities." />
-      </Helmet>
-      
-      <Header />
-      <TabSections activeTab="camping" />
+      <SEO
+        title={campingSEO.title}
+        description={campingSEO.description}
+        keywords={campingSEO.keywords}
+        canonical="https://yalamobilecamping.com/camping"
+      />
       <ImageGallery activeTab="camping" />
-      <CampingSection />
-      <ServicesSection services={SERVICES_DATA} />
-      <WhyChooseUsSection />
-      <CallToActionSection />
-      <Footer />
+      <CampingSection onInquireNow={() => handleBookNow(locations[0])} />
     </>
-  )
-}
+  );
+};
 
-export default CampingPage
+export default CampingPage;

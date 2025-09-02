@@ -1,4 +1,3 @@
-// 3. Create a new Router configuration file
 // src/router/index.jsx
 import { Routes, Route } from 'react-router-dom'
 import HomePage from '../pages/HomePage'
@@ -14,26 +13,27 @@ import TermsPage from '../pages/TermsPage'
 import UnsubscribePage from '../pages/UnsubscribePage'
 import BlogPage from '../pages/BlogPage'
 import NotFoundPage from '../pages/NotFoundPage'
+import MainLayout from '../layouts/MainLayout'
 
 const AppRouter = () => {
   return (
     <Routes>
-      {/* Main pages */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/safaris" element={<SafariPage />} />
-      <Route path="/camping" element={<CampingPage />} />
-      <Route path="/about" element={<AboutPage />} />
+      {/* Main Layout Routes */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/safaris" element={<SafariPage />} />
+        <Route path="/camping" element={<CampingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/location/:locationId" element={<LocationDetailPage />} />
+      </Route>
       
-      {/* Service pages */}
-      <Route path="/transportation" element={<TransportationPage />} />
+      {/* Standalone Pages (No Main Layout) */}
       <Route path="/book/:locationId?" element={<BookingPage />} />
-      <Route path="/location/:locationId" element={<LocationDetailPage />} />
       
-      {/* Content pages */}
+      {/* Standalone Pages (No Main Layout) */}
+      <Route path="/transportation" element={<TransportationPage />} />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/faq" element={<FAQPage />} />
-      
-      {/* Legal pages */}
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/unsubscribe" element={<UnsubscribePage />} />

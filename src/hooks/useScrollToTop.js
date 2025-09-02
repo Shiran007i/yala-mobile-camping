@@ -1,15 +1,15 @@
 // src/hooks/useScrollToTop.js
-import { useEffect } from 'react';
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-const useScrollToTop = (dependency = null) => {
+const useScrollToTop = () => {
+  const { pathname } = useLocation();
+
   useEffect(() => {
-    // Immediate scroll to top - no smooth behavior to avoid delay
     window.scrollTo(0, 0);
-    
-    // Also ensure document body is at top
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, [dependency]);
+  }, [pathname]);
+
+  return null;
 };
 
 export default useScrollToTop;

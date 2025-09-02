@@ -1,27 +1,27 @@
-
 // src/pages/UnsubscribePage.jsx
-import React from 'react'
-import { Helmet } from 'react-helmet-async'
-import Header from '../components/Header'
-import Unsubscribe from '../components/Unsubscribe'
-import Footer from '../components/Footer'
+import React from "react";
+import { Unsubscribe } from "../components";
+import SEO from "../components/SEO.jsx";
 
 const UnsubscribePage = () => {
+  const unsubscribeSEO = {
+    title: "Unsubscribe | Yala Mobile Camping Newsletter",
+    description:
+      "Unsubscribe from Yala Mobile Camping newsletter. We're sorry to see you go!",
+    keywords: "unsubscribe newsletter, Yala Mobile Camping email",
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Unsubscribe | Yala Mobile Camping</title>
-        <meta name="description" content="Unsubscribe from our mailing list." />
-      </Helmet>
-      
-      <Header />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Unsubscribe</h1>
-        <Unsubscribe />
-      </div>
-      <Footer />
+      <SEO
+        title={unsubscribeSEO.title}
+        description={unsubscribeSEO.description}
+        keywords={unsubscribeSEO.keywords}
+        canonical="https://yalamobilecamping.com/unsubscribe"
+      />
+      <Unsubscribe />
     </>
-  )
-}
+  );
+};
 
-export default UnsubscribePage
+export default UnsubscribePage;
