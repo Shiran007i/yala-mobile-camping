@@ -1,52 +1,52 @@
+# Yala Mobile Camping - robots.txt
+# Generated: 2025
+
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://www.yalamobilecamping.com/sitemap.xml
+Sitemap: https://yalamobilecamping.com/sitemap.xml
 
-# Prevent indexing of API routes and sensitive directories
-Disallow: /api/
-Disallow: /src/
-Disallow: /node_modules/
-Disallow: /.env*
-Disallow: /server.js
-Disallow: /unused/
+# Disallow admin/sensitive areas
 Disallow: /admin/
+Disallow: /private/
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /wp-config.php
+Disallow: /*.sql$
+Disallow: /*.log$
+Disallow: /temp/
+Disallow: /cache/
+
+# API restrictions
+Disallow: /api/
+Allow: /api/contact
+Allow: /api/booking
+
+# File type restrictions
 Disallow: /*.json$
-Disallow: /unsubscribe
+Disallow: /*.xml$ 
+Allow: /sitemap.xml
+Disallow: /*.txt$
+Allow: /robots.txt
 
-# Specific crawl instructions for SEO
-Allow: /transportation
-Allow: /faq
-Allow: /privacy
-Allow: /terms
-Allow: /blog/
+# Development/testing directories
+Disallow: /test/
+Disallow: /dev/
+Disallow: /.git/
+Disallow: /node_modules/
 
-# Allow all images and assets
-Allow: /logo.png
+# Common sensitive files
+Disallow: /.env
+Disallow: /.htaccess
+Disallow: /composer.json
+Disallow: /package.json
+
+# Media/assets are generally allowed
+Allow: /images/
+Allow: /css/
+Allow: /js/
 Allow: /assets/
-Allow: /public/
-Allow: /*.css
-Allow: /*.js
-Allow: /*.jpg
-Allow: /*.jpeg
-Allow: /*.png
-Allow: /*.gif
-Allow: /*.svg
-Allow: /*.webp
 
-
-# Allow important assets
-Allow: /logo.png
-Allow: /assets/
-Allow: /*.css
-Allow: /*.js
-
-# Additional directives for better SEO
-User-agent: Googlebot
-Allow: /
+# Crawl delay (optional - helps prevent server overload)
 Crawl-delay: 1
-
-User-agent: Bingbot  
-Allow: /
-Crawl-delay: 2

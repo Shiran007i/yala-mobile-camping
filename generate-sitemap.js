@@ -2,179 +2,62 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 import { createWriteStream } from 'fs';
 import { resolve } from 'path';
 
-const hostname = 'https://yalamobilecamping.com'; // Replace with your actual domain
-
-// Define all your routes based on your component structure
-const routes = [
-  // Main pages
+// Assuming your locations data is accessible or can be imported
+// For this example, I'll hardcode a simple version of locations
+// In a real app, you might fetch this from an API or a data file
+const locationsData = [
   {
-    url: '/',
-    changefreq: 'weekly',
-    priority: 1.0,
-    lastmod: new Date().toISOString()
+    id: 2,
+    name: "Yala Mobile Camp",
+    location: "Yala National Park",
+    // ... other location properties
   },
-  {
-    url: '/about',
-    changefreq: 'monthly',
-    priority: 0.9,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/contact',
-    changefreq: 'monthly',
-    priority: 0.8,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Booking & Services
-  {
-    url: '/booking',
-    changefreq: 'weekly',
-    priority: 0.9,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/booking-details',
-    changefreq: 'monthly',
-    priority: 0.7,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Camping & Safari
-  {
-    url: '/camping',
-    changefreq: 'weekly',
-    priority: 0.9,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/safari-activities',
-    changefreq: 'weekly',
-    priority: 0.8,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Location & Maps
-  {
-    url: '/location',
-    changefreq: 'monthly',
-    priority: 0.7,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/interactive-map',
-    changefreq: 'monthly',
-    priority: 0.6,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/yala-wildlife-map',
-    changefreq: 'monthly',
-    priority: 0.7,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Gallery & Media
-  {
-    url: '/gallery',
-    changefreq: 'weekly',
-    priority: 0.8,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Information Pages
-  {
-    url: '/faq',
-    changefreq: 'monthly',
-    priority: 0.6,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/newsletter',
-    changefreq: 'monthly',
-    priority: 0.5,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/tripadvisor',
-    changefreq: 'monthly',
-    priority: 0.6,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Transportation & Services
-  {
-    url: '/transportation',
-    changefreq: 'monthly',
-    priority: 0.7,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/pricing',
-    changefreq: 'weekly',
-    priority: 0.8,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Legal Pages
-  {
-    url: '/privacy',
-    changefreq: 'yearly',
-    priority: 0.3,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/terms',
-    changefreq: 'yearly',
-    priority: 0.3,
-    lastmod: new Date().toISOString()
-  },
-  
-  // Additional sections
-  {
-    url: '/why-choose-us',
-    changefreq: 'monthly',
-    priority: 0.7,
-    lastmod: new Date().toISOString()
-  },
-  {
-    url: '/unsubscribe',
-    changefreq: 'yearly',
-    priority: 0.2,
-    lastmod: new Date().toISOString()
-  }
+  // Add more locations as needed
 ];
+
+const hostname = 'https://yalamobilecamping.com'; // Replace with your actual domain
 
 async function generateSitemap() {
   try {
-    // Create a sitemap stream
     const sitemap = new SitemapStream({ hostname });
-    
-    // Create write stream for sitemap.xml in the dist folder
-    const writeStream = createWriteStream(resolve('./dist/sitemap.xml'));
-    
-    // Pipe sitemap to write stream
+    const writeStream = createWriteStream(resolve('./public/sitemap.xml')); // Write to public folder
     sitemap.pipe(writeStream);
-    
-    // Add routes to sitemap
-    routes.forEach(route => {
-      sitemap.write(route);
+
+    // Static Routes
+    const staticRoutes = [
+      { url: '/', changefreq: 'weekly', priority: 1.0 },
+      { url: '/safaris', changefreq: 'monthly', priority: 0.8 },
+      { url: '/camping', changefreq: 'monthly', priority: 0.8 },
+      { url: '/about', changefreq: 'monthly', priority: 0.7 },
+      { url: '/transportation', changefreq: 'monthly', priority: 0.7 },
+      { url: '/book', changefreq: 'weekly', priority: 0.9 }, // Main booking page
+      { url: '/faq', changefreq: 'monthly', priority: 0.6 },
+      { url: '/privacy', changefreq: 'yearly', priority: 0.3 },
+      { url: '/terms', changefreq: 'yearly', priority: 0.3 },
+      { url: '/unsubscribe', changefreq: 'yearly', priority: 0.2 },
+      { url: '/blog', changefreq: 'monthly', priority: 0.7 },
+    ];
+
+    staticRoutes.forEach(route => sitemap.write(route));
+
+    // Dynamic Routes (e.g., /location/:locationId)
+    locationsData.forEach(location => {
+      sitemap.write({
+        url: `/location/${location.id}`,
+        changefreq: 'monthly',
+        priority: 0.8,
+      });
     });
-    
-    // End the stream
+
     sitemap.end();
-    
-    // Wait for sitemap to be written
     await streamToPromise(sitemap);
-    
-    console.log('✅ Sitemap generated successfully at dist/sitemap.xml');
-    console.log(`📋 Generated sitemap with ${routes.length} URLs`);
-    console.log('🔗 Routes included:');
-    routes.forEach(route => console.log(`   ${route.url}`));
+
+    console.log('✅ Sitemap generated successfully at public/sitemap.xml');
+    console.log(`📋 Generated sitemap with ${staticRoutes.length + locationsData.length} URLs`);
     
     // Generate robots.txt
     generateRobotsTxt();
-    
+
   } catch (error) {
     console.error('❌ Error generating sitemap:', error);
     process.exit(1);
@@ -198,10 +81,9 @@ Disallow: /*.json$
 Allow: /api/contact
 Allow: /api/booking`;
 
-    // Write robots.txt to dist folder
     import('fs').then(fs => {
-      fs.writeFileSync(resolve('./dist/robots.txt'), robotsContent);
-      console.log('✅ robots.txt generated successfully at dist/robots.txt');
+      fs.writeFileSync(resolve('./public/robots.txt'), robotsContent); // Write to public folder
+      console.log('✅ robots.txt generated successfully at public/robots.txt');
     });
     
   } catch (error) {
