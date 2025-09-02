@@ -31,6 +31,14 @@ const DesktopNav = ({ scrollToSection, textClassName = "", style }) => {
         Services
       </button>
       <Link
+        to="/about"
+        className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
+        style={style}
+        aria-label="Go to About page"
+      >
+        About
+      </Link>
+      <Link
         to="/transportation"
         className={`${textClassName} font-dancing-script hover:scale-105 transition-transform duration-200`}
         style={style}

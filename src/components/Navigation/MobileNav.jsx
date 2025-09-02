@@ -61,6 +61,15 @@ const MobileNav = ({ scrollToSection, textClassName = "", style }) => {
               Services
             </button>
             <Link
+              to="/about"
+              onClick={() => setIsMenuOpen(false)}
+              className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}
+              style={style}
+              aria-label="Go to About page"
+            >
+              About
+            </Link>
+            <Link
               to="/transportation"
               onClick={() => setIsMenuOpen(false)}
               className={`block px-3 py-2 w-full text-left font-dancing-script ${textClassName} hover:bg-white/10 rounded transition-colors`}

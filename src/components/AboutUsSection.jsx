@@ -9,8 +9,8 @@ import {
   TreePine,
 } from "lucide-react";
 import { Helmet } from "react-helmet";
-import camp3Img from "/src//assets/images/about/camp3.webp";
-import aboutUsImg from "/src/assets/images/about/aboutus.webp";
+import camp3Img from "../assets/images/about/camp3.webp";
+import aboutUsImg from "../assets/images/about/aboutus.webp";
 
 const AboutUsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
