@@ -149,7 +149,7 @@ const Footer = ({ onNavigate }) => {
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="#"
+                href="https://x.com/CampingYal6727"
                 className="bg-slate-700 hover:bg-slate-600 p-2 rounded-md transition-colors duration-200"
                 aria-label="Twitter"
               >
