@@ -23,7 +23,6 @@ const AppRouter = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/safaris" element={<SafariPage />} />
         <Route path="/camping" element={<CampingPage />} />
-        <Route path="/about" element={<AboutPage />} />
         <Route path="/location/:locationId" element={<LocationDetailPage />} />
       </Route>
       
@@ -31,6 +30,7 @@ const AppRouter = () => {
       <Route path="/book/:locationId?" element={<BookingPage />} />
       
       {/* Standalone Pages (No Main Layout) */}
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/transportation" element={<TransportationPage />} />
       <Route path="/blog" element={<BlogPage />} />
       <Route path="/faq" element={<FAQPage />} />

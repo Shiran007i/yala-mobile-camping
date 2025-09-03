@@ -154,6 +154,12 @@ body {
   animation: fadeIn 1s ease-out;
 }
 
+/* Add this to your index.css if blur still doesn't work */
+.header-blur {
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+}
+
 .animate-fade-in-delay {
   animation: fadeInDelay 1s ease-out 0.3s both;
 }

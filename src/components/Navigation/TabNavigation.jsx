@@ -55,16 +55,7 @@ const TabNavigation = ({ activeTab, setActiveTab }) => {
           >
             Transportation
           </button> */}
-          <button
-            onClick={() => handleTabClick("about")}
-            className={`font-medium text-lg border-b-2 pb-2 transition-all duration-300 whitespace-nowrap ${
-              activeTab === "about"
-                ? "text-amber-600 border-amber-600"
-                : "text-gray-700 border-transparent hover:text-amber-600 hover:border-amber-600"
-            }`}
-          >
-            About Us
-          </button>
+          
         </nav>
       </div>
     </div>

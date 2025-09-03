@@ -1,5 +1,5 @@
-// src/pages/AboutPage.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import { AboutUsSection } from "../components";
 import SEO from "../components/SEO.jsx";
 
@@ -13,7 +13,12 @@ const AboutPage = () => {
   };
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
+      <div style={{ position: "absolute", top: "1rem", left: "1rem", zIndex: 10 }}>
+        <Link to="/" style={{ textDecoration: "none", color: "#333" }}>
+          &larr; Back to Home
+        </Link>
+      </div>
       <SEO
         title={aboutSEO.title}
         description={aboutSEO.description}
@@ -21,7 +26,7 @@ const AboutPage = () => {
         canonical="https://yalamobilecamping.com/about"
       />
       <AboutUsSection />
-    </>
+    </div>
   );
 };
 

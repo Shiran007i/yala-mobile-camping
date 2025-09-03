@@ -26,14 +26,7 @@ const HomePage = () => {
       keywords:
         "mobile camping Sri Lanka, glamping Yala, eco-friendly accommodation, luxury tents",
     },
-    about: {
-      title: "About Us | Yala Mobile Camping - Sustainable Wildlife Tourism",
-      description:
-        "Learn about our commitment to sustainable tourism and wildlife conservation. Expert guides, eco-friendly practices, authentic experiences.",
-      keywords:
-        "sustainable tourism, wildlife conservation, eco-tourism Sri Lanka, responsible travel",
-    },
-  };
+    };
 
   const currentSEO = tabMetadata[activeTab] || tabMetadata.camping;
 
@@ -55,13 +48,6 @@ const HomePage = () => {
             <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
             <ImageGallery activeTab={activeTab} />
             <CampingSection onInquireNow={() => handleBookNow(locations[0])} />
-          </>
-        );
-      case "about":
-        return (
-          <>
-            <TabSections activeTab={activeTab} setActiveTab={setActiveTab} />
-            <ImageGallery activeTab={activeTab} />
           </>
         );
       default:

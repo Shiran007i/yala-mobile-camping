@@ -31,12 +31,14 @@ const HeroSection = ({ onInquireNow }) => {
   }, []);
 
   return (
-    <section
-      id="home"
-      className="relative h-[90vh] overflow-hidden"
-      role="banner"
-      aria-label="Hero section showcasing Yala Mobile Camping experience"
-    >
+  <section
+  id="home"
+  className="relative h-screen overflow-hidden -mt-32" // full screen so header overlays
+  role="banner"
+  aria-label="Hero section showcasing Yala Mobile Camping experience"
+>
+
+
       <Helmet>
         <title>
           Yala Mobile Camping | Sri Lanka Safari & Wildlife Adventure
