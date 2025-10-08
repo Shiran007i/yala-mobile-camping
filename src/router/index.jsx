@@ -14,6 +14,7 @@ import UnsubscribePage from '../pages/UnsubscribePage'
 import BlogPage from '../pages/BlogPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import MainLayout from '../layouts/MainLayout'
+import SafariActivities from '../pages/SafariActivities'
 
 const AppRouter = () => {
   return (
@@ -24,6 +25,7 @@ const AppRouter = () => {
         <Route path="/safaris" element={<SafariPage />} />
         <Route path="/camping" element={<CampingPage />} />
         <Route path="/location/:locationId" element={<LocationDetailPage />} />
+        <Route path="/safari-activities" element={<SafariActivities />} />
       </Route>
       
       {/* Standalone Pages (No Main Layout) */}
