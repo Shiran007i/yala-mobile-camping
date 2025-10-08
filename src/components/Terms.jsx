@@ -141,9 +141,9 @@ const Terms = ({ onBackToMain }) => {
             <div className="bg-gray-50 p-4 rounded-lg">
               <ul className="list-none text-gray-700 space-y-2">
                 <li><strong>Email:</strong> info@yalamobilecamping.com</li>
-                <li><strong>Phone:</strong> +94 71 358 5926</li>
+                <li><strong>Phone:</strong> +94 716335000</li>
                 <li><strong>Address:</strong> No-795/6, Wilhelm Garden, Welipillewa, Dadigamuwa, Sri Lanka</li>
-                <li><strong>Emergency Contact:</strong> +94 71 358 5926 (24/7)</li>
+                <li><strong>Emergency Contact:</strong> +94 716335000 (24/7)</li>
               </ul>
             </div>
           </div>

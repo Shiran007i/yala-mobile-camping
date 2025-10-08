@@ -38,8 +38,6 @@ import { useBookingHandlers } from "./hooks";
 import { SERVICES_DATA } from "./constants";
 import camp3 from "/src/assets/images/camp3.webp";
 
-
-
 // SEO Constants
 const SEO_CONFIG = {
   siteName: "Yala Mobile Camping",
@@ -59,18 +57,18 @@ const SEO_CONFIG = {
 const getCurrentPage = () => {
   const path = window.location.pathname;
   const params = new URLSearchParams(window.location.search);
-  
+
   // Direct path matching (primary method)
   if (path === "/unsubscribe") return "unsubscribe";
   if (path === "/transportation") return "transportation";
   if (path === "/faq") return "faq";
   if (path === "/privacy") return "privacy";
   if (path === "/terms") return "terms";
-  
+
   // Fallback to query params for compatibility
-  const page = params.get('page');
+  const page = params.get("page");
   if (page) return page;
-  
+
   // Legacy hash support (will redirect to proper path)
   const hash = window.location.hash;
   if (hash === "#unsubscribe") return "unsubscribe";
@@ -78,22 +76,22 @@ const getCurrentPage = () => {
   if (hash === "#faq") return "faq";
   if (hash === "#privacy") return "privacy";
   if (hash === "#terms") return "terms";
-  
+
   return "main";
 };
 
 // Helper function to update URL properly
 const updateURL = (page) => {
   const newPath = page === "main" ? "/" : `/${page}`;
-  
+
   // Update URL without reload
   if (window.location.pathname !== newPath) {
-    window.history.pushState({ page }, '', newPath);
+    window.history.pushState({ page }, "", newPath);
   }
-  
+
   // Clear any hash fragments for clean URLs
   if (window.location.hash) {
-    window.history.replaceState({ page }, '', newPath);
+    window.history.replaceState({ page }, "", newPath);
   }
 };
 
@@ -108,7 +106,7 @@ const generateStructuredData = (activeTab, selectedLocation, currentView) => {
     alternateName: "Yala Mobile Camp",
     description: SEO_CONFIG.defaultDescription,
     url: SEO_CONFIG.siteUrl,
-    telephone: "+94713585926",
+    telephone: "+94716335000",
     email: "info@yalamobilecamping.com",
     logo: {
       "@type": "ImageObject",
@@ -154,18 +152,18 @@ const generateStructuredData = (activeTab, selectedLocation, currentView) => {
           name: "What's included in the mobile camping package?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Our packages include comfortable safari tents, all meals, professional safari guide, park entrance fees, safari vehicle, and camping equipment."
-          }
+            text: "Our packages include comfortable safari tents, all meals, professional safari guide, park entrance fees, safari vehicle, and camping equipment.",
+          },
         },
         {
-          "@type": "Question", 
+          "@type": "Question",
           name: "What's the best time to visit Yala National Park?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "February to July offers the best wildlife viewing with 85% leopard sighting success rate."
-          }
-        }
-      ]
+            text: "February to July offers the best wildlife viewing with 85% leopard sighting success rate.",
+          },
+        },
+      ],
     };
   }
 
@@ -316,22 +314,25 @@ const App = () => {
   // Enhanced check for current page on mount and URL changes
   // In your App component:
 
-  
   useEffect(() => {
     const checkCurrentPage = () => {
       const currentPage = getCurrentPage();
       console.log("📍 Current page detected:", currentPage);
-      
+
       // Handle legacy hash URLs by redirecting to proper paths
       if (window.location.hash) {
         const hashPage = window.location.hash.substring(1);
-        if (['unsubscribe', 'transportation', 'faq', 'privacy', 'terms'].includes(hashPage)) {
+        if (
+          ["unsubscribe", "transportation", "faq", "privacy", "terms"].includes(
+            hashPage
+          )
+        ) {
           updateURL(hashPage);
           setCurrentView(hashPage);
           return;
         }
       }
-      
+
       setCurrentView(currentPage);
     };
 
@@ -352,11 +353,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-  // Scroll to top when currentView changes (for page navigation)
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-}, [currentView]);
+    // Scroll to top when currentView changes (for page navigation)
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentView]);
 
   // SEO metadata based on current view and active tab
   const tabMetadata = useMemo(() => {
@@ -501,15 +502,15 @@ const App = () => {
   }, []);
 
   // Also update your handleNavigation function to ensure immediate scroll:
-const handleNavigation = (page) => {
-  // Immediate scroll to top
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  
-  updateURL(page);
-  setCurrentView(page);
-};
+  const handleNavigation = (page) => {
+    // Immediate scroll to top
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    updateURL(page);
+    setCurrentView(page);
+  };
 
   // Function to render content based on active tab
   const renderTabContent = () => {
@@ -624,23 +625,25 @@ const handleNavigation = (page) => {
       {/* JSON-LD structured data - exclude from unsubscribe page */}
       {currentView !== "unsubscribe" && (
         <script type="application/ld+json">
-          {JSON.stringify(generateStructuredData(activeTab, selectedLocation, currentView))}
+          {JSON.stringify(
+            generateStructuredData(activeTab, selectedLocation, currentView)
+          )}
         </script>
       )}
     </Helmet>
   );
 
   // Back to main handler with proper URL update
- // Update your handleBackToMain function:
-const handleBackToMain = () => {
-  // Immediate scroll to top
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-  
-  updateURL("main");
-  setCurrentView("main");
-};
+  // Update your handleBackToMain function:
+  const handleBackToMain = () => {
+    // Immediate scroll to top
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    updateURL("main");
+    setCurrentView("main");
+  };
 
   // Transportation Page
   if (currentView === "transportation") {
@@ -682,20 +685,20 @@ const handleBackToMain = () => {
       </HelmetProvider>
     );
   }
-// In your App.jsx, add this case:
-if (currentView === "blog") {
-  return (
-    <HelmetProvider>
-      <SEOHead
-        title="Mobile Camping Blog | Yala National Park Wildlife Adventures"
-        description="Read about revolutionary mobile camping experiences in Yala National Park, wildlife encounters, and safari adventures in Sri Lanka."
-        keywords="yala mobile camping blog, sri lanka safari blog, wildlife camping stories"
-        canonical={`${SEO_CONFIG.siteUrl}/blog`}
-      />
-      <BlogPost onBackToMain={handleBackToMain} />
-    </HelmetProvider>
-  );
-}
+  // In your App.jsx, add this case:
+  if (currentView === "blog") {
+    return (
+      <HelmetProvider>
+        <SEOHead
+          title="Mobile Camping Blog | Yala National Park Wildlife Adventures"
+          description="Read about revolutionary mobile camping experiences in Yala National Park, wildlife encounters, and safari adventures in Sri Lanka."
+          keywords="yala mobile camping blog, sri lanka safari blog, wildlife camping stories"
+          canonical={`${SEO_CONFIG.siteUrl}/blog`}
+        />
+        <BlogPost onBackToMain={handleBackToMain} />
+      </HelmetProvider>
+    );
+  }
   // Unsubscribe Page
   if (currentView === "unsubscribe") {
     console.log("📧 Rendering unsubscribe page");
@@ -831,7 +834,9 @@ if (currentView === "blog") {
         title={tabMetadata.title}
         description={tabMetadata.description}
         keywords={tabMetadata.keywords}
-        canonical={`${SEO_CONFIG.siteUrl}${activeTab !== 'camping' ? `#${activeTab}` : ''}`}
+        canonical={`${SEO_CONFIG.siteUrl}${
+          activeTab !== "camping" ? `#${activeTab}` : ""
+        }`}
       />
 
       <div className="min-h-screen bg-white">

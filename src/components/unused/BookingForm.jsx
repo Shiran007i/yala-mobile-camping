@@ -118,7 +118,7 @@ ${
 
 Please confirm availability and send payment details. Thank you!`;
 
-    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/94716335000?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");

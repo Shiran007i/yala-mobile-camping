@@ -148,7 +148,7 @@ export const sanitizeBookingData = (data) => {
  * @returns {string} WhatsApp URL
  */
 export const generateWhatsAppLink = (bookingData) => {
-  const phone = "94713585926"; // Your business WhatsApp number
+  const phone = "94716335000"; // Your business WhatsApp number
   const message = `Hi! I just submitted booking ${bookingData.bookingId} for ${bookingData.nights} nights at ${bookingData.location.name}. Looking forward to hearing from you!`;
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;

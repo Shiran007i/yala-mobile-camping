@@ -1,7 +1,7 @@
 // src/constants/index.js
-export const WHATSAPP_NUMBER = "94713585926";
+export const WHATSAPP_NUMBER = "94716335000";
 export const COMPANY_EMAIL = "info@yalamobilecamp.com";
-export const COMPANY_PHONE = "+94713585926";
+export const COMPANY_PHONE = "+94716335000";
 
 export const SERVICES_DATA = [
   {

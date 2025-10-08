@@ -354,7 +354,43 @@ Next steps:
 
   // WhatsApp message with updated pricing
   const createWhatsAppMessage = (bookingData) => {
-    return `🕏️ *NEW BOOKING REQUEST*\n\n📋 *Booking ID:* ${bookingData.bookingId}\n📅 *Date:* ${new Date().toLocaleString()}\n\n👤 *Guest Details:*\n• Name: ${bookingData.firstName} ${bookingData.lastName}\n• Email: ${bookingData.email}\n• Phone: ${bookingData.phone}\n\n🕏️ *Accommodation:*\n• Location: ${bookingData.location.name}\n• Address: ${bookingData.location.location}\n• Check-in: ${bookingData.checkIn}\n• Check-out: ${bookingData.checkOut}\n• Duration: ${bookingData.nights} nights\n• Guests: ${bookingData.groupSize}\n• Accommodation: ${bookingData.accommodationType}\n• Meal Plan: ${bookingData.mealPlan}\n\n💰 *Pricing:*\n• Base Package (2 persons): $700 × ${bookingData.nights} = $${700 * bookingData.nights}\n${bookingData.groupSize > 2 ? `• Additional Persons (${bookingData.groupSize - 2}): $325 × ${bookingData.groupSize - 2} × ${bookingData.nights} = $${(bookingData.groupSize - 2) * 325 * bookingData.nights}` : ""}\n${bookingData.groupSize > 2 ? `• *Your Savings:* $${(bookingData.groupSize - 2) * 25 * bookingData.nights} ($25 off per additional person!)` : ""}\n• *TOTAL: $${bookingData.total}*\n\n${bookingData.specialRequests ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n` : ""}Please confirm availability and send payment details. Thank you! 🙏`;
+    return `🕏️ *NEW BOOKING REQUEST*\n\n📋 *Booking ID:* ${
+      bookingData.bookingId
+    }\n📅 *Date:* ${new Date().toLocaleString()}\n\n👤 *Guest Details:*\n• Name: ${
+      bookingData.firstName
+    } ${bookingData.lastName}\n• Email: ${bookingData.email}\n• Phone: ${
+      bookingData.phone
+    }\n\n🕏️ *Accommodation:*\n• Location: ${
+      bookingData.location.name
+    }\n• Address: ${bookingData.location.location}\n• Check-in: ${
+      bookingData.checkIn
+    }\n• Check-out: ${bookingData.checkOut}\n• Duration: ${
+      bookingData.nights
+    } nights\n• Guests: ${bookingData.groupSize}\n• Accommodation: ${
+      bookingData.accommodationType
+    }\n• Meal Plan: ${
+      bookingData.mealPlan
+    }\n\n💰 *Pricing:*\n• Base Package (2 persons): $700 × ${
+      bookingData.nights
+    } = $${700 * bookingData.nights}\n${
+      bookingData.groupSize > 2
+        ? `• Additional Persons (${bookingData.groupSize - 2}): $325 × ${
+            bookingData.groupSize - 2
+          } × ${bookingData.nights} = $${
+            (bookingData.groupSize - 2) * 325 * bookingData.nights
+          }`
+        : ""
+    }\n${
+      bookingData.groupSize > 2
+        ? `• *Your Savings:* $${
+            (bookingData.groupSize - 2) * 25 * bookingData.nights
+          } ($25 off per additional person!)`
+        : ""
+    }\n• *TOTAL: $${bookingData.total}*\n\n${
+      bookingData.specialRequests
+        ? `📝 *Special Requests:*\n${bookingData.specialRequests}\n\n`
+        : ""
+    }Please confirm availability and send payment details. Thank you! 🙏`;
   };
 
   const handleWhatsAppBooking = (bookingData = null) => {
@@ -372,10 +408,14 @@ Next steps:
     };
 
     const message = createWhatsAppMessage(finalBookingData);
-    const whatsappUrl = `https://wa.me/94713585926?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/94716335000?text=${encodeURIComponent(
+      message
+    )}`;
     window.open(whatsappUrl, "_blank");
 
-    alert(`📱 Opening WhatsApp...\n\n📋 Booking ID: ${finalBookingData.bookingId}\n💬 WhatsApp message prepared and ready to send!\n\nWe'll respond quickly via WhatsApp with confirmation and payment details.`);
+    alert(
+      `📱 Opening WhatsApp...\n\n📋 Booking ID: ${finalBookingData.bookingId}\n💬 WhatsApp message prepared and ready to send!\n\nWe'll respond quickly via WhatsApp with confirmation and payment details.`
+    );
 
     onBookingComplete && onBookingComplete(finalBookingData);
   };
@@ -823,20 +863,28 @@ Next steps:
               alt="TripAdvisor"
               className="h-10 w-10 group-hover:scale-110 transition-transform duration-200"
             />
-            <span className="ml-2 text-green-700 font-semibold text-base group-hover:underline">TripAdvisor</span>
+            <span className="ml-2 text-green-700 font-semibold text-base group-hover:underline">
+              TripAdvisor
+            </span>
           </a>
           <div>
-            <p className="font-semibold text-green-700">Listed on TripAdvisor</p>
+            <p className="font-semibold text-green-700">
+              Listed on TripAdvisor
+            </p>
             <p className="text-xs text-gray-600">Please Add Reviews...</p>
           </div>
         </div>
         <div className="bg-white border border-blue-200 rounded-xl p-6 flex items-center shadow-md w-full md:w-1/2">
           <img src={logo} alt="Google Reviews" className="h-12 w-12 mr-3" />
           <div>
-            <p className="font-semibold text-blue-700">100% Satisfaction Guarantee</p>
+            <p className="font-semibold text-blue-700">
+              100% Satisfaction Guarantee
+            </p>
             <div className="flex items-center mt-1">
               {/* <img src={logo} alt="Google Icon" className="h-5 w-5 mr-1" /> */}
-              <span className="text-xs text-gray-600">Book with confidence</span>
+              <span className="text-xs text-gray-600">
+                Book with confidence
+              </span>
             </div>
           </div>
         </div>
@@ -908,28 +956,41 @@ Next steps:
         <div className="space-y-4 text-sm">
           <div>
             <strong>Is Yala Mobile Camping safe?</strong>
-            <p>Yes! Our campsites are secure, guided by local experts, and follow strict safety protocols for guests and wildlife.</p>
+            <p>
+              Yes! Our campsites are secure, guided by local experts, and follow
+              strict safety protocols for guests and wildlife.
+            </p>
           </div>
           <div>
             <strong>What is included in the package?</strong>
-            <p>Accommodation, meals, guided safaris, park entry, and all camping amenities. See above for full details.</p>
+            <p>
+              Accommodation, meals, guided safaris, park entry, and all camping
+              amenities. See above for full details.
+            </p>
           </div>
           <div>
             <strong>How do I get to Yala?</strong>
-            <p>We offer pickup options from major cities and airports. Contact us for details or see our Locations page.</p>
+            <p>
+              We offer pickup options from major cities and airports. Contact us
+              for details or see our Locations page.
+            </p>
           </div>
           <div>
             <strong>Can I book for large groups or families?</strong>
-            <p>Yes, we accommodate up to 8 guests per camp. Family tents and custom arrangements available.</p>
+            <p>
+              Yes, we accommodate up to 8 guests per camp. Family tents and
+              custom arrangements available.
+            </p>
           </div>
           <div>
             <strong>Is the camp eco-friendly?</strong>
-            <p>Absolutely! We use sustainable practices, minimize waste, and support local conservation efforts.</p>
+            <p>
+              Absolutely! We use sustainable practices, minimize waste, and
+              support local conservation efforts.
+            </p>
           </div>
         </div>
       </div>
-
-    
 
       {/* Why Choose Us Section */}
       <div className="mt-8 bg-emerald-50 border border-emerald-200 rounded-lg p-6">
@@ -948,10 +1009,18 @@ Next steps:
 
       {/* Internal Links for SEO */}
       <div className="mt-8 text-center text-sm text-gray-600">
-        <a href="/about" className="underline mx-2">About Us</a>
-        <a href="/activities" className="underline mx-2">Activities</a>
-        <a href="/locations" className="underline mx-2">Locations</a>
-        <a href="/reviews" className="underline mx-2">Guest Reviews (coming soon)</a>
+        <a href="/about" className="underline mx-2">
+          About Us
+        </a>
+        <a href="/activities" className="underline mx-2">
+          Activities
+        </a>
+        <a href="/locations" className="underline mx-2">
+          Locations
+        </a>
+        <a href="/reviews" className="underline mx-2">
+          Guest Reviews (coming soon)
+        </a>
       </div>
 
       {/* FAQ Schema Markup for Google Rich Results */}

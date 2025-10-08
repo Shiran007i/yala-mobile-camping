@@ -680,7 +680,7 @@ const generateNextSteps = () => `
 const generateContactInfo = (env) => `
   <div class="contact">
     <h3>📞 Need Help? Contact Us Anytime!</h3>
-    <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/94713585926" style="color: #10b981;">+94 71 399 1051</a></p>
+    <p><strong>📱 WhatsApp:</strong> <a href="https://wa.me/94716335000" style="color: #10b981;">+94 71 399 1051</a></p>
     <p><strong>📧 Email:</strong> <a href="mailto:${env.EMAIL_USER}" style="color: #3b82f6;">${env.EMAIL_USER}</a></p>
     <p><strong>🕐 Available:</strong> 8:00 AM - 8:00 PM (Sri Lanka Time)</p>
   </div>

@@ -7,9 +7,9 @@ import { createPortal } from "react-dom";
 
 const CHAT_CONFIG = {
   companyName: "Yala Mobile Camping",
-  whatsappNumber: "+94713585926",
+  whatsappNumber: "+94716335000",
   email: "info@yalamobilecamping.com",
-  phone: "+94713585926",
+  phone: "+94716335000",
 
   quickReplies: [
     "Safari packages",
@@ -23,8 +23,8 @@ const CHAT_CONFIG = {
     {
       keywords: ["contact", "phone", "call", "tel", "telephone", "number"],
       response: `📞 **Contact Information**:
-• WhatsApp: +94713585926 (Instant response)
-• Phone: +94713585926
+• WhatsApp: +94716335000 (Instant response)
+• Phone: +94716335000
 • Email: info@yalamobilecamping.com
 • Available: 24/7 for bookings and support
 

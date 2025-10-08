@@ -28,10 +28,10 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:3000", 
+      "http://localhost:3000",
       "https://4d769c8f09e8.ngrok-free.app",
       "https://yalamobilecamping.com",
-      "https://www.yalamobilecamping.com"
+      "https://www.yalamobilecamping.com",
     ],
     credentials: true,
   })
@@ -61,19 +61,19 @@ const zohoTransporter = nodemailer.createTransport({
     pass: process.env.ZOHO_PASSWORD,
   },
   tls: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
 // ===================================================================
 // NEWSLETTER STORAGE (Simple File-based - Replace with Database in Production)
 // ===================================================================
 
-const SUBSCRIBERS_FILE = path.join(__dirname, 'data', 'subscribers.json');
+const SUBSCRIBERS_FILE = path.join(__dirname, "data", "subscribers.json");
 
 // Ensure data directory exists
 const ensureDataDirectory = async () => {
-  const dataDir = path.join(__dirname, 'data');
+  const dataDir = path.join(__dirname, "data");
   try {
     await fs.access(dataDir);
   } catch {
@@ -85,14 +85,14 @@ const ensureDataDirectory = async () => {
 const readSubscribers = async () => {
   try {
     await ensureDataDirectory();
-    const data = await fs.readFile(SUBSCRIBERS_FILE, 'utf8');
+    const data = await fs.readFile(SUBSCRIBERS_FILE, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    if (error.code === 'ENOENT') {
+    if (error.code === "ENOENT") {
       // File doesn't exist, return empty array
       return [];
     }
-    console.error('Error reading subscribers file:', error);
+    console.error("Error reading subscribers file:", error);
     throw error;
   }
 };
@@ -103,22 +103,24 @@ const writeSubscribers = async (subscribers) => {
     await ensureDataDirectory();
     await fs.writeFile(SUBSCRIBERS_FILE, JSON.stringify(subscribers, null, 2));
   } catch (error) {
-    console.error('Error writing subscribers file:', error);
+    console.error("Error writing subscribers file:", error);
     throw error;
   }
 };
 
 // Add subscriber
-const addSubscriber = async (email, source = 'unknown') => {
+const addSubscriber = async (email, source = "unknown") => {
   const subscribers = await readSubscribers();
-  const existingIndex = subscribers.findIndex(sub => sub.email.toLowerCase() === email.toLowerCase());
-  
+  const existingIndex = subscribers.findIndex(
+    (sub) => sub.email.toLowerCase() === email.toLowerCase()
+  );
+
   if (existingIndex !== -1) {
     // Update existing subscriber
     subscribers[existingIndex] = {
       ...subscribers[existingIndex],
       lastUpdated: new Date().toISOString(),
-      active: true
+      active: true,
     };
   } else {
     // Add new subscriber
@@ -128,10 +130,10 @@ const addSubscriber = async (email, source = 'unknown') => {
       lastUpdated: new Date().toISOString(),
       source: source,
       active: true,
-      id: Date.now().toString()
+      id: Date.now().toString(),
     });
   }
-  
+
   await writeSubscribers(subscribers);
   return subscribers.length;
 };
@@ -139,8 +141,10 @@ const addSubscriber = async (email, source = 'unknown') => {
 // Remove/Deactivate subscriber
 const removeSubscriber = async (email) => {
   const subscribers = await readSubscribers();
-  const existingIndex = subscribers.findIndex(sub => sub.email.toLowerCase() === email.toLowerCase());
-  
+  const existingIndex = subscribers.findIndex(
+    (sub) => sub.email.toLowerCase() === email.toLowerCase()
+  );
+
   if (existingIndex !== -1) {
     // Mark as inactive instead of deleting (for analytics)
     subscribers[existingIndex].active = false;
@@ -148,14 +152,16 @@ const removeSubscriber = async (email) => {
     await writeSubscribers(subscribers);
     return true;
   }
-  
+
   return false;
 };
 
 // Check if email is subscribed
 const isSubscribed = async (email) => {
   const subscribers = await readSubscribers();
-  const subscriber = subscribers.find(sub => sub.email.toLowerCase() === email.toLowerCase());
+  const subscriber = subscribers.find(
+    (sub) => sub.email.toLowerCase() === email.toLowerCase()
+  );
   return subscriber && subscriber.active;
 };
 
@@ -175,7 +181,10 @@ const sendAdminEmails = async (emailHtml, subject, envVars) => {
   }
 
   // Add ZOHO admin email if configured and different
-  if (process.env.ZOHO_USER && process.env.ZOHO_USER !== process.env.ADMIN_EMAIL) {
+  if (
+    process.env.ZOHO_USER &&
+    process.env.ZOHO_USER !== process.env.ADMIN_EMAIL
+  ) {
     adminEmails.push(process.env.ZOHO_USER);
   }
 
@@ -198,7 +207,10 @@ const sendAdminEmails = async (emailHtml, subject, envVars) => {
       console.log(`✅ Admin notification sent to: ${adminEmail} (via Gmail)`);
       return { email: adminEmail, status: "✅ Sent via Gmail" };
     } catch (error) {
-      console.error(`❌ Failed to send admin notification to ${adminEmail}:`, error.message);
+      console.error(
+        `❌ Failed to send admin notification to ${adminEmail}:`,
+        error.message
+      );
       return { email: adminEmail, status: `❌ Failed: ${error.message}` };
     }
   });
@@ -209,7 +221,12 @@ const sendAdminEmails = async (emailHtml, subject, envVars) => {
 /**
  * Send customer email via ZOHO
  */
-const sendCustomerEmail = async (emailHtml, subject, customerEmail, envVars) => {
+const sendCustomerEmail = async (
+  emailHtml,
+  subject,
+  customerEmail,
+  envVars
+) => {
   try {
     await zohoTransporter.sendMail({
       from: `"${envVars.EMAIL_FROM_NAME}" <${process.env.ZOHO_USER}>`,
@@ -218,10 +235,19 @@ const sendCustomerEmail = async (emailHtml, subject, customerEmail, envVars) => 
       html: emailHtml,
       replyTo: process.env.ZOHO_USER,
     });
-    console.log(`✅ Customer confirmation sent to: ${customerEmail} (via ZOHO)`);
-    return { status: "✅ Sent via ZOHO", email: customerEmail, from: process.env.ZOHO_USER };
+    console.log(
+      `✅ Customer confirmation sent to: ${customerEmail} (via ZOHO)`
+    );
+    return {
+      status: "✅ Sent via ZOHO",
+      email: customerEmail,
+      from: process.env.ZOHO_USER,
+    };
   } catch (error) {
-    console.error("❌ Failed to send customer confirmation via ZOHO:", error.message);
+    console.error(
+      "❌ Failed to send customer confirmation via ZOHO:",
+      error.message
+    );
     throw error;
   }
 };
@@ -230,8 +256,10 @@ const sendCustomerEmail = async (emailHtml, subject, customerEmail, envVars) => 
  * Generate newsletter subscription confirmation email template
  */
 const generateSubscriptionEmailTemplate = (email, envVars) => {
-  const unsubscribeUrl = `${process.env.FRONTEND_URL || 'https://yalamobilecamping.com'}/unsubscribe?email=${encodeURIComponent(email)}`;
-  
+  const unsubscribeUrl = `${
+    process.env.FRONTEND_URL || "https://yalamobilecamping.com"
+  }/unsubscribe?email=${encodeURIComponent(email)}`;
+
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -314,7 +342,7 @@ const generateSubscriptionEmailTemplate = (email, envVars) => {
           <div style="background: #fef3c7; padding: 20px; border-radius: 8px; border-left: 4px solid #f59e0b;">
             <h4 style="margin-top: 0; color: #92400e;">🔥 Ready for Your First Adventure?</h4>
             <p>Our most popular package includes luxury mobile camping, guided safaris, and authentic Sri Lankan cuisine starting from just $950 for 2 persons.</p>
-            <p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/94713585926" style="color: #059669;">+94 71 358 5926</a></p>
+            <p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/94716335000" style="color: #059669;">+94 716335000</a></p>
           </div>
         </div>
         
@@ -330,14 +358,18 @@ const generateSubscriptionEmailTemplate = (email, envVars) => {
             <strong>Yala Mobile Camping</strong><br>
             No-795/6, Wilhelm Garden, Welipillewa, Dadigamuwa<br>
             Sri Lanka 🇱🇰<br>
-            📧 ${envVars.ZOHO_USER || 'info@yalamobilecamping.com'} | 📞 +94 71 633 5000
+            📧 ${
+              envVars.ZOHO_USER || "info@yalamobilecamping.com"
+            } | 📞 +94 71 633 5000
           </p>
           
           <div class="unsubscribe">
             <p>You're receiving this email because you subscribed to our newsletter at ${new Date().toLocaleDateString()}.</p>
             <p>
               <a href="${unsubscribeUrl}">Unsubscribe</a> | 
-              <a href="mailto:${envVars.ZOHO_USER || 'info@yalamobilecamping.com'}">Contact Us</a> | 
+              <a href="mailto:${
+                envVars.ZOHO_USER || "info@yalamobilecamping.com"
+              }">Contact Us</a> | 
               <a href="https://yalamobilecamping.com/privacy">Privacy Policy</a>
             </p>
           </div>
@@ -356,9 +388,9 @@ const generateSubscriptionEmailTemplate = (email, envVars) => {
 app.get("/api/health", async (req, res) => {
   try {
     const subscribers = await readSubscribers();
-    const activeSubscribers = subscribers.filter(sub => sub.active).length;
+    const activeSubscribers = subscribers.filter((sub) => sub.active).length;
     const totalSubscribers = subscribers.length;
-    
+
     res.json({
       status: "OK",
       message: "Yala Mobile Camping API is running!",
@@ -366,14 +398,14 @@ app.get("/api/health", async (req, res) => {
       newsletterStats: {
         activeSubscribers,
         totalSubscribers,
-        unsubscribed: totalSubscribers - activeSubscribers
+        unsubscribed: totalSubscribers - activeSubscribers,
       },
       emailConfig: {
         // Gmail configuration (for admin notifications)
         gmail: {
           user: process.env.EMAIL_USER ? "✅ Configured" : "❌ Missing",
           password: process.env.EMAIL_PASSWORD ? "✅ Configured" : "❌ Missing",
-          purpose: "Admin Notifications"
+          purpose: "Admin Notifications",
         },
         // ZOHO configuration (for customer emails)
         zoho: {
@@ -381,21 +413,19 @@ app.get("/api/health", async (req, res) => {
           password: process.env.ZOHO_PASSWORD ? "✅ Configured" : "❌ Missing",
           host: process.env.ZOHO_HOST || "smtp.zoho.com",
           port: process.env.ZOHO_PORT || 465,
-          purpose: "Customer Emails & Newsletter"
+          purpose: "Customer Emails & Newsletter",
         },
         // Admin recipients
-        adminRecipients: [
-          process.env.ADMIN_EMAIL,
-          process.env.ZOHO_USER
-        ].filter(email => email && email.trim())
-         .filter((email, index, arr) => arr.indexOf(email) === index), // Remove duplicates
+        adminRecipients: [process.env.ADMIN_EMAIL, process.env.ZOHO_USER]
+          .filter((email) => email && email.trim())
+          .filter((email, index, arr) => arr.indexOf(email) === index), // Remove duplicates
       },
     });
   } catch (error) {
     res.status(500).json({
       status: "ERROR",
       message: "Health check failed",
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -403,66 +433,69 @@ app.get("/api/health", async (req, res) => {
 // Newsletter subscription endpoint
 app.post("/api/newsletter/subscribe", async (req, res) => {
   try {
-    const { email, source = 'website', timestamp } = req.body;
-    
+    const { email, source = "website", timestamp } = req.body;
+
     console.log("📧 Newsletter subscription request:", email);
-    
+
     // Validation
     if (!email || !email.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Email address is required"
+        message: "Email address is required",
       });
     }
-    
+
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
       return res.status(400).json({
         success: false,
-        message: "Please enter a valid email address"
+        message: "Please enter a valid email address",
       });
     }
-    
+
     const normalizedEmail = email.trim().toLowerCase();
-    
+
     // Check if already subscribed and active
     if (await isSubscribed(normalizedEmail)) {
       return res.status(200).json({
         success: true,
         message: "You're already subscribed to our newsletter!",
-        alreadySubscribed: true
+        alreadySubscribed: true,
       });
     }
-    
+
     // Add subscriber
     await addSubscriber(normalizedEmail, source);
-    
+
     // Send confirmation email to subscriber
     if (process.env.ZOHO_USER && process.env.ZOHO_PASSWORD) {
       try {
         const envVars = {
           EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME || "Yala Mobile Camping",
-          ZOHO_USER: process.env.ZOHO_USER
+          ZOHO_USER: process.env.ZOHO_USER,
         };
-        
-        const welcomeEmailHtml = generateSubscriptionEmailTemplate(normalizedEmail, envVars);
-        
+
+        const welcomeEmailHtml = generateSubscriptionEmailTemplate(
+          normalizedEmail,
+          envVars
+        );
+
         await zohoTransporter.sendMail({
           from: `"${envVars.EMAIL_FROM_NAME}" <${process.env.ZOHO_USER}>`,
           to: normalizedEmail,
           subject: "🎉 Welcome to Yala Mobile Camping Newsletter!",
           html: welcomeEmailHtml,
-          replyTo: process.env.ZOHO_USER
+          replyTo: process.env.ZOHO_USER,
         });
-        
+
         console.log(`✅ Welcome email sent to: ${normalizedEmail}`);
       } catch (emailError) {
         console.error("❌ Failed to send welcome email:", emailError.message);
         // Don't fail the entire request if email fails
       }
     }
-    
+
     // Notify admins about new subscription
     if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
       try {
@@ -471,33 +504,44 @@ app.post("/api/newsletter/subscribe", async (req, res) => {
           <p><strong>Email:</strong> ${normalizedEmail}</p>
           <p><strong>Source:</strong> ${source}</p>
           <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
-          <p><strong>Total Active Subscribers:</strong> ${await readSubscribers().then(subs => subs.filter(s => s.active).length)}</p>
+          <p><strong>Total Active Subscribers:</strong> ${await readSubscribers().then(
+            (subs) => subs.filter((s) => s.active).length
+          )}</p>
         `;
-        
+
         await sendAdminEmails(
           adminEmailHtml,
           `📧 New Newsletter Subscription: ${normalizedEmail}`,
-          { EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME || "Yala Mobile Camping" }
+          {
+            EMAIL_FROM_NAME:
+              process.env.EMAIL_FROM_NAME || "Yala Mobile Camping",
+          }
         );
       } catch (adminEmailError) {
-        console.error("❌ Failed to send admin notification:", adminEmailError.message);
+        console.error(
+          "❌ Failed to send admin notification:",
+          adminEmailError.message
+        );
       }
     }
-    
+
     console.log(`✅ Successfully subscribed: ${normalizedEmail}`);
-    
+
     res.json({
       success: true,
-      message: "Successfully subscribed to our newsletter! Check your email for a welcome message.",
-      email: normalizedEmail
+      message:
+        "Successfully subscribed to our newsletter! Check your email for a welcome message.",
+      email: normalizedEmail,
     });
-    
   } catch (error) {
     console.error("❌ Newsletter subscription error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to subscribe. Please try again later.",
-      error: process.env.NODE_ENV === "development" ? error.message : "Internal server error"
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
     });
   }
 });
@@ -506,30 +550,31 @@ app.post("/api/newsletter/subscribe", async (req, res) => {
 app.post("/api/newsletter/unsubscribe", async (req, res) => {
   try {
     const { email } = req.body;
-    
+
     console.log("📧 Newsletter unsubscribe request:", email);
-    
+
     // Validation
     if (!email || !email.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Email address is required"
+        message: "Email address is required",
       });
     }
-    
+
     const normalizedEmail = email.trim().toLowerCase();
-    
+
     // Check if email exists and is subscribed
     if (!(await isSubscribed(normalizedEmail))) {
       return res.status(404).json({
         success: false,
-        message: "Email address not found in our subscriber list or already unsubscribed"
+        message:
+          "Email address not found in our subscriber list or already unsubscribed",
       });
     }
-    
+
     // Remove/deactivate subscriber
     const removed = await removeSubscriber(normalizedEmail);
-    
+
     if (removed) {
       // Send unsubscribe confirmation email
       if (process.env.ZOHO_USER && process.env.ZOHO_PASSWORD) {
@@ -573,7 +618,7 @@ app.post("/api/newsletter/unsubscribe", async (req, res) => {
                 <div class="footer">
                   <p>
                     <strong>Yala Mobile Camping</strong><br>
-                    📧 info@yalamobilecamping.com | 📞 +94 71 358 5926<br>
+                    📧 info@yalamobilecamping.com | 📞 +94 716335000<br>
                     🌐 <a href="https://yalamobilecamping.com">yalamobilecamping.com</a>
                   </p>
                 </div>
@@ -581,21 +626,26 @@ app.post("/api/newsletter/unsubscribe", async (req, res) => {
             </body>
             </html>
           `;
-          
+
           await zohoTransporter.sendMail({
             from: `"Yala Mobile Camping" <${process.env.ZOHO_USER}>`,
             to: normalizedEmail,
             subject: "Unsubscribed - Yala Mobile Camping Newsletter",
             html: unsubscribeConfirmationHtml,
-            replyTo: process.env.ZOHO_USER
+            replyTo: process.env.ZOHO_USER,
           });
-          
-          console.log(`✅ Unsubscribe confirmation sent to: ${normalizedEmail}`);
+
+          console.log(
+            `✅ Unsubscribe confirmation sent to: ${normalizedEmail}`
+          );
         } catch (emailError) {
-          console.error("❌ Failed to send unsubscribe confirmation:", emailError.message);
+          console.error(
+            "❌ Failed to send unsubscribe confirmation:",
+            emailError.message
+          );
         }
       }
-      
+
       // Notify admins about unsubscription
       if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
         try {
@@ -603,38 +653,48 @@ app.post("/api/newsletter/unsubscribe", async (req, res) => {
             <h2>😢 Newsletter Unsubscription</h2>
             <p><strong>Email:</strong> ${normalizedEmail}</p>
             <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
-            <p><strong>Remaining Active Subscribers:</strong> ${await readSubscribers().then(subs => subs.filter(s => s.active).length)}</p>
+            <p><strong>Remaining Active Subscribers:</strong> ${await readSubscribers().then(
+              (subs) => subs.filter((s) => s.active).length
+            )}</p>
           `;
-          
+
           await sendAdminEmails(
             adminEmailHtml,
             `📧 Newsletter Unsubscription: ${normalizedEmail}`,
-            { EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME || "Yala Mobile Camping" }
+            {
+              EMAIL_FROM_NAME:
+                process.env.EMAIL_FROM_NAME || "Yala Mobile Camping",
+            }
           );
         } catch (adminEmailError) {
-          console.error("❌ Failed to send admin notification:", adminEmailError.message);
+          console.error(
+            "❌ Failed to send admin notification:",
+            adminEmailError.message
+          );
         }
       }
-      
+
       console.log(`✅ Successfully unsubscribed: ${normalizedEmail}`);
-      
+
       res.json({
         success: true,
-        message: "You have been successfully unsubscribed from our newsletter."
+        message: "You have been successfully unsubscribed from our newsletter.",
       });
     } else {
       res.status(404).json({
         success: false,
-        message: "Email not found in subscriber list"
+        message: "Email not found in subscriber list",
       });
     }
-    
   } catch (error) {
     console.error("❌ Newsletter unsubscribe error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to unsubscribe. Please try again later.",
-      error: process.env.NODE_ENV === "development" ? error.message : "Internal server error"
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
     });
   }
 });
@@ -643,23 +703,23 @@ app.post("/api/newsletter/unsubscribe", async (req, res) => {
 app.get("/api/newsletter/stats", async (req, res) => {
   try {
     const subscribers = await readSubscribers();
-    const activeSubscribers = subscribers.filter(sub => sub.active);
-    const inactiveSubscribers = subscribers.filter(sub => !sub.active);
-    
+    const activeSubscribers = subscribers.filter((sub) => sub.active);
+    const inactiveSubscribers = subscribers.filter((sub) => !sub.active);
+
     // Group by source
     const bySource = activeSubscribers.reduce((acc, sub) => {
       acc[sub.source] = (acc[sub.source] || 0) + 1;
       return acc;
     }, {});
-    
+
     // Recent subscriptions (last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
-    const recentSubscriptions = activeSubscribers.filter(sub => 
-      new Date(sub.subscribedAt) >= thirtyDaysAgo
+
+    const recentSubscriptions = activeSubscribers.filter(
+      (sub) => new Date(sub.subscribedAt) >= thirtyDaysAgo
     ).length;
-    
+
     res.json({
       success: true,
       stats: {
@@ -671,20 +731,22 @@ app.get("/api/newsletter/stats", async (req, res) => {
         latestSubscriptions: activeSubscribers
           .sort((a, b) => new Date(b.subscribedAt) - new Date(a.subscribedAt))
           .slice(0, 5)
-          .map(sub => ({
+          .map((sub) => ({
             email: sub.email,
             subscribedAt: sub.subscribedAt,
-            source: sub.source
-          }))
-      }
+            source: sub.source,
+          })),
+      },
     });
-    
   } catch (error) {
     console.error("❌ Newsletter stats error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to fetch newsletter statistics",
-      error: process.env.NODE_ENV === "development" ? error.message : "Internal server error"
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
     });
   }
 });
@@ -700,8 +762,17 @@ app.post("/api/booking", async (req, res) => {
     // VALIDATION
     // ===================================================================
     const requiredFields = [
-      "bookingId", "firstName", "lastName", "email", "phone",
-      "checkIn", "checkOut", "nights", "groupSize", "total", "location",
+      "bookingId",
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "checkIn",
+      "checkOut",
+      "nights",
+      "groupSize",
+      "total",
+      "location",
     ];
 
     const missingFields = requiredFields.filter((field) => !data[field]);
@@ -758,7 +829,11 @@ app.post("/api/booking", async (req, res) => {
     const adminSubject = `🚨 URGENT: New Camping Booking - ${data.bookingId} - ${data.firstName} ${data.lastName} (${data.total})`;
 
     console.log("📧 Sending admin notifications via Gmail...");
-    const adminEmailResults = await sendAdminEmails(adminEmailHtml, adminSubject, envVars);
+    const adminEmailResults = await sendAdminEmails(
+      adminEmailHtml,
+      adminSubject,
+      envVars
+    );
 
     // ===================================================================
     // 2. SEND CUSTOMER CONFIRMATION EMAIL (via ZOHO)
@@ -777,8 +852,10 @@ app.post("/api/booking", async (req, res) => {
         envVars
       );
     } catch (error) {
-      console.error("❌ ZOHO customer email failed, trying Gmail as fallback...");
-      
+      console.error(
+        "❌ ZOHO customer email failed, trying Gmail as fallback..."
+      );
+
       // Fallback to Gmail if ZOHO fails
       try {
         await gmailTransporter.sendMail({
@@ -791,13 +868,13 @@ app.post("/api/booking", async (req, res) => {
           status: "✅ Sent via Gmail (ZOHO fallback)",
           email: data.email,
           from: process.env.EMAIL_USER,
-          note: "ZOHO failed, used Gmail as fallback"
+          note: "ZOHO failed, used Gmail as fallback",
         };
         console.log("✅ Customer confirmation sent via Gmail fallback");
       } catch (fallbackError) {
         customerEmailResult = {
           status: `❌ Both ZOHO and Gmail failed: ${fallbackError.message}`,
-          email: data.email
+          email: data.email,
         };
       }
     }
@@ -820,7 +897,8 @@ app.post("/api/booking", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Booking request submitted successfully! Check your email for confirmation.",
+      message:
+        "Booking request submitted successfully! Check your email for confirmation.",
       bookingId: data.bookingId,
       emailStatus: {
         adminEmails: adminEmailSummary,
@@ -828,25 +906,30 @@ app.post("/api/booking", async (req, res) => {
         totalAdminEmails: Object.keys(adminEmailSummary).length,
         emailConfiguration: {
           adminNotifications: "Sent via Gmail",
-          customerConfirmation: customerEmailResult.status.includes("ZOHO") ? "Sent via ZOHO" : "Sent via Gmail (fallback)",
-          customerSentFrom: customerEmailResult.from
-        }
+          customerConfirmation: customerEmailResult.status.includes("ZOHO")
+            ? "Sent via ZOHO"
+            : "Sent via Gmail (fallback)",
+          customerSentFrom: customerEmailResult.from,
+        },
       },
-      whatsappLink: `https://wa.me/94713585926?text=${encodeURIComponent(
+      whatsappLink: `https://wa.me/94716335000?text=${encodeURIComponent(
         `Hi! I just submitted a booking request (ID: ${data.bookingId}) for ${data.nights} nights at ${data.location.name}. Looking forward to hearing from you!`
       )}`,
     });
-
   } catch (error) {
     console.error("❌ Error processing booking request:", error);
 
     res.status(500).json({
       success: false,
-      message: "Failed to process booking request. Please try again or contact us directly.",
-      error: process.env.NODE_ENV === "development" ? error.message : "Internal server error",
+      message:
+        "Failed to process booking request. Please try again or contact us directly.",
+      error:
+        process.env.NODE_ENV === "development"
+          ? error.message
+          : "Internal server error",
       timestamp: new Date().toISOString(),
       fallback: {
-        whatsapp: "https://wa.me/94713585926",
+        whatsapp: "https://wa.me/94716335000",
         email: `mailto:${process.env.ZOHO_USER || process.env.EMAIL_USER}`,
       },
     });
@@ -857,74 +940,80 @@ app.post("/api/booking", async (req, res) => {
 // EMAIL TESTING ENDPOINTS (DEVELOPMENT ONLY)
 // ===================================================================
 if (process.env.NODE_ENV === "development") {
-  
   // Test newsletter functionality
   app.post("/api/test-newsletter", async (req, res) => {
     try {
       const testEmail = process.env.ADMIN_EMAIL || process.env.ZOHO_USER;
-      
+
       if (!testEmail) {
         return res.status(400).json({
           success: false,
-          message: "No test email configured"
+          message: "No test email configured",
         });
       }
-      
+
       console.log("🧪 Testing newsletter functionality with:", testEmail);
-      
+
       // Test subscribe
-      const subscribeResponse = await fetch(`http://localhost:${PORT}/api/newsletter/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: testEmail,
-          source: 'api_test',
-          timestamp: new Date().toISOString()
-        })
-      });
-      
+      const subscribeResponse = await fetch(
+        `http://localhost:${PORT}/api/newsletter/subscribe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: testEmail,
+            source: "api_test",
+            timestamp: new Date().toISOString(),
+          }),
+        }
+      );
+
       const subscribeResult = await subscribeResponse.json();
-      
+
       // Wait a moment
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Test unsubscribe
-      const unsubscribeResponse = await fetch(`http://localhost:${PORT}/api/newsletter/unsubscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: testEmail
-        })
-      });
-      
+      const unsubscribeResponse = await fetch(
+        `http://localhost:${PORT}/api/newsletter/unsubscribe`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: testEmail,
+          }),
+        }
+      );
+
       const unsubscribeResult = await unsubscribeResponse.json();
-      
+
       res.json({
         success: true,
         message: "Newsletter test completed",
         results: {
           subscribe: subscribeResult,
-          unsubscribe: unsubscribeResult
+          unsubscribe: unsubscribeResult,
         },
-        testEmail
+        testEmail,
       });
-      
     } catch (error) {
       res.status(500).json({
         success: false,
         message: "Newsletter test failed",
-        error: error.message
+        error: error.message,
       });
     }
   });
-  
+
   // Test ZOHO connection
   app.get("/api/test-zoho", async (req, res) => {
     try {
       console.log("🧪 Testing ZOHO connection...");
-      
+
       const testResult = await zohoTransporter.sendMail({
-        from: `"${process.env.EMAIL_FROM_NAME || 'Test'}" <${process.env.ZOHO_USER}>`,
+        from: `"${process.env.EMAIL_FROM_NAME || "Test"}" <${
+          process.env.ZOHO_USER
+        }>`,
         to: process.env.ADMIN_EMAIL || process.env.ZOHO_USER, // Send to admin for testing
         subject: "🧪 ZOHO Connection Test - Yala Mobile Camping",
         html: `
@@ -932,7 +1021,9 @@ if (process.env.NODE_ENV === "development") {
           <p>This is a test email sent via ZOHO SMTP to verify the configuration.</p>
           <p><strong>Sent from:</strong> ${process.env.ZOHO_USER}</p>
           <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
-          <p><strong>Host:</strong> ${process.env.ZOHO_HOST || 'smtp.zoho.com'}</p>
+          <p><strong>Host:</strong> ${
+            process.env.ZOHO_HOST || "smtp.zoho.com"
+          }</p>
           <p><strong>Port:</strong> ${process.env.ZOHO_PORT || 465}</p>
           <hr>
           <p><em>If you received this, ZOHO email configuration is working correctly!</em></p>
@@ -947,7 +1038,6 @@ if (process.env.NODE_ENV === "development") {
         to: process.env.ADMIN_EMAIL || process.env.ZOHO_USER,
         timestamp: new Date().toISOString(),
       });
-
     } catch (error) {
       console.error("❌ ZOHO test failed:", error);
       res.status(500).json({
@@ -955,11 +1045,11 @@ if (process.env.NODE_ENV === "development") {
         message: "ZOHO test failed",
         error: error.message,
         config: {
-          host: process.env.ZOHO_HOST || 'smtp.zoho.com',
+          host: process.env.ZOHO_HOST || "smtp.zoho.com",
           port: process.env.ZOHO_PORT || 465,
           user: process.env.ZOHO_USER,
           hasPassword: !!process.env.ZOHO_PASSWORD,
-        }
+        },
       });
     }
   });
@@ -1006,7 +1096,10 @@ if (process.env.NODE_ENV === "development") {
 
       // Test customer email (ZOHO)
       console.log("🧪 Testing customer email via ZOHO...");
-      const customerEmailHtml = generateCustomerEmailTemplate(testData, envVars);
+      const customerEmailHtml = generateCustomerEmailTemplate(
+        testData,
+        envVars
+      );
       const customerResult = await sendCustomerEmail(
         customerEmailHtml,
         `🧪 TEST: Customer Confirmation - ${testData.bookingId}`,
@@ -1018,17 +1111,18 @@ if (process.env.NODE_ENV === "development") {
         success: true,
         message: "Test booking emails sent successfully!",
         results: {
-          adminEmails: adminResults.map(r => r.status === 'fulfilled' ? r.value : { error: r.reason }),
+          adminEmails: adminResults.map((r) =>
+            r.status === "fulfilled" ? r.value : { error: r.reason }
+          ),
           customerEmail: customerResult,
         },
         testData: { bookingId: testData.bookingId },
         configuration: {
           adminVia: "Gmail",
           customerVia: "ZOHO",
-          sentTo: testData.email
-        }
+          sentTo: testData.email,
+        },
       });
-
     } catch (error) {
       res.status(500).json({
         success: false,
@@ -1045,19 +1139,23 @@ if (process.env.NODE_ENV === "development") {
 app.get("/unsubscribe", (req, res) => {
   // In production, this would serve your React unsubscribe page
   // For now, just redirect to frontend
-  const frontendUrl = process.env.FRONTEND_URL || 'https://yalamobilecamping.com';
+  const frontendUrl =
+    process.env.FRONTEND_URL || "https://yalamobilecamping.com";
   const email = req.query.email;
-  const redirectUrl = email 
+  const redirectUrl = email
     ? `${frontendUrl}/unsubscribe?email=${encodeURIComponent(email)}`
     : `${frontendUrl}/unsubscribe`;
-  
+
   res.redirect(redirectUrl);
 });
 
 // Handle root redirect properly
-app.get('/', (req, res, next) => {
+app.get("/", (req, res, next) => {
   // If this is an API server request, let it pass through
-  if (req.headers['user-agent']?.includes('bot') || req.headers.accept?.includes('text/html')) {
+  if (
+    req.headers["user-agent"]?.includes("bot") ||
+    req.headers.accept?.includes("text/html")
+  ) {
     return next();
   }
   next();
@@ -1071,7 +1169,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: "Internal server error",
-    error: process.env.NODE_ENV === "development" ? err.message : "Something went wrong"
+    error:
+      process.env.NODE_ENV === "development"
+        ? err.message
+        : "Something went wrong",
   });
 });
 
@@ -1086,12 +1187,14 @@ app.use((req, res) => {
       "POST /api/newsletter/subscribe",
       "POST /api/newsletter/unsubscribe",
       "GET /api/newsletter/stats",
-      ...(process.env.NODE_ENV === "development" ? [
-        "GET /api/test-zoho",
-        "POST /api/test-booking-emails",
-        "POST /api/test-newsletter"
-      ] : [])
-    ]
+      ...(process.env.NODE_ENV === "development"
+        ? [
+            "GET /api/test-zoho",
+            "POST /api/test-booking-emails",
+            "POST /api/test-newsletter",
+          ]
+        : []),
+    ],
   });
 });
 
@@ -1099,10 +1202,22 @@ app.use((req, res) => {
 // SERVER STARTUP
 // ===================================================================
 app.listen(PORT, async () => {
-  console.log(`🚀 Yala Mobile Camping API Server running on http://localhost:${PORT}`);
-  console.log(`📧 Gmail sender (admin notifications): ${process.env.EMAIL_USER || "NOT CONFIGURED"}`);
-  console.log(`📧 ZOHO sender (customer emails & newsletter): ${process.env.ZOHO_USER || "NOT CONFIGURED"}`);
-  console.log(`📧 Gmail admin recipient: ${process.env.ADMIN_EMAIL || "NOT CONFIGURED"}`);
+  console.log(
+    `🚀 Yala Mobile Camping API Server running on http://localhost:${PORT}`
+  );
+  console.log(
+    `📧 Gmail sender (admin notifications): ${
+      process.env.EMAIL_USER || "NOT CONFIGURED"
+    }`
+  );
+  console.log(
+    `📧 ZOHO sender (customer emails & newsletter): ${
+      process.env.ZOHO_USER || "NOT CONFIGURED"
+    }`
+  );
+  console.log(
+    `📧 Gmail admin recipient: ${process.env.ADMIN_EMAIL || "NOT CONFIGURED"}`
+  );
 
   // Count unique admin emails
   const adminEmails = [process.env.ADMIN_EMAIL, process.env.ZOHO_USER]
@@ -1117,27 +1232,47 @@ app.listen(PORT, async () => {
   }
 
   console.log(`🌐 Email Flow Configuration:`);
-  console.log(`   • Customer emails: ${process.env.ZOHO_USER || 'NOT CONFIGURED'} → Customer (via ZOHO)`);
-  console.log(`   • Admin notifications: ${process.env.EMAIL_USER || 'NOT CONFIGURED'} → Admins (via Gmail)`);
-  console.log(`   • Newsletter: ${process.env.ZOHO_USER || 'NOT CONFIGURED'} → Subscribers (via ZOHO)`);
-  
+  console.log(
+    `   • Customer emails: ${
+      process.env.ZOHO_USER || "NOT CONFIGURED"
+    } → Customer (via ZOHO)`
+  );
+  console.log(
+    `   • Admin notifications: ${
+      process.env.EMAIL_USER || "NOT CONFIGURED"
+    } → Admins (via Gmail)`
+  );
+  console.log(
+    `   • Newsletter: ${
+      process.env.ZOHO_USER || "NOT CONFIGURED"
+    } → Subscribers (via ZOHO)`
+  );
+
   // Initialize newsletter stats
   try {
     const subscribers = await readSubscribers();
-    const activeCount = subscribers.filter(sub => sub.active).length;
+    const activeCount = subscribers.filter((sub) => sub.active).length;
     console.log(`📰 Newsletter: ${activeCount} active subscribers`);
   } catch (error) {
     console.log(`📰 Newsletter: Initializing subscriber database`);
   }
-  
+
   console.log(`⏰ Server started at: ${new Date().toLocaleString()}`);
 
   if (process.env.NODE_ENV === "development") {
     console.log(`\n🧪 DEVELOPMENT TESTING ENDPOINTS:`);
-    console.log(`   • ZOHO Testing: GET http://localhost:${PORT}/api/test-zoho`);
-    console.log(`   • Booking Email Testing: POST http://localhost:${PORT}/api/test-booking-emails`);
-    console.log(`   • Newsletter Testing: POST http://localhost:${PORT}/api/test-newsletter`);
-    console.log(`   • Newsletter Stats: GET http://localhost:${PORT}/api/newsletter/stats`);
+    console.log(
+      `   • ZOHO Testing: GET http://localhost:${PORT}/api/test-zoho`
+    );
+    console.log(
+      `   • Booking Email Testing: POST http://localhost:${PORT}/api/test-booking-emails`
+    );
+    console.log(
+      `   • Newsletter Testing: POST http://localhost:${PORT}/api/test-newsletter`
+    );
+    console.log(
+      `   • Newsletter Stats: GET http://localhost:${PORT}/api/newsletter/stats`
+    );
   }
 });
 

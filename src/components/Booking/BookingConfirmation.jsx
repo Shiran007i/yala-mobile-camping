@@ -469,14 +469,14 @@ Thank you for choosing Yala Mobile Camping!
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="tel:+94713585926"
+              href="tel:+94716335000"
               className="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors flex items-center justify-center"
             >
               <Phone className="h-4 w-4 mr-2" />
               Call Now: +94 71 399 1051
             </a>
             <a
-              href="https://wa.me/94713585926"
+              href="https://wa.me/94716335000"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center"

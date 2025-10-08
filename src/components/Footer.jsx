@@ -225,7 +225,7 @@ const Footer = () => {
                     href={`tel:${COMPANY_PHONE}`}
                     className="text-slate-300 hover:text-white transition-colors duration-200"
                   >
-                    +94 71 358 5926
+                    +94 716335000
                   </a>
                   <br />
                   <a
